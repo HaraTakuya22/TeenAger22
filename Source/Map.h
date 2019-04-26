@@ -18,6 +18,14 @@
 #define MAPWINDOW_SIZE_X GRIDSIZE * 6
 #define MAPWINDOW_SIZE_Y 214
 
+// player‚Ìæ‚ª•Ç‚©“¹‚©
+enum PASSAGE
+{
+	PASSAGE_WAY,	// “¹
+	PASSAGE_WALL	// •Ç
+};
+
+
 // “¦‚°‚é‘¤‚Ìl”
 enum PLAYER
 {
@@ -47,6 +55,7 @@ public:
 		
 		return true;
 	}
+	bool SetMapData(VECTOR2 pos,PASSAGE passage);
 
 	// Še•Ï”‚Ì‰Šú‰»ŠÖ”
 	bool Init(void);
@@ -77,5 +86,8 @@ private:
 
 	// ½¸Ø°İ‘S‘Ì‚Ì»²½Ş
 	VECTOR2 Scr;
+	
+	// “¹‚©•Ç‚©‚ÌÌ×¸Ş
+	PASSAGE passageF[GRIDCNT_X * GRIDCNT_Y];
 };
 

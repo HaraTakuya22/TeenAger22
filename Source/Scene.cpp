@@ -43,9 +43,9 @@ void Scene::Destroy(void)
 
 bool Scene::SystemInit(void)
 {
-	SetGraphMode(SCREENSIZE_X, SCREENSIZE_Y, 16);		//65536色ﾓｰﾄﾞに設定
+	SetGraphMode(SCREENSIZE_X, SCREENSIZE_Y, 32);		//65536色ﾓｰﾄﾞに設定
 
-	ChangeWindowMode(false);								//true:window　false:ﾌﾙｽｸﾘｰﾝ
+	ChangeWindowMode(true);								//true:window　false:ﾌﾙｽｸﾘｰﾝ
 	SetWindowText("sample");
 	if (DxLib_Init() == -1) return false;				//DXﾗｲﾌﾞﾗﾘ初期化処理
 	SetDrawScreen(DX_SCREEN_BACK);

@@ -22,6 +22,9 @@ void Map::MapDraw(void)
 			DrawLine(0, y, Scr.x, y, 0xffffff);
 			for (int x = 0; x <= Scr.x; x += GRIDSIZE)
 			{
+
+
+
 				DrawLine(x, 0, x, Scr.y, 0xffffff);
 			}
 		}
@@ -52,6 +55,14 @@ void Map::MapDraw(void)
 	}
 
 	DrawLine(GRIDSIZE * 9, GRIDSIZE * 3, GRIDSIZE * 9, Scr.y, 0xff00ff);
+}
+
+bool Map::SetMapData(VECTOR2 pos,PASSAGE passage)
+{
+	auto tmp = VECTOR2(pos.x / GRIDSIZE, pos.y / GRIDSIZE);
+
+	passageF[tmp.x * tmp.y] = passage;
+	return true;
 }
 
 bool Map::Init(void)

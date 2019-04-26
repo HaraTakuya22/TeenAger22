@@ -125,7 +125,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="PASSAGE.cpp" />
     <ClCompile Include="Source\AddList.cpp" />
     <ClCompile Include="Source\BaseScene.cpp" />
     <ClCompile Include="Source\Controller.cpp" />
@@ -141,7 +140,6 @@
     <ClCompile Include="Source\VECTOR2.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PASSAGE.h" />
     <ClInclude Include="Source\AddList.h" />
     <ClInclude Include="Source\BaseScene.h" />
     <ClInclude Include="Source\Controller.h" />

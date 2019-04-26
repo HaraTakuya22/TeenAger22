@@ -55,47 +55,47 @@ void Map::MapDraw(void)
 	
 }
 
-//bool Map::CheckPassage(VECTOR2 pos, PASSAGE passage,DIR dir)
-//{
-//	// ﾎﾟｼﾞｼｮﾝをﾏｽ目で表現
-//	auto tmp = VECTOR2(pos.x / GRIDSIZE, pos.y / GRIDSIZE);
-//	// ﾌﾟﾚｲﾔｰの隣を見る
-//	auto NextPos = [&](DIR dir) {
-//		VECTOR2 nextpos;
-//		switch (dir)
-//		{
-//			// 左の場合
-//		case DIR_LEFT:
-//			nextpos = { pos.x - PREYSIZE_X,0 };
-//			break;
-//
-//			// 右の場合
-//		case DIR_RIGHT:
-//			nextpos = { pos.x + PREYSIZE_X,0 };
-//			break;
-//
-//			// 上の場合
-//		case DIR_UP:
-//			nextpos = { 0,pos.y - PREYSIZE_Y };
-//			break;
-//
-//			// 下の場合
-//		case DIR_DOWN:
-//			nextpos = { 0,pos.y + PREYSIZE_Y };
-//			break;
-//
-//		default:
-//			break;
-//		};
-//		return pos + nextpos;
-//	};
-//	// 先が壁だったら
-//	if (NextPos(dir) == passage)
-//	{
-//		return false;
-//	}
-//	return true;
-//}
+bool Map::CheckPassage(VECTOR2 pos, PASSAGE passage,DIR dir)
+{
+	// ﾎﾟｼﾞｼｮﾝをﾏｽ目で表現
+	auto tmp = VECTOR2(pos.x / GRIDSIZE, pos.y / GRIDSIZE);
+	// ﾌﾟﾚｲﾔｰの隣を見る
+	auto NextPos = [&](DIR dir) {
+		VECTOR2 nextpos;
+		switch (dir)
+		{
+			// 左の場合
+		case DIR_LEFT:
+			nextpos = { pos.x + PREYSIZE_X,0 };
+			break;
+
+			// 右の場合
+		case DIR_RIGHT:
+			nextpos = { pos.x + PREYSIZE_X,0 };
+			break;
+
+			// 上の場合
+		case DIR_UP:
+			nextpos = { 0,pos.y + PREYSIZE_Y };
+			break;
+
+			// 下の場合
+		case DIR_DOWN:
+			nextpos = { 0,pos.y + PREYSIZE_Y };
+			break;
+
+		default:
+			break;
+		};
+		return pos + nextpos;
+	};
+	// 先が壁だったら
+	if (NextPos(dir) == passage)
+	{
+		return false;
+	}
+	return true;
+}
 
 bool Map::Init(void)
 {

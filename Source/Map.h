@@ -1,6 +1,7 @@
 #pragma once
 #include "VECTOR2.h"
 #include "AddList.h"
+#include "Obj.h"
 
 
 #define lpMap Map::getIns()
@@ -12,7 +13,6 @@
 #define GRIDCNT_X	15
 // Ï½–Ú(c)
 #define GRIDCNT_Y	8
-
 
 // Map³¨İÄŞ³‚Ì»²½Ş
 #define MAPWINDOW_SIZE_X GRIDSIZE * 6
@@ -62,7 +62,7 @@ public:
 		return true;
 	}
 
-	//bool CheckPassage(VECTOR2 pos, PASSAGE passage,DIR dir);
+	bool CheckPassage(VECTOR2 pos, PASSAGE passage,DIR dir);
 
 	// Še•Ï”‚Ì‰Šú‰»ŠÖ”
 	bool Init(void);

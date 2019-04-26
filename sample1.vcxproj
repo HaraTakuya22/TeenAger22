@@ -128,6 +128,7 @@
     <ClCompile Include="Source\AddList.cpp" />
     <ClCompile Include="Source\BaseScene.cpp" />
     <ClCompile Include="Source\Controller.cpp" />
+    <ClCompile Include="Source\EditScene.cpp" />
     <ClCompile Include="Source\GameScene.cpp" />
     <ClCompile Include="Source\Image.cpp" />
     <ClCompile Include="Source\It.cpp" />
@@ -143,6 +144,7 @@
     <ClInclude Include="Source\AddList.h" />
     <ClInclude Include="Source\BaseScene.h" />
     <ClInclude Include="Source\Controller.h" />
+    <ClInclude Include="Source\EditScene.h" />
     <ClInclude Include="Source\GameScene.h" />
     <ClInclude Include="Source\Image.h" />
     <ClInclude Include="Source\It.h" />

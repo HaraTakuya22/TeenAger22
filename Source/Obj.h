@@ -8,11 +8,11 @@
 // ŠeµÌÞ¼Þª¸Ä‚Ì•ûŒü
 enum DIR
 {
-	LEFT,
-	RIGHT,
-	UP,
-	DOWN,
-	MAX
+	DIR_LEFT,
+	DIR_RIGHT,
+	DIR_UP,
+	DIR_DOWN,
+	DIR_MAX
 };
 
 // ±ÆÒ°¼®ÝŠÖŒW
@@ -66,7 +66,7 @@ private:
 	//Še±ÆÒ°¼®Ý‚Ì–¼‘O
 	std::string AnimationName;
 	//±ÆÒ°¼®Ý‚ÉŠÖ‚·‚éÌÚ°Ñ“™‚ÌŠi”[
-	std::map<std::string, int[MAX]> animTbl;
+	std::map<std::string, int[DIR_MAX]> animTbl;
 	//±ÆÒ°¼®Ý¶³ÝÄ
 	unsigned int AniCnt;
 	bool deleteflag;

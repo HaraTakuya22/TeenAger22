@@ -8,6 +8,11 @@
 // 1Ï½‚Ì»²½Ş
 #define GRIDSIZE 80
 
+// Ï½–Ú(‰¡)
+#define GRIDCNT_X	15
+// Ï½–Ú(c)
+#define GRIDCNT_Y	8
+
 
 // Map³¨İÄŞ³‚Ì»²½Ş
 #define MAPWINDOW_SIZE_X GRIDSIZE * 6
@@ -20,15 +25,6 @@ enum PLAYER
 	PLAYER_2,		// 2l
 	PLAYER_3,		// 3l
 	PLAYER_MAX
-};
-
-
-// ÀŞİ¼Ş®İ‚Ì•Ç‚©’Ê˜H‚©
-enum PASSAGE
-{
-	PASSAGE_WAY,	// “¹
-	PASSAGE_WALL,	// •Ç
-	PASSAGE_MAX
 };
 
 class Map
@@ -70,8 +66,8 @@ private:
 	// Ï¯Ìß‚Ì¶ã‚ÌÎß¼Ş¼®İ
 	VECTOR2 mapPos;
 
-	// Ï¯Ìß‚Ì‰¼‰æ‘œ
-	int PlanningImage;
+	// Ï¯Ìß‚Ì‰æ‘œ
+	int MapImage;
 
 	// Še³¨İÄŞ³(’ÇÕ‚³‚ê‚é‘¤)
 	int PreyWindow;

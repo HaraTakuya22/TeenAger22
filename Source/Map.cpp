@@ -50,6 +50,8 @@ void Map::MapDraw(void)
 	default:
 		break;
 	}
+
+	DrawLine(GRIDSIZE * 9, GRIDSIZE * 3, GRIDSIZE * 9, Scr.y, 0xff00ff);
 }
 
 bool Map::Init(void)
@@ -61,7 +63,7 @@ bool Map::Init(void)
 	MapWindow = 0;
 
 	mapPos = VECTOR2(0, 0);
-	PlanningImage = LoadGraph("image/PlanningMap.png");
+	MapImage = LoadGraph("MAP/map.png");
 
 	//----------------------------------
 
@@ -132,13 +134,13 @@ void Map::IndividualsDraw(WeakList weaklist)
 		DrawGraph(0, 0, PreyWindow, true);
 
 		// Map(‰¼)‚Ì•\Ž¦
-		DrawGraph(mapPos.x, mapPos.y, PlanningImage, true);
+		DrawGraph(mapPos.x, mapPos.y, MapImage, true);
 
 		// Prey(‰¼)‚Ì•\Ž¦
 		//DrawBox(GRIDSIZE * 4,(GRIDSIZE * 4) - 40,(GRIDSIZE * 4) + PREYSIZE_X,(GRIDSIZE * 5), 0xff0000, true);
 
 		// Prey‚Ì²Ý½ÀÝ½
-		AddList()(weaklist, std::make_unique<Prey>(VECTOR2((GRIDSIZE * 4) + PREYSIZE_X, GRIDSIZE * 5)));
+		AddList()(weaklist, std::make_unique<Prey>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 5)));
 	}
 
 	// player2‚Ì‰æ–Ê•\Ž¦

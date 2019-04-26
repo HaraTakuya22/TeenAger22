@@ -1,18 +1,2 @@
-﻿  AddList.cpp
-  BaseScene.cpp
-  Controller.cpp
-  GameScene.cpp
-  Image.cpp
-  It.cpp
-  Main.cpp
-  Map.cpp
-  Obj.cpp
-  Prey.cpp
-  Scene.cpp
-  TitleScene.cpp
-  VECTOR2.cpp
-  コードを生成中...
-c:\users\1816028\desktop\sample1\source\vector2.cpp(41): warning C4715: 'VECTOR2::operator[]': 値を返さないコントロール パスがあります。
-c:\users\1816028\desktop\sample1\source\vector2.cpp(97): warning C4717: 'VECTOR2::operator-': すべてのコントロールのパス、関数を回帰するとランタイム スタック オーバーフローが発生します。
-c:\users\1816028\desktop\sample1\source\vector2.cpp(202): warning C4172: ローカル変数またはテンポラリのアドレスを返します: vec
-  sample1.vcxproj -> C:\Users\1816028\Desktop\sample1\x64\Debug\sample1.exe
+﻿  PASSAGE.cpp
+c:\users\1816028\desktop\sample1\passage.h(2): fatal error C1083: include ファイルを開けません。'Map.h':No such file or directory

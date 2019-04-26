@@ -5,9 +5,9 @@ typedef std::array<char, 256> KEY_FLAG;
 
 //־ÞְÝ‚ּ‰‰÷מ•ס‚ְּ²ּß
 enum KEY_TYPE {
-	NOW,	//¡‰‚µ‚ִ‚¢‚י
-	OLD,	//‘OּÚ°ׁ‚ֹ‰‚µ‚½
-	KEY_MAX
+	KEY_TYPE_NOW,	//¡‰‚µ‚ִ‚¢‚י
+	KEY_TYPE_OLD,	//‘OּÚ°ׁ‚ֹ‰‚µ‚½
+	KEY_TYPE_MAX
 };
 
 class Controller

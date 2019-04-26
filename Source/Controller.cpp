@@ -26,7 +26,7 @@ bool Controller::Update(void)
 
 const KEY_FLAG & Controller::GetButtonInfo(KEY_TYPE type) const
 {
-	if (type == OLD)
+	if (type == KEY_TYPE_OLD)
 	{
 		return keyOld;
 	}

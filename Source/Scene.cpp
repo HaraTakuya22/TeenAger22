@@ -43,7 +43,7 @@ void Scene::Destroy(void)
 
 bool Scene::SystemInit(void)
 {
-	SetGraphMode(SCREENSIZE_X, SCREENSIZE_Y, 32);		//65536êF”∞ƒﬁÇ…ê›íË
+	SetGraphMode(SCREENSIZE_X, SCREENSIZE_Y, 32);		
 
 	ChangeWindowMode(true);								//true:windowÅ@false:ÃŸΩ∏ÿ∞›
 	SetWindowText("sample");

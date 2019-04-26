@@ -52,10 +52,17 @@ public:
 	// Ï¯Ìß‚Ì‘S‘Ì‚ğ‚Æ‚è‚ ‚¦‚¸WALL(•Ç)‚Å‰Šú‰»
 	bool MapInit(void)
 	{
-		
+		for (int y = 0; y <= GRIDCNT_Y; y++)
+		{
+			for (int x = 0; x <= GRIDCNT_X; x++)
+			{
+				passageF[(y * x) + x] = PASSAGE_WALL;
+			}
+		}
 		return true;
 	}
-	bool SetMapData(VECTOR2 pos,PASSAGE passage);
+
+	//bool CheckPassage(VECTOR2 pos, PASSAGE passage,DIR dir);
 
 	// Še•Ï”‚Ì‰Šú‰»ŠÖ”
 	bool Init(void);

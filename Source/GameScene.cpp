@@ -22,6 +22,7 @@ unique_Base GameScene::Update(unique_Base own, const Controller & Controller)
 	{
 		(*itr)->Update(Controller, objlist);
 	}
+	lpMap.MapInit();
 
 	ClsDrawScreen();
 	Draw();
@@ -37,7 +38,6 @@ int GameScene::Init(void)
 	{
 		objlist = std::make_shared<Shared_ObjList>();
 	}
-	lpMap.MapInit();
 	return 0;
 }
 

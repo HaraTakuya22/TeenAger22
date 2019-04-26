@@ -22,9 +22,6 @@ void Map::MapDraw(void)
 			DrawLine(0, y, Scr.x, y, 0xffffff);
 			for (int x = 0; x <= Scr.x; x += GRIDSIZE)
 			{
-
-
-
 				DrawLine(x, 0, x, Scr.y, 0xffffff);
 			}
 		}
@@ -55,15 +52,50 @@ void Map::MapDraw(void)
 	}
 
 	DrawLine(GRIDSIZE * 9, GRIDSIZE * 3, GRIDSIZE * 9, Scr.y, 0xff00ff);
+	
 }
 
-bool Map::SetMapData(VECTOR2 pos,PASSAGE passage)
-{
-	auto tmp = VECTOR2(pos.x / GRIDSIZE, pos.y / GRIDSIZE);
-
-	passageF[tmp.x * tmp.y] = passage;
-	return true;
-}
+//bool Map::CheckPassage(VECTOR2 pos, PASSAGE passage,DIR dir)
+//{
+//	// Îß¼Þ¼®Ý‚ðÏ½–Ú‚Å•\Œ»
+//	auto tmp = VECTOR2(pos.x / GRIDSIZE, pos.y / GRIDSIZE);
+//	// ÌßÚ²Ô°‚Ì—×‚ðŒ©‚é
+//	auto NextPos = [&](DIR dir) {
+//		VECTOR2 nextpos;
+//		switch (dir)
+//		{
+//			// ¶‚Ìê‡
+//		case DIR_LEFT:
+//			nextpos = { pos.x - PREYSIZE_X,0 };
+//			break;
+//
+//			// ‰E‚Ìê‡
+//		case DIR_RIGHT:
+//			nextpos = { pos.x + PREYSIZE_X,0 };
+//			break;
+//
+//			// ã‚Ìê‡
+//		case DIR_UP:
+//			nextpos = { 0,pos.y - PREYSIZE_Y };
+//			break;
+//
+//			// ‰º‚Ìê‡
+//		case DIR_DOWN:
+//			nextpos = { 0,pos.y + PREYSIZE_Y };
+//			break;
+//
+//		default:
+//			break;
+//		};
+//		return pos + nextpos;
+//	};
+//	// æ‚ª•Ç‚¾‚Á‚½‚ç
+//	if (NextPos(dir) == passage)
+//	{
+//		return false;
+//	}
+//	return true;
+//}
 
 bool Map::Init(void)
 {

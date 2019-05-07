@@ -29,6 +29,9 @@ private:
 	// ýėp
 	bool setF;
 
+	int keyDefRng;
+	int inputFrame;
+
 	// ID
 	objID id;
 };

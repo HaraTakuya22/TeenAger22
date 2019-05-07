@@ -75,6 +75,9 @@
     <ClCompile Include="Source\objID.cpp">
       <Filter>ソース ファイル\ENUM</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Connection.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\VECTOR2.h">
@@ -121,6 +124,9 @@
     </ClInclude>
     <ClInclude Include="Source\objID.h">
       <Filter>ヘッダー ファイル\ENUM</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Connection.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

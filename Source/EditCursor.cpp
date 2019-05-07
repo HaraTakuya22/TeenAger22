@@ -5,12 +5,16 @@
 #include "EditCursor.h"
 
 
+#define EDITCURSOR_DEF_RNG	(30)
+#define EDITCURSOR_MIN_RNG	(5)
 
 EditCursor::EditCursor(VECTOR2 pos)
 {
 	this->pos.x = pos.x;
 	this->pos.y = pos.y;
 
+	keyDefRng = EDITCURSOR_DEF_RNG;
+	inputFrame = EDITCURSOR_DEF_RNG;
 	setF = false;
 }
 
@@ -25,6 +29,8 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	ChangeInputOld = ChangeInput;
 	ChangeInputBackOld = ChangeInputBack;
 	SetInputOld = SetInput;
+	VECTOR2 tmp(pos);
+
 	// ｹﾞｰﾑﾊﾟｯﾄﾞの入力
 	auto Pad = GetJoypadInputState(DX_INPUT_PAD1);
 
@@ -51,9 +57,9 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	{
 		pos.x += GRIDSIZE;
 		// ｶｰｿﾙのﾎﾟｼﾞｼｮﾝ制御
-		if (pos.x >= Scr.x - GRIDSIZE)
+		if (tmp.x >= Scr.x - GRIDSIZE)
 		{
-			pos.x = Scr.x - GRIDSIZE;
+			tmp.x = Scr.x - GRIDSIZE;
 		}
 	}
 	// ---------------------------------------------------------
@@ -72,11 +78,11 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	}
 	if (InputNow[DIR_LEFT] & ~InputOld[DIR_LEFT])
 	{
-		pos.x -= GRIDSIZE;
+		tmp.x -= GRIDSIZE;
 		// ｶｰｿﾙのﾎﾟｼﾞｼｮﾝ制御
-		if (pos.x <= 0)
+		if (tmp.x <= 0)
 		{
-			pos.x = 0;
+			tmp.x = 0;
 		}
 	}
 	//--------------------------------------------------------
@@ -95,11 +101,11 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	}
 	if (InputNow[DIR_UP] & ~InputOld[DIR_UP])
 	{
-		pos.y -= GRIDSIZE;
+		tmp.y -= GRIDSIZE;
 		// ｶｰｿﾙのﾎﾟｼﾞｼｮﾝ制御
-		if (pos.y <= 0)
+		if (tmp.y <= 0)
 		{
-			pos.y = 0;
+			tmp.y = 0;
 		}
 	}
 	//----------------------------------------------------
@@ -118,11 +124,11 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	}
 	if (InputNow[DIR_DOWN] & ~InputOld[DIR_DOWN])
 	{
-		pos.y += GRIDSIZE;
+		tmp.y += GRIDSIZE;
 		// ｶｰｿﾙのﾎﾟｼﾞｼｮﾝ制御
-		if (pos.y >= (Scr.y - GRIDSIZE) - 20)
+		if (tmp.y >= (Scr.y - GRIDSIZE) - 20)
 		{
-			pos.y = (Scr.y - GRIDSIZE) - 20;
+			tmp.y = (Scr.y - GRIDSIZE) - 20;
 		}
 	}
 	//--------------------------------------------------------
@@ -181,9 +187,9 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	}
 	// 押した瞬間を取得[ｷｰﾎﾞｰﾄﾞ操作]
 	// 現在右ﾎﾞﾀﾝを押下--------------------------------------
-	if (cnt_now[KEY_INPUT_RIGHT] & ~cnt_old[KEY_INPUT_RIGHT])
+	if (cnt_now[KEY_INPUT_RIGHT])
 	{
-		pos.x += GRIDSIZE;
+		tmp.x += GRIDSIZE;
 		lpMap.GetMapPos().x -= GRIDSIZE;
 		// Mapの移動制御
 		if (lpMap.GetMapPos().x <= -(Scr.x * 3))
@@ -191,19 +197,19 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 			lpMap.GetMapPos().x = -(Scr.x * 3);
 		}
 		// ｶｰｿﾙのﾎﾟｼﾞｼｮﾝ制御
-		if (pos.x >= Scr.x - GRIDSIZE)
+		if (tmp.x >= Scr.x - GRIDSIZE)
 		{
 			//lpMap.GetMapPos().x += Scr.x;
-			pos.x = Scr.x - GRIDSIZE;
+			tmp.x = Scr.x - GRIDSIZE;
 		}
 	}
 	
 	// ---------------------------------------------------------
 
 	// 現在左ﾎﾞﾀﾝを押下-----------------------------------------
-	if (cnt_now[KEY_INPUT_LEFT] & ~cnt_old[KEY_INPUT_LEFT])
+	if (cnt_now[KEY_INPUT_LEFT])
 	{
-		pos.x -= GRIDSIZE;
+		tmp.x -= GRIDSIZE;
 		lpMap.GetMapPos().x += GRIDSIZE;
 		// Mapの移動制御
 		if (lpMap.GetMapPos().x + lpMap.GetMapSize().x >= lpMap.GetMapSize().x - Scr.x)
@@ -212,35 +218,35 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 		}
 
 		// ｶｰｿﾙのﾎﾟｼﾞｼｮﾝ制御
-		if (pos.x <= 0)
+		if (tmp.x <= 0)
 		{
-			pos.x = 0;
+			tmp.x = 0;
 		}
 	}
 	
 	//--------------------------------------------------------
 
 	// 現在上ﾎﾞﾀﾝを押下---------------------------------------
-	if (cnt_now[KEY_INPUT_UP] & ~cnt_old[KEY_INPUT_UP])
+	if (cnt_now[KEY_INPUT_UP])
 	{
-		pos.y -= GRIDSIZE;
+		tmp.y -= GRIDSIZE;
 		lpMap.GetMapPos().y += GRIDSIZE;
 		if (lpMap.GetMapPos().y + lpMap.GetMapSize().y >= lpMap.GetMapSize().y - Scr.y)
 		{
 			lpMap.GetMapPos().y = 0;
 		}
 		// ｶｰｿﾙのﾎﾟｼﾞｼｮﾝ制御
-		if (pos.y <= 0)
+		if (tmp.y <= 0)
 		{
-			pos.y = 0;
+			tmp.y = 0;
 		}
 	}
 	//----------------------------------------------------
 
 	// 現在下ﾎﾞﾀﾝを押下-----------------------------------
-	if (cnt_now[KEY_INPUT_DOWN] & ~cnt_old[KEY_INPUT_DOWN])
+	if (cnt_now[KEY_INPUT_DOWN])
 	{
-		pos.y += GRIDSIZE;
+		tmp.y += GRIDSIZE;
 		lpMap.GetMapPos().y -= GRIDSIZE;
 		// Mapの移動制御
 		if (lpMap.GetMapPos().y <= -((Scr.y * 4) - (GRIDSIZE * 6)))
@@ -248,11 +254,35 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 			lpMap.GetMapPos().y = -((Scr.y * 4) - (GRIDSIZE * 6));
 		}
 		// ｶｰｿﾙのﾎﾟｼﾞｼｮﾝ制御
-		if (pos.y >= (Scr.y - GRIDSIZE) - 20)
+		if (tmp.y >= (Scr.y - GRIDSIZE) - 20)
 		{
-			pos.y = (Scr.y - GRIDSIZE) - 20;
+			tmp.y = (Scr.y - GRIDSIZE) - 20;
 		}
 	}
+
+	//ｶｰｿﾙの移動（徐々に速くなっていく処理）-----------------------------
+	if (tmp != pos)								//ｷｰを押している間の処理
+	{
+		inputFrame++;								//加算
+		if (inputFrame >= keyDefRng)				//
+		{
+			pos = tmp;
+			inputFrame = 0;							//ﾎﾞﾀﾝから手を離したとき0ｸﾘする
+			keyDefRng /= 2;							//ﾎﾞﾀﾝを押し続けているとだんだん加速
+			if (keyDefRng < EDITCURSOR_MIN_RNG)			//加速が5になったらそこでずっと5にする
+			{
+				keyDefRng = EDITCURSOR_MIN_RNG;
+			}
+		}
+	}
+	else
+	{
+		keyDefRng = EDITCURSOR_DEF_RNG;
+		inputFrame = EDITCURSOR_DEF_RNG;
+	}
+	//-----------------------------------------------------------------------------
+
+
 	//--------------------------------------------------------
 
 	if (cnt_now[KEY_INPUT_RCONTROL] & ~cnt_old[KEY_INPUT_RCONTROL])
@@ -270,7 +300,6 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (cnt_now[KEY_INPUT_SPACE] & ~cnt_old[KEY_INPUT_SPACE])
 	{
 		setF = true;
-
 		lpMap.setMapData(pos, id);
 	}
 	else

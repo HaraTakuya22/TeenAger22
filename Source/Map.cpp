@@ -319,7 +319,7 @@ bool Map::setData(MapType maptype, const VECTOR2 & pos, IDType id)
 template<typename MapType, typename IDType>
 IDType Map::GetData(MapType maptype, const VECTOR2 & pos, IDType defID)
 {
-	VECTOR2 tmp = VECTOR2(pos.x / chipSize.x, pos.y / chipSize.y);
+	VECTOR2 tmp = VECTOR2(pos.x / ChipSize.x, pos.y / ChipSize.y);
 
 	SizeCheck sizeCheck;
 

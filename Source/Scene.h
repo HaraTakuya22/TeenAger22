@@ -29,6 +29,7 @@ public:
 	}
 
 private:
+	bool isFullScreen;
 
 	Scene();
 	~Scene();

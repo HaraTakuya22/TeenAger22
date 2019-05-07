@@ -64,24 +64,8 @@ void Map::MapDraw(bool gameF)
 		for (int x = 0; x < MapSize.x; x++)
 		{
 			objID id = MapData[y][x];
-			switch (id)
-			{
-			case objID::ID_1:
-				DrawGraph(x * ChipSize.x, y * ChipSize.y, lpImage.GetID("image/chips.png")[static_cast<int>(id)], true);
-
-			case objID::ID_2:
-				break;
-			case objID::ID_3:
-				break;
-			case objID::ID_4:
-				DrawGraph(x * ChipSize.x, y * ChipSize.y, lpImage.GetID("image/chips.png")[static_cast<int>(id)], true);
-			case objID::ID_5:
-				break;
-			case objID::ID_6:
-				break;
-			case objID::ID_7:
-				break;
-			}
+			DrawGraph(x * ChipSize.x, y * ChipSize.y, lpImage.GetID("image/chips.png")[static_cast<int>(id)], true);
+			DrawFormatString(x * ChipSize.x, y * ChipSize.y, 0xff0000, "%d", MapData[y][x]);
 		}
 	}
 
@@ -300,16 +284,22 @@ bool Map::setMapData(const VECTOR2 & pos, objID id)
 	return setData(MapData,pos,id);
 }
 
+// Mapè„ÇÃIDèÓïÒÇëºÇ…ìnÇµÇƒÇ†Ç∞ÇÈ
+objID Map::GetMapData(const VECTOR2 & pos)
+{
+	return GetData(MapData,pos,objID::ID_9);
+}
+
 template<typename MapType, typename IDType>
 bool Map::setData(MapType maptype, const VECTOR2 & pos, IDType id)
 {
 	VECTOR2 tmp = VECTOR2(pos.x / ChipSize.x , pos.y / ChipSize.y );
 
 	// Mapì‡Ç≈Ç»Ç¢èÍçáÇÕï`âÊÇµÇ»Ç¢
-	if (!SizeCheck()(tmp, MapSize));
-	{
+	//if (!SizeCheck()(tmp, MapSize));
+	/*{
 		return false;
-	}
+	}*/
 	// Mapì‡ÇÃèÍçáÇÕï`âÊOK
 	maptype[tmp.y][tmp.x] = id;
 	_RPTN(_CRT_WARN, "ID:[%d:%d]%d\n", pos.x, pos.y, id);

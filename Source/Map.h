@@ -78,6 +78,7 @@ public:
 	void setUp(const VECTOR2& size, const VECTOR2& chipSize);
 
 	bool setMapData(const VECTOR2& pos, objID id);
+	objID GetMapData(const VECTOR2& pos);
 
 	// ÌßÚ²Ô°‚Ìl”‚ÌŠi”[•Ï”
 	PLAYER player;

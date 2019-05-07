@@ -18,6 +18,9 @@ bool Controller::Update(void)
 {
 	//‘OÌÚ°Ñ‚Å‰Ÿ‚µ‚½ÎŞÀİî•ñ
 	keyOld = key;
+
+	PadInputOld = PadInput;
+
 	//‘SÎŞÀİ‚Ì‰Ÿ‰ºî•ñ
 	GetHitKeyStateAll(&key[0]);
 
@@ -31,4 +34,13 @@ const KEY_FLAG & Controller::GetButtonInfo(KEY_TYPE type) const
 		return keyOld;
 	}
 	return key;
+}
+
+const PAD_INPUT & Controller::GetPadButtonInfo(PAD_INPUT inputType) const
+{
+	if (inputType == PAD_INPUT_OLD)
+	{
+		return PadInputOld;
+	}
+	return PadInput;
 }

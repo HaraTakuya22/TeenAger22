@@ -1,4 +1,5 @@
 #include <DxLib.h>
+
 #include "Map.h"
 #include "Scene.h"
 #include "Prey.h"
@@ -10,7 +11,7 @@ void Map::Draw(void)
 {
 }
 
-void Map::MapDraw(void)
+void Map::MapDraw(bool gameF)
 {	
 	// 画面分割(player人数毎に)
 	switch (player)
@@ -26,15 +27,21 @@ void Map::MapDraw(void)
 			}
 		}
 		// Mapを画面右下に配置
-		DrawGraph(Scr.x - (GRIDSIZE * 6), 0, MapWindow, false);
-		DrawFormatString(Scr.x / 2 - 150, Scr.y - (Scr.y / 3) + 50, 0xffffff, "Map");
+		if (gameF)
+		{
+			DrawGraph(Scr.x - (GRIDSIZE * 6), 0, MapWindow, false);
+			DrawFormatString(Scr.x / 2 - 150, Scr.y - (Scr.y / 3) + 50, 0xffffff, "Map");
+		}
 		break;
 	case PLAYER_2:
 		DrawLine(Scr.x / 2, 0, Scr.x / 2, Scr.y, 0xffffff);
 
 		// Mapの配置
-		DrawGraph(Scr.x / 2 - (MAPWINDOW_SIZE_X / 2), 0, MapWindow, false);
-		DrawFormatString(Scr.x / 2 - 150, Scr.y - (Scr.y / 3) + 50, 0xffffff, "Map");
+		if (gameF)
+		{
+			DrawGraph(Scr.x / 2 - (MAPWINDOW_SIZE_X / 2), 0, MapWindow, false);
+			DrawFormatString(Scr.x / 2 - 150, Scr.y - (Scr.y / 3) + 50, 0xffffff, "Map");
+		}
 		break;
 
 	case PLAYER_3:
@@ -42,60 +49,96 @@ void Map::MapDraw(void)
 		DrawLine(0, Scr.y / 2, Scr.x, Scr.y / 2, 0xffffff);
 
 		// Mapの配置
-		DrawGraph((Scr.x - (Scr.x / 4)) - (MAPWINDOW_SIZE_X / 2), (Scr.y - (Scr.y / 4)) - (MAPWINDOW_SIZE_Y / 2), MapWindow, false);
-		DrawFormatString(Scr.x / 2 + 150, Scr.y / 2 + (((Scr.y / 3) / 2) / 2) + 50, 0xffffff, "Map");
-
+		if (gameF)
+		{
+			DrawGraph((Scr.x - (Scr.x / 4)) - (MAPWINDOW_SIZE_X / 2), (Scr.y - (Scr.y / 4)) - (MAPWINDOW_SIZE_Y / 2), MapWindow, false);
+			DrawFormatString(Scr.x / 2 + 150, Scr.y / 2 + (((Scr.y / 3) / 2) / 2) + 50, 0xffffff, "Map");
+		}
 		break;
 
 	default:
 		break;
 	}
+	for (int y = 0; y < MapSize.y; y++)
+	{
+		for (int x = 0; x < MapSize.x; x++)
+		{
+			objID id = MapData[y][x];
+			switch (id)
+			{
+			case objID::ID_1:
+				DrawGraph(x * ChipSize.x, y * ChipSize.y, lpImage.GetID("image/chips.png")[static_cast<int>(id)], true);
+
+			case objID::ID_2:
+				break;
+			case objID::ID_3:
+				break;
+			case objID::ID_4:
+				DrawGraph(x * ChipSize.x, y * ChipSize.y, lpImage.GetID("image/chips.png")[static_cast<int>(id)], true);
+			case objID::ID_5:
+				break;
+			case objID::ID_6:
+				break;
+			case objID::ID_7:
+				break;
+			}
+		}
+	}
 
 	DrawLine(GRIDSIZE * 9, GRIDSIZE * 3, GRIDSIZE * 9, Scr.y, 0xff00ff);
+
+	if (!gameF)
+	{
+		DrawFormatString(0, 0, 0xff0000, "EditMode");
+	}
+	else
+	{
+		DrawFormatString(0, 0, 0xff0000, "GameMode");
+	}
 	
 }
 
-bool Map::CheckPassage(VECTOR2 pos, PASSAGE passage,DIR dir)
-{
-	// ﾎﾟｼﾞｼｮﾝをﾏｽ目で表現
-	auto tmp = VECTOR2(pos.x / GRIDSIZE, pos.y / GRIDSIZE);
-	// ﾌﾟﾚｲﾔｰの隣を見る
-	auto NextPos = [&](DIR dir) {
-		VECTOR2 nextpos;
-		switch (dir)
-		{
-			// 左の場合
-		case DIR_LEFT:
-			nextpos = { pos.x + PREYSIZE_X,0 };
-			break;
-
-			// 右の場合
-		case DIR_RIGHT:
-			nextpos = { pos.x + PREYSIZE_X,0 };
-			break;
-
-			// 上の場合
-		case DIR_UP:
-			nextpos = { 0,pos.y + PREYSIZE_Y };
-			break;
-
-			// 下の場合
-		case DIR_DOWN:
-			nextpos = { 0,pos.y + PREYSIZE_Y };
-			break;
-
-		default:
-			break;
-		};
-		return pos + nextpos;
-	};
-	// 先が壁だったら
-	if (NextPos(dir) == passage)
-	{
-		return false;
-	}
-	return true;
-}
+//bool Map::CheckPassage(VECTOR2 pos, PASSAGE passage,DIR dir)
+//{
+//	// ﾎﾟｼﾞｼｮﾝをﾏｽ目で表現
+//	auto tmp = VECTOR2(pos.x / GRIDSIZE, pos.y / GRIDSIZE);
+//	// ﾌﾟﾚｲﾔｰの隣を見る
+//	auto NextPos = [&](DIR dir) {
+//		VECTOR2 nextpos;
+//		switch (dir)
+//		{
+//			// 左の場合
+//		case DIR_LEFT:
+//			nextpos = { pos.x + PREYSIZE_X,0 };
+//			break;
+//
+//			// 右の場合
+//		case DIR_RIGHT:
+//			nextpos = { pos.x + PREYSIZE_X,0 };
+//			break;
+//
+//			// 上の場合
+//		case DIR_UP:
+//			nextpos = { 0,pos.y + PREYSIZE_Y };
+//			break;
+//
+//			// 下の場合
+//		case DIR_DOWN:
+//			nextpos = { 0,pos.y + PREYSIZE_Y };
+//			break;
+//
+//		default:
+//			break;
+//		};
+//		return pos + nextpos;
+//	};
+//	// 先が壁だったら
+//	if (NextPos(dir) == passage)
+//	{
+//		return false;
+//	}
+//	return true;
+//}
 
 bool Map::Init(void)
 {
@@ -211,6 +254,80 @@ void Map::IndividualsDraw(WeakList weaklist)
 		DrawFormatString(50, Scr.y / 2 + 50, 0xffffff, "Player3");
 		//----------------------------------------------------
 	}
+}
+
+struct SizeCheck
+{
+	bool operator()(const VECTOR2 &tmpPos, const VECTOR2 &MapSize) {
+		//ﾏｯﾌﾟ内であれば、描画OK
+		if ((tmpPos.x < 0) || (tmpPos.y < 0) || (MapSize.x <= tmpPos.x) || (MapSize.y <= tmpPos.y))
+		{
+			return false;
+		}
+		return true;
+	}
+};
+
+void Map::setUp(const VECTOR2& size, const VECTOR2& chipSize)
+{
+	lpImage.GetID("image/chips.png", VECTOR2(5, 2), VECTOR2(80, 80));
+
+	MapSize = VECTOR2(size.x / chipSize.x, size.y / chipSize.y);
+
+	this->ChipSize = chipSize;
+
+	auto createMap = [=](auto& base, auto& frontMap, auto initNum)
+	{
+		base.resize(MapSize.x * MapSize.y);
+		frontMap.resize(MapSize.y);
+
+		//一定間隔のﾎﾟｲﾝﾀｱﾄﾞﾚｽを入れていく(連結)↓
+		for (int cnt = 0; cnt < frontMap.size(); cnt++)
+		{
+			frontMap[cnt] = &base[MapSize.x * cnt];			//画像ﾃﾞｰﾀの全体を回す
+		}
+		//全て回したらmapnonで初期化しておく。
+		for (int j = 0; j < base.size(); j++)
+		{
+			base[j] = initNum;
+		}
+	};
+	createMap(BaseMap, MapData, objID::ID_NON);
+}
+
+bool Map::setMapData(const VECTOR2 & pos, objID id)
+{
+	return setData(MapData,pos,id);
+}
+
+template<typename MapType, typename IDType>
+bool Map::setData(MapType maptype, const VECTOR2 & pos, IDType id)
+{
+	VECTOR2 tmp = VECTOR2(pos.x / ChipSize.x , pos.y / ChipSize.y );
+
+	// Map内でない場合は描画しない
+	if (!SizeCheck()(tmp, MapSize));
+	{
+		return false;
+	}
+	// Map内の場合は描画OK
+	maptype[tmp.y][tmp.x] = id;
+	_RPTN(_CRT_WARN, "ID:[%d:%d]%d\n", pos.x, pos.y, id);
+	return true;
+}
+
+template<typename MapType, typename IDType>
+IDType Map::GetData(MapType maptype, const VECTOR2 & pos, IDType defID)
+{
+	VECTOR2 tmp = VECTOR2(pos.x / chipSize.x, pos.y / chipSize.y);
+
+	SizeCheck sizeCheck;
+
+	if (!sizeCheck(tmp,MapSize))
+	{
+		return defID;
+	}
+	return maptype[tmp.y][tmp.x];
 }
 
 Map::Map()

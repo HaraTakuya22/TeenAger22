@@ -31,7 +31,11 @@ class Obj
 public:
 	Obj();
 	~Obj();
+	// 単なる描画関数
 	virtual void Draw(void);
+
+	// ﾁｯﾌﾟのid毎の描画関数
+	void Draw(unsigned int id);
 	//移動（各ｷｬﾗで移動を自由にしたいので純粋仮想関数）
 	virtual void Move(const Controller& controll, WeakList objlist) = 0;
 	//各ｷｬﾗｸﾀｰの移動
@@ -67,8 +71,7 @@ private:
 	std::string AnimationName;
 	//ｱﾆﾒｰｼｮﾝに関するﾌﾚｰﾑ等の格納
 	std::map<std::string, int[DIR_MAX]> animTbl;
-	//ｱﾆﾒｰｼｮﾝｶｳﾝﾄ
-	unsigned int AniCnt;
+	
 	bool deleteflag;
 
 	//画像の分割ｻｲｽﾞ
@@ -81,6 +84,14 @@ protected:
 	DIR dir;
 	//各ｷｬﾗのﾎﾟｼﾞｼｮﾝの格納変数
 	VECTOR2 pos;
+
+	//ｱﾆﾒｰｼｮﾝｶｳﾝﾄ
+	unsigned int AniCnt;
+
+	// 移動ﾎﾞﾀﾝの押下ﾌﾗｸﾞ
+	int InputNow[DIR_MAX];
+	// 前ﾌﾚｰﾑの押下ﾌﾗｸﾞ
+	int InputOld[DIR_MAX];
 
 	//ﾎﾟｼﾞｼｮﾝｾｯﾄ
 	void SetPos(VECTOR2 pos)

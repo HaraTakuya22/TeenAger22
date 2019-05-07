@@ -2,6 +2,7 @@
 #include "Map.h"
 #include "Scene.h"
 #include "TitleScene.h"
+#include "EditScene.h"
 #include "GameScene.h"
 
 
@@ -36,7 +37,7 @@ unique_Base TitleScene::Update(unique_Base own, const Controller & Controller)
 			|| lpMap.player == PLAYER_2
 			|| lpMap.player == PLAYER_3))
 	{
-		return std::make_unique<GameScene>();
+		return std::make_unique<EditScene>();
 	}
 	ClsDrawScreen();
 	Draw();

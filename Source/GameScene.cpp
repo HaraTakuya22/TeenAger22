@@ -1,6 +1,7 @@
 #include <DxLib.h>
 #include "Scene.h"
 #include "GameScene.h"
+#include "EditScene.h"
 #include "Map.h"
 
 
@@ -16,12 +17,20 @@ GameScene::~GameScene()
 
 unique_Base GameScene::Update(unique_Base own, const Controller & Controller)
 {
-	
+	auto Pad = GetJoypadInputState(DX_INPUT_PAD1);
+
 	// objList‚Ì±¯ÌßÃŞ°Ä
 	for (auto itr = objlist->begin(); itr != objlist->end(); itr++)
 	{
 		(*itr)->Update(Controller, objlist);
 	}
+
+	// ¹Ş°ÑÊß¯ÄŞ‚ÌBack·°‚ğ‰Ÿ‰º ¨ EditScene‚ÉˆÚs
+	if (Pad & PAD_INPUT_11)
+	{
+		return std::make_unique<EditScene>();
+	}
+
 	lpMap.MapInit();
 
 	ClsDrawScreen();
@@ -53,6 +62,6 @@ void GameScene::Draw(void)
 	{
 		(*itr)->Draw();
 	}
-	lpMap.MapDraw();
+	lpMap.MapDraw(true);
 
 }

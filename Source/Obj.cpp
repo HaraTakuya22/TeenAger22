@@ -32,6 +32,13 @@ void Obj::Draw(void)
 	}
 	DrawGraph(pos.x, pos.y, ImageID(ImageName)[ID], true);
 }
+void Obj::Draw(unsigned int id)
+{
+	if (id < ImageID(ImageName).size())
+	{
+		DrawGraph(pos.x,pos.y, ImageID(ImageName)[id], true);
+	}
+}
 
 void Obj::Update(const Controller & controll, WeakList objlist)
 {

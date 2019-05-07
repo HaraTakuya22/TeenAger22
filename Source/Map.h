@@ -1,6 +1,8 @@
 #pragma once
+#include <vector>
 #include "VECTOR2.h"
 #include "AddList.h"
+#include "objID.h"
 #include "Obj.h"
 
 
@@ -46,8 +48,8 @@ public:
 	// Mapのｵﾌﾞｼﾞｪｸﾄの描画
 	void Draw(void);
 
-	// MapのGridの表示(ﾏｽ確認用)
-	void MapDraw(void);
+	// MapのGridの表示(ﾏｽ確認用) gameF:ｹﾞｰﾑｼｰﾝに移行しているかどうか true:GameScene false:EditScene
+	void MapDraw(bool gameF);
 
 	// ﾏｯﾌﾟの全体をとりあえずWALL(壁)で初期化
 	bool MapInit(void)
@@ -62,7 +64,7 @@ public:
 		return true;
 	}
 
-	bool CheckPassage(VECTOR2 pos, PASSAGE passage,DIR dir);
+	//bool CheckPassage(VECTOR2 pos, PASSAGE passage,DIR dir);
 
 	// 各変数の初期化関数
 	bool Init(void);
@@ -72,6 +74,10 @@ public:
 
 	// 各ﾌﾟﾚｲﾔｰのﾃﾞｨｽﾌﾟﾚｲの描画関数
 	void IndividualsDraw(WeakList weaklist);
+
+	void setUp(const VECTOR2& size, const VECTOR2& chipSize);
+
+	bool setMapData(const VECTOR2& pos, objID id);
 
 	// ﾌﾟﾚｲﾔｰの人数の格納変数
 	PLAYER player;
@@ -93,8 +99,28 @@ private:
 
 	// ｽｸﾘｰﾝ全体のｻｲｽﾞ
 	VECTOR2 Scr;
+
+	// ﾏｯﾌﾟの1ﾏｽ1ﾏｽのﾃﾞｰﾀ
+	std::vector<objID*>MapData;
+	// ﾏｯﾌﾟの全体のﾃﾞｰﾀ
+	std::vector<objID>BaseMap;
+	
+
+	// 
+	VECTOR2 MapSize;
+	// 1ﾁｯﾌﾟのｻｲｽﾞ
+	VECTOR2 ChipSize;
 	
 	// 道か壁かのﾌﾗｸﾞ
 	PASSAGE passageF[GRIDCNT_X * GRIDCNT_Y];
+
+	//	引数のところで置き換えた型で宣言するということ
+	template<typename MapType, typename IDType>
+	// Mapにﾁｯﾌﾟ情報を埋め込む関数
+	bool setData(MapType maptype, const VECTOR2& pos, IDType id);
+
+	template<typename MapType, typename IDType>
+	IDType GetData(MapType maptype, const VECTOR2& pos, IDType defID);
 };
+
 

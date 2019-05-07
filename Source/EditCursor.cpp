@@ -184,7 +184,8 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (cnt_now[KEY_INPUT_RIGHT] & ~cnt_old[KEY_INPUT_RIGHT])
 	{
 		pos.x += GRIDSIZE;
-		lpMap.GetMapPos().x -= 80;
+		lpMap.GetMapPos().x -= GRIDSIZE;
+		// MapÇÃà⁄ìÆêßå‰
 		if (lpMap.GetMapPos().x <= -(Scr.x * 3))
 		{
 			lpMap.GetMapPos().x = -(Scr.x * 3);
@@ -203,10 +204,11 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (cnt_now[KEY_INPUT_LEFT] & ~cnt_old[KEY_INPUT_LEFT])
 	{
 		pos.x -= GRIDSIZE;
-		lpMap.GetMapPos().x += 80;
-		if (lpMap.GetMapPos().x >= (Scr.x * 4))
+		lpMap.GetMapPos().x += GRIDSIZE;
+		// MapÇÃà⁄ìÆêßå‰
+		if (lpMap.GetMapPos().x + lpMap.GetMapSize().x >= lpMap.GetMapSize().x - Scr.x)
 		{
-			lpMap.GetMapPos().x = (Scr.x * 4);
+			lpMap.GetMapPos().x = 0;
 		}
 
 		// ∂∞øŸÇÃŒﬂºﬁºÆ›êßå‰
@@ -222,6 +224,11 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (cnt_now[KEY_INPUT_UP] & ~cnt_old[KEY_INPUT_UP])
 	{
 		pos.y -= GRIDSIZE;
+		lpMap.GetMapPos().y += GRIDSIZE;
+		if (lpMap.GetMapPos().y + lpMap.GetMapSize().y >= lpMap.GetMapSize().y - Scr.y)
+		{
+			lpMap.GetMapPos().y = 0;
+		}
 		// ∂∞øŸÇÃŒﬂºﬁºÆ›êßå‰
 		if (pos.y <= 0)
 		{
@@ -234,6 +241,12 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (cnt_now[KEY_INPUT_DOWN] & ~cnt_old[KEY_INPUT_DOWN])
 	{
 		pos.y += GRIDSIZE;
+		lpMap.GetMapPos().y -= GRIDSIZE;
+		// MapÇÃà⁄ìÆêßå‰
+		if (lpMap.GetMapPos().y <= -((Scr.y * 4) - (GRIDSIZE * 6)))
+		{
+			lpMap.GetMapPos().y = -((Scr.y * 4) - (GRIDSIZE * 6));
+		}
 		// ∂∞øŸÇÃŒﬂºﬁºÆ›êßå‰
 		if (pos.y >= (Scr.y - GRIDSIZE) - 20)
 		{

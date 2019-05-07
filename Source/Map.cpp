@@ -203,8 +203,8 @@ void Map::IndividualsDraw(WeakList weaklist)
 
 		DrawGraph(0, 0, PreyWindow, true);
 
-		// Map(‰¼)‚Ì•\Ž¦
-		DrawGraph(mapPos.x, mapPos.y, MapImage, true);
+		// Map‚Ì•\Ž¦
+		DrawRectGraph(mapPos.x, mapPos.y,0,0,SCREENSIZE_X * 4,SCREENSIZE_Y, MapImage, true,false);
 
 		// Prey(‰¼)‚Ì•\Ž¦
 		//DrawBox(GRIDSIZE * 4,(GRIDSIZE * 4) - 40,(GRIDSIZE * 4) + PREYSIZE_X,(GRIDSIZE * 5), 0xff0000, true);

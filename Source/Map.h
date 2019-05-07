@@ -20,6 +20,10 @@
 #define MAPWINDOW_SIZE_X GRIDSIZE * 6
 #define MAPWINDOW_SIZE_Y 214
 
+// Map‚Ì¸Ş×Ì¨¯¸‚Ì»²½Ş
+#define MAPSIZE_X	4800
+#define MAPSIZE_Y	2880
+
 // player‚Ìæ‚ª•Ç‚©“¹‚©
 enum PASSAGE
 {
@@ -79,6 +83,16 @@ public:
 
 	bool setMapData(const VECTOR2& pos, objID id);
 	objID GetMapData(const VECTOR2& pos);
+
+	// Ï¯Ìß‚ÌÎß¼Ş¼®İæ“¾
+	VECTOR2& GetMapPos(void)
+	{
+		return mapPos;
+	}
+	VECTOR2 GetMapSize(void)
+	{
+		return VECTOR2(MAPSIZE_X, MAPSIZE_Y);
+	}
 
 	// ÌßÚ²Ô°‚Ìl”‚ÌŠi”[•Ï”
 	PLAYER player;

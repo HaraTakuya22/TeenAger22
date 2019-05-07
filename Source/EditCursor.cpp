@@ -184,9 +184,15 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (cnt_now[KEY_INPUT_RIGHT] & ~cnt_old[KEY_INPUT_RIGHT])
 	{
 		pos.x += GRIDSIZE;
+		lpMap.GetMapPos().x -= 80;
+		if (lpMap.GetMapPos().x <= -(lpMap.GetMapSize().x * 3))
+		{
+			lpMap.GetMapPos().x = -(lpMap.GetMapSize().x * 4);
+		}
 		// ∂∞øŸÇÃŒﬂºﬁºÆ›êßå‰
 		if (pos.x >= Scr.x - GRIDSIZE)
 		{
+			//lpMap.GetMapPos().x += Scr.x;
 			pos.x = Scr.x - GRIDSIZE;
 		}
 	}
@@ -197,6 +203,12 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (cnt_now[KEY_INPUT_LEFT] & ~cnt_old[KEY_INPUT_LEFT])
 	{
 		pos.x -= GRIDSIZE;
+		lpMap.GetMapPos().x += 80;
+		if (lpMap.GetMapPos().x >= Scr.x)
+		{
+			lpMap.GetMapPos().x = Scr.x;
+		}
+
 		// ∂∞øŸÇÃŒﬂºﬁºÆ›êßå‰
 		if (pos.x <= 0)
 		{

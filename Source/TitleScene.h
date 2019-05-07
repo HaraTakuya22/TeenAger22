@@ -17,6 +17,5 @@ private:
 	// object's list
 	Shared_ObjListptr objlist;
 	void Draw(void);
-
 };
 

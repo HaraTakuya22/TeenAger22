@@ -28,9 +28,12 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	// πﬁ∞— ﬂØƒﬁÇÃì¸óÕ
 	auto Pad = GetJoypadInputState(DX_INPUT_PAD1);
 
+	auto cnt_now = controll.GetButtonInfo(KEY_TYPE_NOW);
+	auto cnt_old = controll.GetButtonInfo(KEY_TYPE_OLD);
+
 	auto Scr = lpScene.GetScrSize();
 
-	// âüÇµÇΩèuä‘ÇéÊìæ
+	// âüÇµÇΩèuä‘ÇéÊìæ[πﬁ∞— ﬂØƒﬁëÄçÏ]
 	// åªç›âEŒﬁ¿›Çâüâ∫--------------------------------------
 	if (Pad & PAD_INPUT_RIGHT)
 	{
@@ -167,6 +170,79 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	}
 	
 	if (SetInput & ~SetInputOld)
+	{
+		setF = true;
+
+		lpMap.setMapData(pos, id);
+	}
+	else
+	{
+		setF = false;
+	}
+	// âüÇµÇΩèuä‘ÇéÊìæ[∑∞Œﬁ∞ƒﬁëÄçÏ]
+	// åªç›âEŒﬁ¿›Çâüâ∫--------------------------------------
+	if (cnt_now[KEY_INPUT_RIGHT] & ~cnt_old[KEY_INPUT_RIGHT])
+	{
+		pos.x += GRIDSIZE;
+		// ∂∞øŸÇÃŒﬂºﬁºÆ›êßå‰
+		if (pos.x >= Scr.x - GRIDSIZE)
+		{
+			pos.x = Scr.x - GRIDSIZE;
+		}
+	}
+	
+	// ---------------------------------------------------------
+
+	// åªç›ç∂Œﬁ¿›Çâüâ∫-----------------------------------------
+	if (cnt_now[KEY_INPUT_LEFT] & ~cnt_old[KEY_INPUT_LEFT])
+	{
+		pos.x -= GRIDSIZE;
+		// ∂∞øŸÇÃŒﬂºﬁºÆ›êßå‰
+		if (pos.x <= 0)
+		{
+			pos.x = 0;
+		}
+	}
+	
+	//--------------------------------------------------------
+
+	// åªç›è„Œﬁ¿›Çâüâ∫---------------------------------------
+	if (cnt_now[KEY_INPUT_UP] & ~cnt_old[KEY_INPUT_UP])
+	{
+		pos.y -= GRIDSIZE;
+		// ∂∞øŸÇÃŒﬂºﬁºÆ›êßå‰
+		if (pos.y <= 0)
+		{
+			pos.y = 0;
+		}
+	}
+	//----------------------------------------------------
+
+	// åªç›â∫Œﬁ¿›Çâüâ∫-----------------------------------
+	if (cnt_now[KEY_INPUT_DOWN] & ~cnt_old[KEY_INPUT_DOWN])
+	{
+		pos.y += GRIDSIZE;
+		// ∂∞øŸÇÃŒﬂºﬁºÆ›êßå‰
+		if (pos.y >= (Scr.y - GRIDSIZE) - 20)
+		{
+			pos.y = (Scr.y - GRIDSIZE) - 20;
+		}
+	}
+	//--------------------------------------------------------
+
+	if (cnt_now[KEY_INPUT_RCONTROL] & ~cnt_old[KEY_INPUT_RCONTROL])
+	{
+		id = (objID)((id >= objID::ID_NON) ? objID::ID_1 : id + 1);	//id+1 = CursorÇÃ±≤∫›ÇÃéü
+	}
+	//------------------------------------------------------------
+
+	if (cnt_now[KEY_INPUT_LCONTROL] & ~cnt_old[KEY_INPUT_LCONTROL])
+	{
+		id = (objID)((id <= objID::ID_1) ? objID::ID_NON : id - 1);	//id+1 = CursorÇÃ±≤∫›ÇÃéü
+	}
+	//-----------------------------------------------------------
+
+	if (cnt_now[KEY_INPUT_SPACE] & ~cnt_old[KEY_INPUT_SPACE])
 	{
 		setF = true;
 

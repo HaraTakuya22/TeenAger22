@@ -43,7 +43,7 @@ int EditScene::Init(void)
 	objlist->clear();
 	lpMap.setUp(VECTOR2(SCREENSIZE_X, SCREENSIZE_Y), VECTOR2(GRIDSIZE, GRIDSIZE));
 	auto obj = AddList()(objlist, std::make_unique<EditCursor>(VECTOR2(0, 0)));
-	(*obj)->Init("image/chis.png", VECTOR2(5, 2), VECTOR2(80, 80));
+	(*obj)->Init("image/chips.png", VECTOR2(5, 2), VECTOR2(80, 80));
 
 	return 0;
 }

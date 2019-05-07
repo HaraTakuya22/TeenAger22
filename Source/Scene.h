@@ -33,6 +33,8 @@ private:
 	Scene();
 	~Scene();
 
+	bool isFullScreen = false;
+
 	static std::once_flag onceflag;
 	static Scene* sceneins;
 

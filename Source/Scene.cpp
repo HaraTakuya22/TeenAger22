@@ -7,9 +7,25 @@ std::once_flag Scene::onceflag;
 
 void Scene::onceRun(void)
 {
+	// フルスクリーンウインドウの切り替えでリソースが消えるのを防ぐ
+	SetChangeScreenModeGraphicsSystemResetFlag(FALSE);
+
 	sceneshift = std::make_unique<TitleScene>();
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
+		// フルスクリーンの切り替え
+		if (CheckHitKey(KEY_INPUT_F1) && !isFullScreen)
+		{
+			ChangeWindowMode(FALSE);
+			SetDrawScreen(DX_SCREEN_BACK);
+			isFullScreen = true;
+		}
+		if (CheckHitKey(KEY_INPUT_F2) && isFullScreen)
+		{
+			ChangeWindowMode(TRUE);
+			SetDrawScreen(DX_SCREEN_BACK);
+			isFullScreen = false;
+		}
 		sceneshift = sceneshift->Update(std::move(sceneshift), (*gamectl));
 		gamectl->Update();
 	}
@@ -44,6 +60,8 @@ void Scene::Destroy(void)
 bool Scene::SystemInit(void)
 {
 	SetGraphMode(SCREENSIZE_X, SCREENSIZE_Y, 32);		
+
+	isFullScreen = false;
 
 	ChangeWindowMode(true);								//true:window　false:ﾌﾙｽｸﾘｰﾝ
 	SetWindowText("sample");

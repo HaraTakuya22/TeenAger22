@@ -45,7 +45,7 @@ Prey::Prey(VECTOR2 pos)
 
 	// player(‹SˆÈŠO)‚ÌÎß¼Ş¼®İ‚Ì¾¯Ä
 	SetPos(pos);
-	Obj::Init("image/character.png", VECTOR2(320 / 4, 480 / 4), VECTOR2(4, 4), pos);
+	Obj::Init("character/character.png", VECTOR2(4, 4), VECTOR2(320 / 4, 480 / 4));
 	Prey::Init();
 	afterKeyFlag = false;
 }
@@ -87,7 +87,7 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 			Prey::dir = dirTbl[dir][id];
 			if (!PassageTbl[static_cast<int>(lpMap.GetMapData(SidePos(Prey::dir, pos, speedTbl[Prey::dir], IN_SIDE)))])
 			{
-				// ˆÚ“®•s‰Â‚ÌµÌŞ¼Şª¸Ä‚ª—×‚É‚ ‚Á‚½ê‡
+				// •Ç‚ª—×‚É‚ ‚Á‚½ê‡
 				return false;
 			}
 			else
@@ -127,7 +127,8 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 
 void Prey::Draw(void)
 {
-	DrawBox(pos.x, pos.y, pos.x + GRIDSIZE, pos.y - (GRIDSIZE + 40), 0xff0000, true);
+	//DrawBox(pos.x, pos.y, pos.x + GRIDSIZE, pos.y - (GRIDSIZE + 40), 0xff0000, true);
+	Obj::Draw();
 }
 
 bool Prey::Init(void)

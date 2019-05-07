@@ -54,13 +54,6 @@ bool Obj::Init(std::string filename, VECTOR2 divcnt, VECTOR2 divsize)
 	return true;
 }
 
-bool Obj::Init(std::string filename, VECTOR2 divcnt, VECTOR2 divsize, VECTOR2 pos)
-{
-	Init(filename, divcnt, divsize);
-	SetPos(pos);
-	return true;
-}
-
 bool Obj::AddAnim(std::string animationName, int x, int y, int flame, int val)
 {
 	animTbl[animationName][ANIM_START] = DivCnt.x * y + x;

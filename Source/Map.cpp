@@ -202,6 +202,7 @@ void Map::IndividualsDraw(WeakList weaklist)
 		//---------------------------------------------
 
 		DrawGraph(0, 0, PreyWindow, true);
+		bool PreyFlag = false;
 
 		// Map‚Ì•\Ž¦
 		DrawRectGraph(mapPos.x, mapPos.y,0,0,SCREENSIZE_X * 4,(SCREENSIZE_Y * 4) + (GRIDSIZE * 3), MapImage, true,false);
@@ -210,7 +211,9 @@ void Map::IndividualsDraw(WeakList weaklist)
 		//DrawBox(GRIDSIZE * 4,(GRIDSIZE * 4) - 40,(GRIDSIZE * 4) + PREYSIZE_X,(GRIDSIZE * 5), 0xff0000, true);
 
 		// Prey‚Ì²Ý½ÀÝ½
+
 		AddList()(weaklist, std::make_unique<Prey>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 5)));
+		PreyFlag = true;
 	}
 
 	// player2‚Ì‰æ–Ê•\Ž¦

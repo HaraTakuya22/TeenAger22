@@ -28,7 +28,8 @@
 enum PASSAGE
 {
 	PASSAGE_WAY,	// “¹
-	PASSAGE_WALL	// •Ç
+	PASSAGE_WALL,	// •Ç
+	PASSAGE_MAX
 };
 
 

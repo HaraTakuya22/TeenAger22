@@ -52,6 +52,11 @@ public:
 	void Move(const Controller& controll, WeakList objlist);
 	void Draw(void);
 
+	bool GetType(OBJ_TYPE type)
+	{
+		return (type == TYPE_PREY);
+	}
+
 private:
 	bool Init(void);
 	bool afterKeyFlag;				// ·°ˆ——pÌ×¸Ş

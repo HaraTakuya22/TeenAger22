@@ -23,13 +23,10 @@ unique_Base EditScene::Update(unique_Base own, const Controller & Controller)
 	{
 		(*itr)->Update(Controller, objlist);
 	}
+	lpMap.CursorShape(objlist);
 
 	// ¹Ş°ÑÊß¯ÄŞ‚ÌStart·°‚ğ‰Ÿ‰º ¨ GameScene‚ÉˆÚs
 	if (Pad & PAD_INPUT_12)
-	{
-		return std::make_unique<GameScene>();
-	}
-	if (CheckHitKey(KEY_INPUT_SPACE))
 	{
 		return std::make_unique<GameScene>();
 	}
@@ -47,7 +44,7 @@ int EditScene::Init(void)
 	objlist->clear();
 	lpMap.setUp(VECTOR2(SCREENSIZE_X, SCREENSIZE_Y), VECTOR2(GRIDSIZE, GRIDSIZE));
 	auto obj = AddList()(objlist, std::make_unique<EditCursor>(VECTOR2(0, 0)));
-	(*obj)->Init("image/chips.png", VECTOR2(5, 2), VECTOR2(80, 80));
+	(*obj)->Init("image/mapblock.png", VECTOR2(6, 4), VECTOR2(lpMap.CursorShape(objlist).x, lpMap.CursorShape(objlist).y));
 
 	return 0;
 }
@@ -58,7 +55,9 @@ void EditScene::EditDraw(void)
 
 	lpMap.CreateIndividualsDisplay();
 	lpMap.IndividualsDraw(objlist);
+	
 	lpMap.MapDraw(false);
+	lpMap.SetObj(objlist);
 	//	´ÃŞ¨¯Ä¼°İ‚Ì•`‰æ
 	auto itr = objlist->begin();
 	(*itr)->Draw();

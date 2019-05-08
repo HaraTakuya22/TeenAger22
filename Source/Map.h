@@ -85,6 +85,8 @@ public:
 	bool setMapData(const VECTOR2& pos, objID id);
 	objID GetMapData(const VECTOR2& pos);
 
+	bool SetObj(WeakList objlist);
+
 	// Ï¯Ìß‚ÌÎß¼Ş¼®İæ“¾
 	VECTOR2& GetMapPos(void)
 	{
@@ -94,9 +96,11 @@ public:
 	{
 		return VECTOR2(MAPSIZE_X, MAPSIZE_Y);
 	}
+	VECTOR2 CursorShape(WeakList objlist);
 
 	// ÌßÚ²Ô°‚Ìl”‚ÌŠi”[•Ï”
 	PLAYER player;
+
 private:
 	Map();
 	~Map();
@@ -129,6 +133,8 @@ private:
 	
 	// “¹‚©•Ç‚©‚ÌÌ×¸Ş
 	PASSAGE passageF[GRIDCNT_X * GRIDCNT_Y];
+
+	
 
 	//	ˆø”‚Ì‚Æ‚±‚ë‚Å’u‚«Š·‚¦‚½Œ^‚ÅéŒ¾‚·‚é‚Æ‚¢‚¤‚±‚Æ
 	template<typename MapType, typename IDType>

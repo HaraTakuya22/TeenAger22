@@ -4,7 +4,7 @@
 //FIRE_DIR‚Ìæ“ª‚Ì—v‘f‚ğ•Ô‚µ‚Ä‚ ‚°‚é
 objID begin(objID)
 {
-	return objID::ID_1;
+	return objID::FLOOR;
 }
 
 //FIRE_DIR‚Ì––’[‚ª•Ô‚Á‚Ä‚­‚é

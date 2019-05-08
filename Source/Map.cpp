@@ -59,15 +59,15 @@ void Map::MapDraw(bool gameF)
 	default:
 		break;
 	}
-	for (int y = 0; y < MapSize.y; y++)
+	/*for (int y = 0; y < MapSize.y; y++)
 	{
 		for (int x = 0; x < MapSize.x; x++)
 		{
 			objID id = MapData[y][x];
-			DrawGraph(x * ChipSize.x, y * ChipSize.y, lpImage.GetID("image/chips.png")[static_cast<int>(id)], true);
+			DrawGraph(x * ChipSize.x, y * ChipSize.y, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true);
 			DrawFormatString(x * ChipSize.x, y * ChipSize.y, 0xff0000, "%d", MapData[y][x]);
 		}
-	}
+	}*/
 
 	DrawLine(GRIDSIZE * 9, GRIDSIZE * 3, GRIDSIZE * 9, Scr.y, 0xff00ff);
 
@@ -202,7 +202,6 @@ void Map::IndividualsDraw(WeakList weaklist)
 		//---------------------------------------------
 
 		DrawGraph(0, 0, PreyWindow, true);
-		bool PreyFlag = false;
 
 		// Map‚Ì•\Ž¦
 		DrawRectGraph(mapPos.x, mapPos.y,0,0,SCREENSIZE_X * 4,(SCREENSIZE_Y * 4) + (GRIDSIZE * 3), MapImage, true,false);
@@ -211,9 +210,7 @@ void Map::IndividualsDraw(WeakList weaklist)
 		//DrawBox(GRIDSIZE * 4,(GRIDSIZE * 4) - 40,(GRIDSIZE * 4) + PREYSIZE_X,(GRIDSIZE * 5), 0xff0000, true);
 
 		// Prey‚Ì²Ý½ÀÝ½
-
 		AddList()(weaklist, std::make_unique<Prey>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 5)));
-		PreyFlag = true;
 	}
 
 	// player2‚Ì‰æ–Ê•\Ž¦
@@ -279,7 +276,7 @@ void Map::setUp(const VECTOR2& size, const VECTOR2& chipSize)
 			base[j] = initNum;
 		}
 	};
-	createMap(BaseMap, MapData, objID::ID_NON);
+	createMap(BaseMap, MapData, objID::NON);
 }
 
 bool Map::setMapData(const VECTOR2 & pos, objID id)
@@ -290,7 +287,96 @@ bool Map::setMapData(const VECTOR2 & pos, objID id)
 // Mapã‚ÌIDî•ñ‚ð‘¼‚É“n‚µ‚Ä‚ ‚°‚é
 objID Map::GetMapData(const VECTOR2 & pos)
 {
-	return GetData(MapData,pos,objID::ID_9);
+	return GetData(MapData,pos,objID::FLOOR);
+}
+
+bool Map::SetObj(WeakList objlist)
+{
+	Shared_ObjList tmplist(objlist.lock()->size());
+	for (int y = 0; y < MapSize.y; y++)
+	{
+		for (int x = 0; x < MapSize.x; x++)
+		{
+			auto Cursor = std::remove_copy_if(objlist.lock()->begin(), objlist.lock()->end(), tmplist.begin(), [](Objshared& obj) {return !(obj->GetType(TYPE_CURSOR)); });
+			for_each(tmplist.begin(), Cursor, [&](auto &cursor) {
+				VECTOR2 cursorPos = cursor->GetPos();
+				objID id = MapData[y][x];
+				switch (id)
+				{
+				case objID::FLOOR:
+					DrawRectGraph(cursorPos.x, cursorPos.y, 0, 0, GRIDSIZE, GRIDSIZE, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
+					break;
+				case objID::WALL:
+					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE, 0, GRIDSIZE, GRIDSIZE, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
+					break;
+				case objID::TABLE:
+					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 2, 0, GRIDSIZE * 2, GRIDSIZE * 3, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
+					break;
+				case objID::SUBTABLE:
+					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 4, 0, GRIDSIZE, GRIDSIZE * 4, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
+					break;
+				case objID::SUBMONITOR:
+					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 5, 0, GRIDSIZE, GRIDSIZE * 3, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
+					break;
+				case objID::MONITOR:
+					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 6, 0, GRIDSIZE * 3, GRIDSIZE * 3, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
+					break;
+				case objID::BED:
+					DrawRectGraph(cursorPos.x, cursorPos.y, 0, GRIDSIZE, GRIDSIZE * 2, GRIDSIZE * 3, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
+					break;
+				case objID::VASE_1:
+					DrawRectGraph(cursorPos.x, cursorPos.y, 0, GRIDSIZE * 4, GRIDSIZE, GRIDSIZE * 2, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
+					break;
+				case objID::VASE_2:
+					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE, GRIDSIZE * 4, GRIDSIZE, GRIDSIZE * 2, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
+					break;
+				case objID::DESK:
+					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 2, GRIDSIZE * 4, GRIDSIZE * 3, GRIDSIZE * 2, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
+					break;
+				case objID::MIRRORTABLE:
+					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 5, GRIDSIZE * 3, GRIDSIZE, GRIDSIZE * 3, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
+					break;
+				case objID::FACE:
+					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 6, GRIDSIZE * 3, GRIDSIZE, GRIDSIZE * 3, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
+					break;
+				case objID::KITCHIN_1:
+					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 7, GRIDSIZE * 3, GRIDSIZE, GRIDSIZE * 3, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
+					break;
+				case objID::KITCHIN_2:
+					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 8, GRIDSIZE * 3, GRIDSIZE, GRIDSIZE * 3, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
+					break;
+				case objID::BOOKSHELF:
+					DrawRectGraph(cursorPos.x, cursorPos.y, 0, GRIDSIZE * 6, GRIDSIZE, GRIDSIZE * 2, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
+					break;
+				case objID::DRAWER:
+					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE, GRIDSIZE * 6, GRIDSIZE, GRIDSIZE * 2, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
+					break;
+				case objID::LOCKER:
+					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 2, GRIDSIZE * 6, GRIDSIZE, GRIDSIZE * 2, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
+					break;
+				case objID::CHAIR_1:
+					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 3, GRIDSIZE * 6, GRIDSIZE, GRIDSIZE, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
+					break;
+				case objID::CHAIR_2:
+					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 4, GRIDSIZE * 6, GRIDSIZE, GRIDSIZE, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
+					break;
+				case objID::CHAIR_3:
+					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 5, GRIDSIZE * 6, GRIDSIZE, GRIDSIZE, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
+					break;
+				case objID::CHAIR_4:
+					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 6, GRIDSIZE * 6, GRIDSIZE, GRIDSIZE, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
+					break;
+				case objID::NON:
+					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 7, GRIDSIZE * 6, GRIDSIZE, GRIDSIZE, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
+					break;
+				default:
+					break;
+				}
+			});
+		}
+	}
+
+	return true;
 }
 
 template<typename MapType, typename IDType>
@@ -331,4 +417,115 @@ Map::Map()
 
 Map::~Map()
 {
+}
+
+VECTOR2 Map::CursorShape(WeakList objlist)
+{
+	Shared_ObjList tmplist(objlist.lock()->size());
+	VECTOR2 cursorShape;
+	for (int y = 0; y < MapSize.y; y++)
+	{
+		for (int x = 0; x < MapSize.x; x++)
+		{
+			auto Cursor = std::remove_copy_if(objlist.lock()->begin(), objlist.lock()->end(), tmplist.begin(), [](Objshared& obj) {return !(obj->GetType(TYPE_CURSOR)); });
+			for_each(tmplist.begin(), Cursor, [&](auto &cursor) {
+				VECTOR2 cursorPos = cursor->GetPos();
+				objID id = MapData[y][x];
+				switch (id)
+				{
+				case objID::FLOOR:
+					cursorShape.x = GRIDSIZE;
+					cursorShape.y = GRIDSIZE;
+					break;
+				case objID::WALL:
+					cursorShape.x = GRIDSIZE;
+					cursorShape.y = GRIDSIZE;
+					break;
+				case objID::TABLE:
+					cursorShape.x = GRIDSIZE * 2;
+					cursorShape.y = GRIDSIZE * 4;
+					break;
+				case objID::SUBTABLE:
+					cursorShape.x = GRIDSIZE;
+					cursorShape.y = GRIDSIZE * 4;
+					break;
+				case objID::SUBMONITOR:
+					cursorShape.x = GRIDSIZE;
+					cursorShape.y = GRIDSIZE * 3;
+					break;
+				case objID::MONITOR:
+					cursorShape.x = GRIDSIZE * 3;
+					cursorShape.y = GRIDSIZE * 3;
+					break;
+				case objID::BED:
+					cursorShape.x = GRIDSIZE * 2;
+					cursorShape.y = GRIDSIZE * 3;
+					break;
+				case objID::VASE_1:
+					cursorShape.x = GRIDSIZE;
+					cursorShape.y = GRIDSIZE * 2;
+					break;
+				case objID::VASE_2:
+					cursorShape.x = GRIDSIZE;
+					cursorShape.y = GRIDSIZE * 2;
+					break;
+				case objID::DESK:
+					cursorShape.x = GRIDSIZE * 3;
+					cursorShape.y = GRIDSIZE * 2;
+					break;
+				case objID::MIRRORTABLE:
+					cursorShape.x = GRIDSIZE;
+					cursorShape.y = GRIDSIZE * 3;
+					break;
+				case objID::FACE:
+					cursorShape.x = GRIDSIZE;
+					cursorShape.y = GRIDSIZE * 3;
+					break;
+				case objID::KITCHIN_1:
+					cursorShape.x = GRIDSIZE;
+					cursorShape.y = GRIDSIZE * 3;
+					break;
+				case objID::KITCHIN_2:
+					cursorShape.x = GRIDSIZE;
+					cursorShape.y = GRIDSIZE * 3;
+					break;
+				case objID::BOOKSHELF:
+					cursorShape.x = GRIDSIZE;
+					cursorShape.y = GRIDSIZE * 2;
+					break;
+				case objID::DRAWER:
+					cursorShape.x = GRIDSIZE;
+					cursorShape.y = GRIDSIZE * 2;
+					break;
+				case objID::LOCKER:
+					cursorShape.x = GRIDSIZE;
+					cursorShape.y = GRIDSIZE * 2;
+					break;
+				case objID::CHAIR_1:
+					cursorShape.x = GRIDSIZE;
+					cursorShape.y = GRIDSIZE;
+					break;
+				case objID::CHAIR_2:
+					cursorShape.x = GRIDSIZE;
+					cursorShape.y = GRIDSIZE;
+					break;
+				case objID::CHAIR_3:
+					cursorShape.x = GRIDSIZE;
+					cursorShape.y = GRIDSIZE;
+					break;
+				case objID::CHAIR_4:
+					cursorShape.x = GRIDSIZE;
+					cursorShape.y = GRIDSIZE;
+					break;
+				case objID::NON:
+					cursorShape.x = GRIDSIZE;
+					cursorShape.y = GRIDSIZE;
+					break;
+				default:
+					break;
+				}
+			});
+		}
+	}
+	return cursorShape;
 }

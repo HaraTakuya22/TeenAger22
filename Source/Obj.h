@@ -25,6 +25,18 @@ enum ANIMATION
 	ANIM_MAX
 };
 
+// µÌŞ¼Şª¸Ä‚ÌÀ²Ìß
+enum OBJ_TYPE
+{
+	// ´ÃŞ¨¯Ä¶°¿Ù
+	TYPE_CURSOR,
+	// ÌßÚ²Ô°
+	TYPE_PREY,
+	// ‹S
+	TYPE_IT,
+	TYPE_MAX
+};
+
 
 class Obj
 {
@@ -52,7 +64,11 @@ public:
 	{
 		return AnimationName;
 	}
-
+	//Îß¼Ş¼®İæ“¾
+	const VECTOR2 GetPos(void)
+	{
+		return pos;
+	}
 	// w’è‚ÌµÌŞ¼Şª¸Ä‚ğØ½Ä‚©‚çÁ‚·Ì×¸Ş‚ğ•Ô‚·
 	bool Getdeleteflag(void)
 	{
@@ -64,6 +80,10 @@ public:
 	{
 		deleteflag = true;
 	}
+
+	// µÌŞ¼Şª¸Ä‚ÌÀ²Ìßæ“¾ŠÖ”
+	virtual bool GetType(OBJ_TYPE type) = 0;
+
 private:
 	//‰æ‘œ‚Ì–¼‘O
 	std::string ImageName;

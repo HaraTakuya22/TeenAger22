@@ -9,6 +9,11 @@ public:
 	~EditCursor();
 	void Move(const Controller& controll, WeakList objlist);
 
+	bool GetType(OBJ_TYPE type)
+	{
+		return (type == TYPE_CURSOR);
+	}
+
 private:
 	void Draw(void);
 
@@ -34,5 +39,6 @@ private:
 
 	// ID
 	objID id;
+	
 };
 

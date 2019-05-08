@@ -146,7 +146,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 
 	if (ChangeInput & ~ChangeInputOld)
 	{
-		id = (objID)((id >= objID::ID_NON) ? objID::ID_1 : id + 1);	//id+1 = Cursor‚Ì±²ºÝ‚ÌŽŸ
+		id = (objID)((id >= objID::NON) ? objID::FLOOR : id + 1);	//id+1 = Cursor‚Ì±²ºÝ‚ÌŽŸ
 	}
 	//------------------------------------------------------------
 
@@ -162,7 +162,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 
 	if (ChangeInputBack & ~ChangeInputBackOld)
 	{
-		id = (objID)((id <= objID::ID_1) ? objID::ID_NON : id - 1);	//id+1 = Cursor‚Ì±²ºÝ‚ÌŽŸ
+		id = (objID)((id <= objID::FLOOR) ? objID::NON : id - 1);	//id+1 = Cursor‚Ì±²ºÝ‚ÌŽŸ
 	}
 	//------------------------------------------------------------
 
@@ -287,13 +287,13 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 
 	if (cnt_now[KEY_INPUT_RCONTROL] & ~cnt_old[KEY_INPUT_RCONTROL])
 	{
-		id = (objID)((id >= objID::ID_NON) ? objID::ID_1 : id + 1);	//id+1 = Cursor‚Ì±²ºÝ‚ÌŽŸ
+		id = (objID)((id >= objID::NON) ? objID::FLOOR : id + 1);	//id+1 = Cursor‚Ì±²ºÝ‚ÌŽŸ
 	}
 	//------------------------------------------------------------
 
 	if (cnt_now[KEY_INPUT_LCONTROL] & ~cnt_old[KEY_INPUT_LCONTROL])
 	{
-		id = (objID)((id <= objID::ID_1) ? objID::ID_NON : id - 1);	//id+1 = Cursor‚Ì±²ºÝ‚ÌŽŸ
+		id = (objID)((id <= objID::FLOOR) ? objID::NON : id - 1);	//id+1 = Cursor‚Ì±²ºÝ‚ÌŽŸ
 	}
 	//-----------------------------------------------------------
 
@@ -315,7 +315,7 @@ void EditCursor::Draw(void)
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	//DrawBox(pos.x, pos.y, pos.x + 80, pos.y + 80, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA,flickCnt);
-	DrawGraph(pos.x, pos.y, lpImage.GetID("image/chips.png")[static_cast<int>(id)], true);
+	DrawGraph(pos.x, pos.y, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	flickCnt += 5;
 	if (flickCnt >= 300)

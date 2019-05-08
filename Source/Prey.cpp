@@ -13,13 +13,13 @@ Prey::Prey(VECTOR2 pos)
 	this->pos.x = pos.x;
 	this->pos.y = pos.y;
 
-	//		MAIN			
+	//			MAIN			
 	keyIdTbl = { KEY_INPUT_NUMPAD2,	// 下
 				 KEY_INPUT_NUMPAD4,	// 左
 				 KEY_INPUT_NUMPAD6,	// 右
 				 KEY_INPUT_NUMPAD8,	// 上
 	};
-	//	MAIN	
+	//			MAIN	
 	posTbl = { &pos.y, &pos.x,	// 下
 				&pos.x,	&pos.y, // 左
 				&pos.x,	&pos.y, // 右
@@ -31,7 +31,7 @@ Prey::Prey(VECTOR2 pos)
 				 PLAYER_DEF_SPEED,	// 右
 				 -PLAYER_DEF_SPEED,	// 上
 	};
-	//	MAIN		OPP			SUB1		SUB2
+	//			MAIN		OPP			SUB1		SUB2
 	dirTbl = { DIR_DOWN,	DIR_UP,		DIR_LEFT,	DIR_RIGHT,	// 下（上・左・右）
 				DIR_LEFT,	DIR_RIGHT,	DIR_DOWN,	DIR_UP,		// 左（右・下・上）
 				DIR_RIGHT,	DIR_LEFT,	DIR_DOWN,	DIR_UP,		// 右（左・下・上）
@@ -81,7 +81,7 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	};
 
 	auto move = [&, dir = Prey::dir](DIR_TBL_ID id){
-		if (keyTbl[keyIdTbl[dirTbl[dir][id]]])
+		if (keyTbl[keyIdTbl[dirTbl[Prey::dir][id]]])
 		{
 			// 方向のｾｯﾄ
 			Prey::dir = dirTbl[dir][id];
@@ -108,21 +108,22 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 		return false;
 	};
 
-	if (!(move((DIR_TBL_ID)(DIR_TBL_SUB1 - (afterKeyFlag << 1)))
-		|| move((DIR_TBL_ID)(DIR_TBL_SUB2 - (afterKeyFlag << 1)))))	// ｼﾌﾄ演算でafterKeyFlagを1ﾄﾞｯﾄずらす
-	{
-		afterKeyFlag = false;
-		if (!(move((DIR_TBL_ID)(DIR_TBL_MAIN + (afterKeyFlag << 1))) || move((DIR_TBL_ID)(DIR_TBL_OPP + (afterKeyFlag << 1)))))
-		{
-			SetAnim("停止");
-			return;
-		}
-	}
-	else
+	//if (!(move((DIR_TBL_ID)(DIR_TBL_SUB1 - (afterKeyFlag << 1)))
+	//	|| move((DIR_TBL_ID)(DIR_TBL_SUB2 - (afterKeyFlag << 1)))))	// ｼﾌﾄ演算でafterKeyFlagを1ﾄﾞｯﾄずらす
+	//{
+	//	afterKeyFlag = false;
+	//	if (!(move((DIR_TBL_ID)(DIR_TBL_MAIN + (afterKeyFlag << 1))) || move((DIR_TBL_ID)(DIR_TBL_OPP + (afterKeyFlag << 1)))))
+	//	{
+	//		SetAnim("停止");
+	//		return;
+	//	}
+	//}
+	//else
 	{
 		afterKeyFlag = keyTbl[keyIdTbl[dirTbl[dir][DIR_TBL_SUB1]]] || keyTbl[keyIdTbl[dirTbl[dir][DIR_TBL_SUB2]]] ^ (int)(GetAnimation() == "停止");
 	}
 	SetAnim("移動");
+	_RPTN(_CRT_WARN, "character.pos:%d,%d\n", pos.x, pos.y);
 }
 
 void Prey::Draw(void)

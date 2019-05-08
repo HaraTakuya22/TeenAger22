@@ -210,7 +210,13 @@ void Map::IndividualsDraw(WeakList weaklist)
 		//DrawBox(GRIDSIZE * 4,(GRIDSIZE * 4) - 40,(GRIDSIZE * 4) + PREYSIZE_X,(GRIDSIZE * 5), 0xff0000, true);
 
 		// Prey‚Ì²Ý½ÀÝ½
+<<<<<<< HEAD
 		AddList()(weaklist, std::make_unique<Prey>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 5)));
+=======
+
+		AddList()(weaklist, std::make_unique<Prey>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4 - 40)));
+		PreyFlag = true;
+>>>>>>> f810de00795de9afdadaf04d5a424d987ef68d4c
 	}
 
 	// player2‚Ì‰æ–Ê•\Ž¦

@@ -39,10 +39,33 @@ unique_Base TitleScene::Update(unique_Base own, const Controller & Controller)
 	//{
 	//	return std::make_unique<EditScene>();
 	//}
-	//ClsDrawScreen();
-	//Draw();
+	// ƒ}ƒbƒv‚ÌˆÚ“®
+	if ((titleRightPos.x >= 1200) && (titleRightPos.y >= 1440))
+	{
+		titleLeftPos.x = titleLeftPos.x - 3;
+		titleRightPos.x = titleRightPos.x - 3;
+	}
+	if ((titleRightPos.x <= 1200) && (titleRightPos.y >= 660))
+	{
+		titleLeftPos.y = titleLeftPos.y - 3;
+		titleRightPos.y = titleRightPos.y - 3;
+	}
+	if ((titleLeftPos.x <= 0) && (titleRightPos.y <= 660))
+	{
+		titleLeftPos.x = titleLeftPos.x + 3;
+		titleRightPos.x = titleRightPos.x + 3;
+	}
+	if ((titleLeftPos.x >= 0) && (titleLeftPos.y <= 0))
+	{
+		titleLeftPos.y = titleLeftPos.y + 3;
+		titleRightPos.y = titleRightPos.y + 3;
+	}
+	
+	ClsDrawScreen();
 
-	//ScreenFlip();
+	Draw();
+
+	ScreenFlip();
 
 
 	return move(own);
@@ -50,12 +73,20 @@ unique_Base TitleScene::Update(unique_Base own, const Controller & Controller)
 
 int TitleScene::Init(void)
 {
-
+	titleMapImage = LoadGraph("MAP/map(old).png");
+	titleLeftPos = { 0 , 0 };
+	titleRightPos.x = 2400;
+	titleRightPos.y = 1440;
 	return 0;
 }
 
 void TitleScene::Draw(void)
 {
+	DrawExtendGraph(titleLeftPos.x, titleLeftPos.y,
+		titleRightPos.x + 1, titleRightPos.y + 1,
+		titleMapImage,
+		false);
+
 	auto scr = lpScene.GetScrSize();
 	DrawFormatString(600, 0, 0xffff00, "title");
 
@@ -67,4 +98,5 @@ void TitleScene::Draw(void)
 	{
 		DrawBox((scr.x / 2) - 80, ((scr.y / 2) - 40) + i, (scr.x / 2) + 80, (scr.y / 2) + i, 0x00ff00, false);
 	}
+
 }

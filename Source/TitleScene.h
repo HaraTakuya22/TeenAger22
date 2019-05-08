@@ -17,5 +17,11 @@ private:
 	// object's list
 	Shared_ObjListptr objlist;
 	void Draw(void);
+
+	// 表示するマップ
+	int titleMapImage;
+	// 表示するマップのpos
+	VECTOR2 titleLeftPos;
+	VECTOR2 titleRightPos;
 };
 

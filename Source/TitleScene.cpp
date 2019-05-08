@@ -18,31 +18,31 @@ TitleScene::~TitleScene()
 
 unique_Base TitleScene::Update(unique_Base own, const Controller & Controller)
 {
-	// ÃÞÊÞ¯¸Þ—p-----------------------------------
-	if (CheckHitKey(KEY_INPUT_1))
-	{
-		lpMap.player = PLAYER_1;
-	}
-	if (CheckHitKey(KEY_INPUT_2))
-	{
-		lpMap.player = PLAYER_2;
-	}
-	if (CheckHitKey(KEY_INPUT_3))
-	{
-		lpMap.player = PLAYER_3;
-	}
-	// --------------------------------------
-	if (CheckHitKey(KEY_INPUT_RETURN) &&
-		(lpMap.player == PLAYER_1
-			|| lpMap.player == PLAYER_2
-			|| lpMap.player == PLAYER_3))
-	{
-		return std::make_unique<EditScene>();
-	}
-	ClsDrawScreen();
-	Draw();
+	//// ÃÞÊÞ¯¸Þ—p-----------------------------------
+	//if (CheckHitKey(KEY_INPUT_1))
+	//{
+	//	lpMap.player = PLAYER_1;
+	//}
+	//if (CheckHitKey(KEY_INPUT_2))
+	//{
+	//	lpMap.player = PLAYER_2;
+	//}
+	//if (CheckHitKey(KEY_INPUT_3))
+	//{
+	//	lpMap.player = PLAYER_3;
+	//}
+	//// --------------------------------------
+	//if (CheckHitKey(KEY_INPUT_RETURN) &&
+	//	(lpMap.player == PLAYER_1
+	//		|| lpMap.player == PLAYER_2
+	//		|| lpMap.player == PLAYER_3))
+	//{
+	//	return std::make_unique<EditScene>();
+	//}
+	//ClsDrawScreen();
+	//Draw();
 
-	ScreenFlip();
+	//ScreenFlip();
 
 
 	return move(own);

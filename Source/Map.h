@@ -96,8 +96,8 @@ public:
 	{
 		return VECTOR2(MAPSIZE_X, MAPSIZE_Y);
 	}
-	VECTOR2 CursorShape(WeakList objlist);
-
+	bool ChangeCursorShape(void);
+	VECTOR2 cursorShape;
 	// ÌßÚ²Ô°‚Ìl”‚ÌŠi”[•Ï”
 	PLAYER player;
 

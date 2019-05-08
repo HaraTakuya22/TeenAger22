@@ -210,13 +210,7 @@ void Map::IndividualsDraw(WeakList weaklist)
 		//DrawBox(GRIDSIZE * 4,(GRIDSIZE * 4) - 40,(GRIDSIZE * 4) + PREYSIZE_X,(GRIDSIZE * 5), 0xff0000, true);
 
 		// Prey‚Ì²Ý½ÀÝ½
-<<<<<<< HEAD
 		AddList()(weaklist, std::make_unique<Prey>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 5)));
-=======
-
-		AddList()(weaklist, std::make_unique<Prey>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4 - 40)));
-		PreyFlag = true;
->>>>>>> f810de00795de9afdadaf04d5a424d987ef68d4c
 	}
 
 	// player2‚Ì‰æ–Ê•\Ž¦
@@ -260,7 +254,8 @@ struct SizeCheck
 
 void Map::setUp(const VECTOR2& size, const VECTOR2& chipSize)
 {
-	lpImage.GetID("image/chips.png", VECTOR2(5, 2), VECTOR2(80, 80));
+	ChangeCursorShape();
+	lpImage.GetID("image/mapblock.png", VECTOR2(9, 8), VECTOR2(cursorShape.x, cursorShape.y));
 
 	MapSize = VECTOR2(size.x / chipSize.x, size.y / chipSize.y);
 
@@ -425,17 +420,12 @@ Map::~Map()
 {
 }
 
-VECTOR2 Map::CursorShape(WeakList objlist)
+bool Map::ChangeCursorShape(void)
 {
-	Shared_ObjList tmplist(objlist.lock()->size());
-	VECTOR2 cursorShape;
 	for (int y = 0; y < MapSize.y; y++)
 	{
 		for (int x = 0; x < MapSize.x; x++)
 		{
-			auto Cursor = std::remove_copy_if(objlist.lock()->begin(), objlist.lock()->end(), tmplist.begin(), [](Objshared& obj) {return !(obj->GetType(TYPE_CURSOR)); });
-			for_each(tmplist.begin(), Cursor, [&](auto &cursor) {
-				VECTOR2 cursorPos = cursor->GetPos();
 				objID id = MapData[y][x];
 				switch (id)
 				{
@@ -530,8 +520,7 @@ VECTOR2 Map::CursorShape(WeakList objlist)
 				default:
 					break;
 				}
-			});
 		}
 	}
-	return cursorShape;
+	return true;
 }

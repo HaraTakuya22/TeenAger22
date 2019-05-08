@@ -29,6 +29,10 @@ unique_Base EditScene::Update(unique_Base own, const Controller & Controller)
 	{
 		return std::make_unique<GameScene>();
 	}
+	if (CheckHitKey(KEY_INPUT_SPACE))
+	{
+		return std::make_unique<GameScene>();
+	}
 
 	EditDraw();
 	return move(own);

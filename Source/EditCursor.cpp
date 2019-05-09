@@ -178,8 +178,8 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (SetInput & ~SetInputOld)
 	{
 		setF = true;
-
 		lpMap.setMapData(pos, id);
+		
 	}
 	else
 	{
@@ -190,6 +190,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (cnt_now[KEY_INPUT_RIGHT])
 	{
 		tmp.x += GRIDSIZE;
+		setId.set_pos.x -= GRIDSIZE;
 		if (tmp.x >= Scr.x)
 		{
 			lpMap.GetMapPos().x -= GRIDSIZE;
@@ -217,23 +218,22 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (cnt_now[KEY_INPUT_LEFT])
 	{
 		tmp.x -= GRIDSIZE;
+		setId.set_pos += GRIDSIZE;
 		if (tmp.x <= 0)
 		{
 			lpMap.GetMapPos().x += GRIDSIZE;
+			tmp.x = 0;
 		}
 		// Map‚ÌˆÚ“®§Œä
 		if (lpMap.GetMapPos().x + lpMap.GetMapSize().x >= lpMap.GetMapSize().x - Scr.x)
 		{
 			// Map‚ÌˆÚ“®§Œä
 			lpMap.GetMapPos().x = 0;
-			// ¶°¿Ù‚ÌˆÚ“®§Œä
-			tmp.x = GRIDSIZE;
-		}
-
-		// ¶°¿Ù‚ÌÎß¼Ş¼®İ§Œä
-		if (tmp.x <= 0)
-		{
-			tmp.x = 0;
+			// ¶°¿Ù‚ÌÎß¼Ş¼®İ§Œä
+			if (tmp.x <= GRIDSIZE)
+			{
+				tmp.x = GRIDSIZE;
+			}
 		}
 	}
 	
@@ -243,22 +243,25 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (cnt_now[KEY_INPUT_UP])
 	{
 		tmp.y -= GRIDSIZE;
+		setId.set_pos.y += GRIDSIZE;
+
 		if (tmp.y <= 0)
 		{
 			lpMap.GetMapPos().y += GRIDSIZE;
+			tmp.y = 0;
 		}
 		if (lpMap.GetMapPos().y + lpMap.GetMapSize().y >= lpMap.GetMapSize().y - Scr.y)
 		{
 			// Map‚ÌˆÚ“®§Œä
 			lpMap.GetMapPos().y = 0;
-			// ¶°¿Ù‚ÌˆÚ“®§Œä
-			tmp.y = GRIDSIZE;
+			// ¶°¿Ù‚ÌÎß¼Ş¼®İ§Œä
+			if (tmp.y <= GRIDSIZE)
+			{
+				tmp.y = GRIDSIZE;
+			}
+			
 		}
-		// ¶°¿Ù‚ÌÎß¼Ş¼®İ§Œä
-		if (tmp.y <= 0)
-		{
-			tmp.y = 0;
-		}
+		
 	}
 	//----------------------------------------------------
 
@@ -266,19 +269,24 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (cnt_now[KEY_INPUT_DOWN])
 	{
 		tmp.y += GRIDSIZE;
+		setId.set_pos.y -= GRIDSIZE;
 		if (tmp.y >= Scr.y - 20)
 		{
 			lpMap.GetMapPos().y -= GRIDSIZE;
+			tmp.y = Scr.y - GRIDSIZE -20;
 		}
+		
 		// Map‚ÌˆÚ“®§Œä
 		if (lpMap.GetMapPos().y <= -((lpMap.GetMapSize().y - Scr.y) + 20))
 		{
 			// Map‚ÌÎß¼Ş¼®İ§Œä
 			lpMap.GetMapPos().y = -((lpMap.GetMapSize().y - Scr.y) + 20);
-			// ¶°¿Ù‚ÌÎß¼Ş¼®İ§Œä
-			tmp.y = (Scr.y - (GRIDSIZE * 2)) - 20;
-
+			if (tmp.y >= ((Scr.y - (GRIDSIZE * 2)) - 20))
+			{
+				tmp.y = ((Scr.y - (GRIDSIZE * 2)) - 20);
+			}
 		}
+		
 	}
 
 	//¶°¿Ù‚ÌˆÚ“®i™X‚É‘¬‚­‚È‚Á‚Ä‚¢‚­ˆ—j-----------------------------
@@ -317,11 +325,13 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 		id = (objID)((id <= objID::FLOOR) ? objID::NON : id - 1);	//id+1 = Cursor‚Ì±²ºİ‚ÌŸ
 	}
 	//-----------------------------------------------------------
-
+	
 	if (cnt_now[KEY_INPUT_SPACE] & ~cnt_old[KEY_INPUT_SPACE])
 	{
 		setF = true;
 		lpMap.setMapData(pos, id);
+		setId.set_pos = pos;
+		setId.set_id = id;
 	}
 	else
 	{

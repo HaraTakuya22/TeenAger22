@@ -137,7 +137,7 @@ bool Map::Init(void)
 
 	//----------------------------------
 
-	is_makePrey = false;
+	
 
 	return true;
 }
@@ -199,6 +199,8 @@ void Map::IndividualsDraw(WeakList weaklist,bool gameF)
 	// player1‚Ì‰æ–Ê•\Ž¦
 	if (player == PLAYER_1)
 	{
+		is_makePrey = false;
+
 		// ÃÞÊÞ¯¸Þ—p-----------------------------------
 		DrawFormatString(50, 50, 0xffffff, "Player1");
 		//---------------------------------------------
@@ -210,7 +212,6 @@ void Map::IndividualsDraw(WeakList weaklist,bool gameF)
 
 		// Prey(‰¼)‚Ì•\Ž¦
 		//DrawBox(GRIDSIZE * 4,(GRIDSIZE * 4) - 40,(GRIDSIZE * 4) + PREYSIZE_X,(GRIDSIZE * 5), 0xff0000, true);
-
 		// Prey‚Ì²Ý½ÀÝ½(GameScene‚Ì‚Ý)
 		if (gameF && !is_makePrey)
 		{
@@ -336,135 +337,6 @@ IDType Map::GetData(MapType maptype, const VECTOR2 & pos, IDType defID)
 	}
 	return maptype[tmp.y][tmp.x];
 }
-
-/*bool Map::ChangeChipSize(void)
-{
-	for (int y = 0; y < MapSize.y; y++)
-	{
-		for (int x = 0; x < MapSize.x; x++)
-		{
-			objID id = MapData[y][x];
-			VECTOR2 changedSize;
-			switch (id)
-			{
-			case objID::FLOOR:
-				changedSize.x = GRIDSIZE;
-				changedSize.y = GRIDSIZE;
-				break;
-			case objID::WALL:
-				changedSize.x = GRIDSIZE;
-				changedSize.y = GRIDSIZE;
-				break;
-
-			case objID::TABLE:
-				changedSize.x = GRIDSIZE * 2;
-				changedSize.y = GRIDSIZE * 4;
-				break;
-
-			case objID::SUBTABLE:
-				changedSize.x = GRIDSIZE;
-				changedSize.y = GRIDSIZE * 4;
-				break;
-
-			case objID::SUBMONITOR:
-				changedSize.x = GRIDSIZE;
-				changedSize.y = GRIDSIZE * 3;
-				break;
-
-			case objID::MONITOR:
-				changedSize.x = GRIDSIZE * 3;
-				changedSize.y = GRIDSIZE * 3;
-				break;
-
-			case objID::BED:
-				changedSize.x = GRIDSIZE * 2;
-				changedSize.y = GRIDSIZE * 3;
-				break;
-
-			case objID::VASE_1:
-				changedSize.x = GRIDSIZE;
-				changedSize.y = GRIDSIZE * 2;
-				break;
-
-			case objID::VASE_2:
-				changedSize.x = GRIDSIZE;
-				changedSize.y = GRIDSIZE * 2;
-				break;
-
-			case objID::DESK:
-				changedSize.x = GRIDSIZE * 3;
-				changedSize.y = GRIDSIZE * 2;
-				break;
-
-			case objID::MIRRORTABLE:
-				changedSize.x = GRIDSIZE;
-				changedSize.y = GRIDSIZE * 3;
-				break;
-
-			case objID::FACE:
-				changedSize.x = GRIDSIZE;
-				changedSize.y = GRIDSIZE * 3;
-				break;
-
-			case objID::KITCHIN_1:
-				changedSize.x = GRIDSIZE;
-				changedSize.y = GRIDSIZE * 3;
-				break;
-
-			case objID::KITCHIN_2:
-				changedSize.x = GRIDSIZE;
-				changedSize.y = GRIDSIZE * 3;
-				break;
-
-			case objID::BOOKSHELF:
-				changedSize.x = GRIDSIZE;
-				changedSize.y = GRIDSIZE * 2;
-				break;
-
-			case objID::DRAWER:
-				changedSize.x = GRIDSIZE;
-				changedSize.y = GRIDSIZE * 2;
-				break;
-
-			case objID::LOCKER:
-				changedSize.x = GRIDSIZE;
-				changedSize.y = GRIDSIZE * 2;
-				break;
-
-			case objID::CHAIR_1:
-				changedSize.x = GRIDSIZE;
-				changedSize.y = GRIDSIZE;
-				break;
-
-			case objID::CHAIR_2:
-				changedSize.x = GRIDSIZE;
-				changedSize.y = GRIDSIZE;
-				break;
-
-			case objID::CHAIR_3:
-				changedSize.x = GRIDSIZE;
-				changedSize.y = GRIDSIZE;
-				break;
-
-			case objID::CHAIR_4:
-				changedSize.x = GRIDSIZE;
-				changedSize.y = GRIDSIZE;
-				break;
-
-			case objID::NON:
-				changedSize.x = GRIDSIZE;
-				changedSize.y = GRIDSIZE;
-				break;
-
-			default:
-				changedSize.x = GRIDSIZE;
-				changedSize.y = GRIDSIZE;
-				break;
-			}
-		}
-	}
-	return true;
-}*/
 
 bool Map::SetObj(void)
 {

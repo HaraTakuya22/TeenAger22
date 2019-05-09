@@ -1,6 +1,12 @@
 #pragma once
 #include "Obj.h"
 
+struct SETID
+{
+	VECTOR2 set_pos;
+	objID set_id;
+};
+
 class EditCursor :
 	public Obj
 {
@@ -39,6 +45,6 @@ private:
 
 	// ID
 	objID id;
-	
+	SETID setId;
 };
 

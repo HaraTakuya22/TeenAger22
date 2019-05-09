@@ -1,6 +1,7 @@
 #pragma once
 #include "AddList.h"
 #include "BaseScene.h"
+
 class EditScene :
 	public BaseScene
 {
@@ -17,6 +18,5 @@ private:
 	Shared_ObjListptr objlist;
 	List_Obj_itr obj;
 	void EditDraw(void);
-
 };
 

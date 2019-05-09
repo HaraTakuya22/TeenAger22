@@ -32,7 +32,7 @@ unique_Base EditScene::Update(unique_Base own, const Controller & Controller)
 		return std::make_unique<GameScene>();
 	}
 
-	if (Pad & PAD_INPUT_12)
+	if (input[KEY_INPUT_A])
 	{
 		return std::make_unique<GameScene>();
 	}

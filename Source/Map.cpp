@@ -180,7 +180,7 @@ void Map::CreateIndividualsDisplay(void)
 	}
 }
 
-void Map::IndividualsDraw(WeakList weaklist)
+void Map::IndividualsDraw(WeakList weaklist,bool gameF)
 {
 	// MapâÊñ ï\é¶
 	if (player == PLAYER_1 || player == PLAYER_2 || player == PLAYER_3)
@@ -209,9 +209,11 @@ void Map::IndividualsDraw(WeakList weaklist)
 		// Prey(âº)ÇÃï\é¶
 		//DrawBox(GRIDSIZE * 4,(GRIDSIZE * 4) - 40,(GRIDSIZE * 4) + PREYSIZE_X,(GRIDSIZE * 5), 0xff0000, true);
 
-		// PreyÇÃ≤›Ω¿›Ω
-
-		AddList()(weaklist, std::make_unique<Prey>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4 - 40)));
+		// PreyÇÃ≤›Ω¿›Ω(GameSceneÇÃÇ›)
+		if (gameF)
+		{
+			AddList()(weaklist, std::make_unique<Prey>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4 - 40)));
+		}
 	}
 
 	// player2ÇÃâÊñ ï\é¶
@@ -241,11 +243,11 @@ void Map::IndividualsDraw(WeakList weaklist)
 	}
 }
 
-struct SizeCheck
+struct SetCheck
 {
 	bool operator()(const VECTOR2 &tmpPos, const VECTOR2 &MapSize) {
 		//œØÃﬂì‡Ç≈Ç†ÇÍÇŒÅAï`âÊOK
-		if ((tmpPos.x < 0) || (tmpPos.y < 0) || (MapSize.x <= tmpPos.x) || (MapSize.y <= tmpPos.y))
+		if ((tmpPos.x < 1) || (tmpPos.y < 1) || ((MapSize.x / GRIDSIZE) <= tmpPos.x) || ((MapSize.y / GRIDSIZE) <= tmpPos.y))
 		{
 			return false;
 		}
@@ -304,12 +306,12 @@ objID Map::GetMapData(const VECTOR2 & pos)
 template<typename MapType, typename IDType>
 bool Map::setData(MapType maptype, const VECTOR2 & pos, IDType id)
 {
-	ChangeChipSize();
+	//ChangeChipSize();
 	VECTOR2 tmp = VECTOR2(pos.x / ChipSize.x , pos.y / ChipSize.y );
 
 	// Mapì‡Ç≈Ç»Ç¢èÍçáÇÕï`âÊÇµÇ»Ç¢
-	//if (!SizeCheck()(tmp, MapSize));
-	/*{
+	/*if (!SetCheck()(tmp, MapSize));
+	{
 		return false;
 	}*/
 	// Mapì‡ÇÃèÍçáÇÕï`âÊOK
@@ -323,16 +325,16 @@ IDType Map::GetData(MapType maptype, const VECTOR2 & pos, IDType defID)
 {
 	VECTOR2 tmp = VECTOR2(pos.x / ChipSize.x, pos.y / ChipSize.y);
 
-	SizeCheck sizeCheck;
+	SetCheck setCheck;
 
-	if (!sizeCheck(tmp,MapSize))
+	if (!setCheck(tmp,MapSize))
 	{
 		return defID;
 	}
 	return maptype[tmp.y][tmp.x];
 }
 
-bool Map::ChangeChipSize(void)
+/*bool Map::ChangeChipSize(void)
 {
 	for (int y = 0; y < MapSize.y; y++)
 	{
@@ -454,6 +456,60 @@ bool Map::ChangeChipSize(void)
 			default:
 				changedSize.x = GRIDSIZE;
 				changedSize.y = GRIDSIZE;
+				break;
+			}
+		}
+	}
+	return true;
+}*/
+
+bool Map::SetObj(void)
+{
+	for (int y = 0; y < MapSize.y; y++)
+	{
+		for (int x = 0; x < MapSize.x; x++)
+		{
+			objID id = MapData[y][x];
+			switch (id)
+			{
+			case objID::FLOOR:
+			case objID::WALL:	
+			case objID::CHAIR_1:	
+			case objID::CHAIR_2:	
+			case objID::CHAIR_3:
+			case objID::CHAIR_4:
+				DrawGraph(x * ChipSize.x, y * ChipSize.y, lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
+				break;
+			case objID::BOOKSHELF:
+			case objID::DRAWER:
+			case objID::LOCKER:
+			case objID::VASE_1:
+			case objID::VASE_2:
+				DrawGraph(x * ChipSize.x, y * ChipSize.y, lpImage.GetID("image/map2.png")[static_cast<int>(id) - 7], true);
+				break;
+			case objID::MIRRORTABLE:
+			case objID::FACE:
+			case objID::KITCHIN_1:
+			case objID::KITCHIN_2:
+			case objID::S_MONITOR:
+				DrawGraph(x * ChipSize.x, y * ChipSize.y, lpImage.GetID("image/map3.png")[static_cast<int>(id) - 11], true);
+				break;
+			case objID::BED:
+				DrawGraph(x * ChipSize.x, y * ChipSize.y, lpImage.GetID("image/map4.png")[0], true);
+				break;
+			case objID::DESK:
+				DrawGraph(x * ChipSize.x, y * ChipSize.y, lpImage.GetID("image/map5.png")[0], true);
+				break;
+			case objID::MONITOR:
+				DrawGraph(x * ChipSize.x, y * ChipSize.y, lpImage.GetID("image/map6.png")[0], true);
+				break;
+			case objID::S_TABLE:
+				DrawGraph(x * ChipSize.x, y * ChipSize.y, lpImage.GetID("image/map7.png")[0], true);
+				break;
+			case objID::TABLE:
+				DrawGraph(x * ChipSize.x, y * ChipSize.y, lpImage.GetID("image/map8.png")[0], true);
+				break;
+			default:
 				break;
 			}
 		}

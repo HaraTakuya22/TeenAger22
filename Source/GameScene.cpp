@@ -56,7 +56,7 @@ void GameScene::Draw(void)
 
 	DrawFormatString(600, 0, 0xffff00, "Main");
 	lpMap.CreateIndividualsDisplay();
-	lpMap.IndividualsDraw(objlist);
+	lpMap.IndividualsDraw(objlist,true);
 	lpMap.MapDraw(true);
 
 	for (auto itr = objlist->begin(); itr != objlist->end(); itr++)

@@ -1,23 +1,23 @@
 #include <type_traits>
 #include "objID.h"
 
-//FIRE_DIRの先頭の要素を返してあげる
+//objIDの先頭の要素を返してあげる
 objID begin(objID)
 {
 	return objID::FLOOR;
 }
 
-//FIRE_DIRの末端が返ってくる
+//objIDの末端が返ってくる
 objID end(objID)
 {
-	//DOWNではない。
+	//NONではない。
 	//listの中ではMAXが最終となる。
 	return objID::ID_MAX;
 }
 
 objID operator++(objID & id)
 {
-	//基底のｸﾗｽを抜き出して、それに対してdirに当てはめてそれに1を足す→それをdirに格納
+	//基底のｸﾗｽを抜き出して、それに対してidに当てはめてそれに1を足す→それをdirに格納
 	return id = objID(std::underlying_type<objID>::type(id) + 1);
 }
 

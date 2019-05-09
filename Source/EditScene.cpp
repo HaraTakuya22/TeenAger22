@@ -42,16 +42,16 @@ int EditScene::Init(void)
 	}
 	objlist->clear();
 	lpMap.setUp(VECTOR2(SCREENSIZE_X, SCREENSIZE_Y), VECTOR2(GRIDSIZE, GRIDSIZE));
-	obj = AddList()(objlist, std::make_unique<EditCursor>(VECTOR2(0, 0)));
+	obj = AddList()(objlist, std::make_unique<EditCursor>(VECTOR2(GRIDSIZE, GRIDSIZE)));
 	// Á¯Ìß1–‡1–‡‚ðŠi”[----------------------------------------------------------------
-	(*obj)->Init("image/map1.png", VECTOR2(3, 2), VECTOR2(GRIDSIZE,GRIDSIZE));
+	/*(*obj)->Init("image/map1.png", VECTOR2(3, 2), VECTOR2(GRIDSIZE,GRIDSIZE));
 	(*obj)->Init("image/map2.png", VECTOR2(5, 1), VECTOR2(GRIDSIZE, GRIDSIZE * 2));
 	(*obj)->Init("image/map3.png", VECTOR2(5, 1), VECTOR2(GRIDSIZE, GRIDSIZE * 3));
 	(*obj)->Init("image/map4.png", VECTOR2(1, 1), VECTOR2(GRIDSIZE * 2, GRIDSIZE * 3));
 	(*obj)->Init("image/map5.png", VECTOR2(1, 1), VECTOR2(GRIDSIZE * 3, GRIDSIZE * 2));
 	(*obj)->Init("image/map6.png", VECTOR2(1, 1), VECTOR2(GRIDSIZE * 3, GRIDSIZE * 3));
 	(*obj)->Init("image/map7.png", VECTOR2(1, 1), VECTOR2(GRIDSIZE, GRIDSIZE * 4));
-	(*obj)->Init("image/map8.png", VECTOR2(1, 1), VECTOR2(GRIDSIZE * 2, GRIDSIZE * 4));
+	(*obj)->Init("image/map8.png", VECTOR2(1, 1), VECTOR2(GRIDSIZE * 2, GRIDSIZE * 4));*/
 	// --------------------------------------------------------------------------------
 
 	return 0;
@@ -62,9 +62,10 @@ void EditScene::EditDraw(void)
 	ClsDrawScreen();
 
 	lpMap.CreateIndividualsDisplay();
-	lpMap.IndividualsDraw(objlist);
+	lpMap.IndividualsDraw(objlist,false);
 	
 	lpMap.MapDraw(false);
+	lpMap.SetObj();
 	//	´ÃÞ¨¯Ä¼°ÝŽž‚Ì•`‰æ
 	auto itr = objlist->begin();
 	(*itr)->Draw();

@@ -190,11 +190,18 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (cnt_now[KEY_INPUT_RIGHT])
 	{
 		tmp.x += GRIDSIZE;
-		lpMap.GetMapPos().x -= GRIDSIZE;
+		if (tmp.x >= Scr.x)
+		{
+			lpMap.GetMapPos().x -= GRIDSIZE;
+		}
+		
 		// Mapの移動制御
 		if (lpMap.GetMapPos().x <= -(Scr.x * 3))
 		{
+			// Mapの移動制御
 			lpMap.GetMapPos().x = -(Scr.x * 3);
+			// ｶｰｿﾙの移動制御
+			tmp.x = Scr.x - (GRIDSIZE * 2);
 		}
 		// ｶｰｿﾙのﾎﾟｼﾞｼｮﾝ制御
 		if (tmp.x >= Scr.x - GRIDSIZE)
@@ -210,11 +217,17 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (cnt_now[KEY_INPUT_LEFT])
 	{
 		tmp.x -= GRIDSIZE;
-		lpMap.GetMapPos().x += GRIDSIZE;
+		if (tmp.x <= 0)
+		{
+			lpMap.GetMapPos().x += GRIDSIZE;
+		}
 		// Mapの移動制御
 		if (lpMap.GetMapPos().x + lpMap.GetMapSize().x >= lpMap.GetMapSize().x - Scr.x)
 		{
+			// Mapの移動制御
 			lpMap.GetMapPos().x = 0;
+			// ｶｰｿﾙの移動制御
+			tmp.x = GRIDSIZE;
 		}
 
 		// ｶｰｿﾙのﾎﾟｼﾞｼｮﾝ制御
@@ -230,10 +243,16 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (cnt_now[KEY_INPUT_UP])
 	{
 		tmp.y -= GRIDSIZE;
-		lpMap.GetMapPos().y += GRIDSIZE;
+		if (tmp.y <= 0)
+		{
+			lpMap.GetMapPos().y += GRIDSIZE;
+		}
 		if (lpMap.GetMapPos().y + lpMap.GetMapSize().y >= lpMap.GetMapSize().y - Scr.y)
 		{
+			// Mapの移動制御
 			lpMap.GetMapPos().y = 0;
+			// ｶｰｿﾙの移動制御
+			tmp.y = GRIDSIZE;
 		}
 		// ｶｰｿﾙのﾎﾟｼﾞｼｮﾝ制御
 		if (tmp.y <= 0)
@@ -247,7 +266,10 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (cnt_now[KEY_INPUT_DOWN])
 	{
 		tmp.y += GRIDSIZE;
-		lpMap.GetMapPos().y -= GRIDSIZE;
+		if (tmp.y >= Scr.y - 20)
+		{
+			lpMap.GetMapPos().y -= GRIDSIZE;
+		}
 		// Mapの移動制御
 		if (lpMap.GetMapPos().y <= -((Scr.y * 4) - (GRIDSIZE * 6)))
 		{
@@ -315,72 +337,44 @@ void EditCursor::Draw(void)
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	//DrawBox(pos.x, pos.y, pos.x + 80, pos.y + 80, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA,flickCnt);
-	// 処理が重い（要改善！）
 	switch (id)
 	{
 	case objID::FLOOR:
-
-		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map1.png")[0], true);
-		break;
 	case objID::WALL:
-		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map1.png")[1], true);
-		break;
-	case objID::TABLE:
-		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map8.png")[0], true);
-		break;
-	case objID::SUBTABLE:
-		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map7.png")[0], true);
-		break;
-	case objID::SUBMONITOR:
-		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map3.png")[4], true);
-		break;
-	case objID::MONITOR:
-		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map6.png")[0], true);
-		break;
-	case objID::BED:
-		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map4.png")[0], true);
-		break;
-	case objID::VASE_1:
-		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map2.png")[3], true);
-		break;
-	case objID::VASE_2:
-		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map2.png")[4], true);
-		break;
-	case objID::DESK:
-		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map5.png")[0], true);
-		break;
-	case objID::MIRRORTABLE:
-		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map3.png")[0], true);
-		break;
-	case objID::FACE:
-		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map3.png")[1], true);
-		break;
-	case objID::KITCHIN_1:
-		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map3.png")[2], true);
-		break;
-	case objID::KITCHIN_2:
-		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map3.png")[3], true);
+	case objID::CHAIR_1:
+	case objID::CHAIR_2:
+	case objID::CHAIR_3:
+	case objID::CHAIR_4:
+		DrawGraph(pos.x,pos.y, lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
 		break;
 	case objID::BOOKSHELF:
-		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map2.png")[0], true);
-		break;
 	case objID::DRAWER:
-		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map2.png")[1], true);
-		break;
 	case objID::LOCKER:
-		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map2.png")[2], true);
+	case objID::VASE_1:
+	case objID::VASE_2:
+		DrawGraph(pos.x,pos.y, lpImage.GetID("image/map2.png")[static_cast<int>(id - 6)], true);
 		break;
-	case objID::CHAIR_1:
-		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map1.png")[2], true);
+	case objID::MIRRORTABLE:
+	case objID::FACE:
+	case objID::KITCHIN_1:
+	case objID::KITCHIN_2:
+	case objID::S_MONITOR:
+		DrawGraph(pos.x,pos.y, lpImage.GetID("image/map3.png")[static_cast<int>(id - 11)], true);
 		break;
-	case objID::CHAIR_2:
-		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map1.png")[3], true);
+	case objID::BED:
+		DrawGraph(pos.x,pos.y, lpImage.GetID("image/map4.png")[0], true);
 		break;
-	case objID::CHAIR_3:
-		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map1.png")[4], true);
+	case objID::DESK:
+		DrawGraph(pos.x,pos.y, lpImage.GetID("image/map5.png")[0], true);
 		break;
-	case objID::CHAIR_4:
-		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map1.png")[5], true);
+	case objID::MONITOR:
+		DrawGraph(pos.x,pos.y, lpImage.GetID("image/map6.png")[0], true);
+		break;
+	case objID::S_TABLE:
+		DrawGraph(pos.x,pos.y, lpImage.GetID("image/map7.png")[0], true);
+		break;
+	case objID::TABLE:
+		DrawGraph(pos.x,pos.y, lpImage.GetID("image/map8.png")[0], true);
 		break;
 	default:
 		break;

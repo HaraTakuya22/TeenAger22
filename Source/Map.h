@@ -78,7 +78,7 @@ public:
 	void CreateIndividualsDisplay(void);
 
 	// ŠeÌßÚ²Ô°‚ÌÃŞ¨½ÌßÚ²‚Ì•`‰æŠÖ”
-	void IndividualsDraw(WeakList weaklist);
+	void IndividualsDraw(WeakList weaklist,bool gameF);
 
 	void setUp(const VECTOR2& size, const VECTOR2& chipSize);
 
@@ -97,6 +97,8 @@ public:
 
 	// Á¯Ìß‚Ì1–‡‚Ì»²½ŞÁªİ¼Ş
 	bool ChangeChipSize(void);
+
+	bool SetObj(void);
 
 	// ÌßÚ²Ô°‚Ìl”‚ÌŠi”[•Ï”
 	PLAYER player;

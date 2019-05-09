@@ -2,6 +2,7 @@
 #include "Map.h"
 #include "Scene.h"
 #include "TitleScene.h"
+#include "SelectScene.h"
 #include "EditScene.h"
 #include "GameScene.h"
 
@@ -18,47 +19,31 @@ TitleScene::~TitleScene()
 
 unique_Base TitleScene::Update(unique_Base own, const Controller & Controller)
 {
-	//// ﾃﾞﾊﾞｯｸﾞ用-----------------------------------
-	if (CheckHitKey(KEY_INPUT_1))
-	{
-		lpMap.player = PLAYER_1;
-	}
-	if (CheckHitKey(KEY_INPUT_2))
-	{
-		lpMap.player = PLAYER_2;
-	}
-	if (CheckHitKey(KEY_INPUT_3))
-	{
-		lpMap.player = PLAYER_3;
-	}
-	// --------------------------------------
-	if (CheckHitKey(KEY_INPUT_RETURN) &&
-		(lpMap.player == PLAYER_1
-			|| lpMap.player == PLAYER_2
-			|| lpMap.player == PLAYER_3))
+	
+	if (CheckHitKey(KEY_INPUT_RETURN))
 	{
 		return std::make_unique<EditScene>();
 	}
 	// マップの移動
 	if ((titleRightPos.x >= 1200) && (titleRightPos.y >= 1440))
 	{
-		titleLeftPos.x = titleLeftPos.x - 3;
-		titleRightPos.x = titleRightPos.x - 3;
+		titleLeftPos.x = titleLeftPos.x - moveSpeed;
+		titleRightPos.x = titleRightPos.x - moveSpeed;
 	}
 	if ((titleRightPos.x <= 1200) && (titleRightPos.y >= 660))
 	{
-		titleLeftPos.y = titleLeftPos.y - 3;
-		titleRightPos.y = titleRightPos.y - 3;
+		titleLeftPos.y = titleLeftPos.y - moveSpeed;
+		titleRightPos.y = titleRightPos.y - moveSpeed;
 	}
 	if ((titleLeftPos.x <= 0) && (titleRightPos.y <= 660))
 	{
-		titleLeftPos.x = titleLeftPos.x + 3;
-		titleRightPos.x = titleRightPos.x + 3;
+		titleLeftPos.x = titleLeftPos.x + moveSpeed;
+		titleRightPos.x = titleRightPos.x + moveSpeed;
 	}
 	if ((titleLeftPos.x >= 0) && (titleLeftPos.y <= 0))
 	{
-		titleLeftPos.y = titleLeftPos.y + 3;
-		titleRightPos.y = titleRightPos.y + 3;
+		titleLeftPos.y = titleLeftPos.y + moveSpeed;
+		titleRightPos.y = titleRightPos.y + moveSpeed;
 	}
 	
 	ClsDrawScreen();
@@ -77,6 +62,7 @@ int TitleScene::Init(void)
 	titleLeftPos = { 0 , 0 };
 	titleRightPos.x = 2400;
 	titleRightPos.y = 1440;
+	moveSpeed = 2;
 	return 0;
 }
 

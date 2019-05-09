@@ -23,5 +23,7 @@ private:
 	// 表示するマップのpos
 	VECTOR2 titleLeftPos;
 	VECTOR2 titleRightPos;
+	// 表示してるマップの移動速度
+	int moveSpeed;
 };
 

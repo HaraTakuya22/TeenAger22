@@ -60,6 +60,8 @@ public:
 private:
 	bool Init(void);
 	bool afterKeyFlag;				// ·°ˆ——pÌ×¸Ş
+
+	
 	DIR_TBL_ARRAY keyIdTbl;
 	DIR_TBL_ARRAY speedTbl;
 	DIR_TBL_PTR_ARRAY posTbl;

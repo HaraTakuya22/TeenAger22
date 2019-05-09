@@ -133,9 +133,11 @@ bool Map::Init(void)
 	MapWindow = 0;
 
 	mapPos = VECTOR2(0, 0);
-	MapImage = LoadGraph("MAP/map.png");
+	MapImage = LoadGraph("MAP/map_new.png");
 
 	//----------------------------------
+
+	is_makePrey = false;
 
 	return true;
 }
@@ -204,15 +206,16 @@ void Map::IndividualsDraw(WeakList weaklist,bool gameF)
 		DrawGraph(0, 0, PreyWindow, true);
 
 		// Map‚Ì•\Ž¦
-		DrawRectGraph(mapPos.x, mapPos.y,0,0,SCREENSIZE_X * 4,(SCREENSIZE_Y * 4) + (GRIDSIZE * 3), MapImage, true,false);
+		DrawRectGraph(mapPos.x, mapPos.y,0,0,MAPSIZE_X,MAPSIZE_Y, MapImage, true,false);
 
 		// Prey(‰¼)‚Ì•\Ž¦
 		//DrawBox(GRIDSIZE * 4,(GRIDSIZE * 4) - 40,(GRIDSIZE * 4) + PREYSIZE_X,(GRIDSIZE * 5), 0xff0000, true);
 
 		// Prey‚Ì²Ý½ÀÝ½(GameScene‚Ì‚Ý)
-		if (gameF)
+		if (gameF && !is_makePrey)
 		{
 			AddList()(weaklist, std::make_unique<Prey>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4 - 40)));
+			is_makePrey = true;
 		}
 	}
 

@@ -21,8 +21,8 @@
 #define MAPWINDOW_SIZE_Y 214
 
 // Map‚Ì¸Ş×Ì¨¯¸‚Ì»²½Ş
-#define MAPSIZE_X	4800
-#define MAPSIZE_Y	2880
+#define MAPSIZE_X	12000
+#define MAPSIZE_Y	8640
 
 // player‚Ìæ‚ª•Ç‚©“¹‚©
 enum PASSAGE
@@ -136,6 +136,9 @@ private:
 	// “¹‚©•Ç‚©‚ÌÌ×¸Ş
 	PASSAGE passageF[GRIDCNT_X * GRIDCNT_Y];
 
+
+	// ÌßÚ²Ô°²İ½Àİ½Ì×¸Ş(ŒJ‚è•Ô‚µ²İ½Àİ½‚Ì–h~)
+	bool is_makePrey;
 	
 
 	//	ˆø”‚Ì‚Æ‚±‚ë‚Å’u‚«Š·‚¦‚½Œ^‚ÅéŒ¾‚·‚é‚Æ‚¢‚¤‚±‚Æ

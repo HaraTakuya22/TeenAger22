@@ -17,6 +17,8 @@ EditScene::~EditScene()
 
 unique_Base EditScene::Update(unique_Base own, const Controller & Controller)
 {
+	auto input = Controller.GetButtonInfo(KEY_TYPE_NOW);
+	auto inputOld = Controller.GetButtonInfo(KEY_TYPE_OLD);
 	auto Pad = GetJoypadInputState(DX_INPUT_PAD1);
 	// objList‚Ì±¯ÌßÃÞ°Ä
 	for (auto itr = objlist->begin(); itr != objlist->end(); itr++)
@@ -30,6 +32,10 @@ unique_Base EditScene::Update(unique_Base own, const Controller & Controller)
 		return std::make_unique<GameScene>();
 	}
 
+	if (Pad & PAD_INPUT_12)
+	{
+		return std::make_unique<GameScene>();
+	}
 	EditDraw();
 	return move(own);
 }

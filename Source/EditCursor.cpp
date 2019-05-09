@@ -196,10 +196,10 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 		}
 		
 		// Map‚ÌˆÚ“®§Œä
-		if (lpMap.GetMapPos().x <= -(Scr.x * 3))
+		if (lpMap.GetMapPos().x <= -(Scr.x * 9))
 		{
 			// Map‚ÌˆÚ“®§Œä
-			lpMap.GetMapPos().x = -(Scr.x * 3);
+			lpMap.GetMapPos().x = -(Scr.x * 9);
 			// ¶°¿Ù‚ÌˆÚ“®§Œä
 			tmp.x = Scr.x - (GRIDSIZE * 2);
 		}
@@ -271,14 +271,13 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 			lpMap.GetMapPos().y -= GRIDSIZE;
 		}
 		// Map‚ÌˆÚ“®§Œä
-		if (lpMap.GetMapPos().y <= -((Scr.y * 4) - (GRIDSIZE * 6)))
+		if (lpMap.GetMapPos().y <= -((lpMap.GetMapSize().y - Scr.y) + 20))
 		{
-			lpMap.GetMapPos().y = -((Scr.y * 4) - (GRIDSIZE * 6));
-		}
-		// ¶°¿Ù‚ÌÎß¼Ş¼®İ§Œä
-		if (tmp.y >= (Scr.y - GRIDSIZE) - 20)
-		{
-			tmp.y = (Scr.y - GRIDSIZE) - 20;
+			// Map‚ÌÎß¼Ş¼®İ§Œä
+			lpMap.GetMapPos().y = -((lpMap.GetMapSize().y - Scr.y) + 20);
+			// ¶°¿Ù‚ÌÎß¼Ş¼®İ§Œä
+			tmp.y = (Scr.y - (GRIDSIZE * 2)) - 20;
+
 		}
 	}
 

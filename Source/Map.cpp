@@ -210,7 +210,8 @@ void Map::IndividualsDraw(WeakList weaklist)
 		//DrawBox(GRIDSIZE * 4,(GRIDSIZE * 4) - 40,(GRIDSIZE * 4) + PREYSIZE_X,(GRIDSIZE * 5), 0xff0000, true);
 
 		// PreyÇÃ≤›Ω¿›Ω
-		AddList()(weaklist, std::make_unique<Prey>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 5 - 40)));
+
+		AddList()(weaklist, std::make_unique<Prey>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4 - 40)));
 	}
 
 	// player2ÇÃâÊñ ï\é¶
@@ -254,8 +255,17 @@ struct SizeCheck
 
 void Map::setUp(const VECTOR2& size, const VECTOR2& chipSize)
 {
-	ChangeCursorShape();
-	lpImage.GetID("image/mapblock.png", VECTOR2(9, 8), VECTOR2(cursorShape.x, cursorShape.y));
+
+	// œØÃﬂ¡ØÃﬂÇÃ∏ﬁ◊Ã®Ø∏ÇÃì«Ç›çûÇ›-------------------------------------------------------
+	lpImage.GetID("image/map1.png", VECTOR2(3, 2), VECTOR2(GRIDSIZE,GRIDSIZE));
+	lpImage.GetID("image/map2.png", VECTOR2(5, 1), VECTOR2(GRIDSIZE, GRIDSIZE * 2));
+	lpImage.GetID("image/map3.png", VECTOR2(5, 1), VECTOR2(GRIDSIZE, GRIDSIZE * 3));
+	lpImage.GetID("image/map4.png", VECTOR2(1, 1), VECTOR2(GRIDSIZE * 2, GRIDSIZE * 3));
+	lpImage.GetID("image/map5.png", VECTOR2(1, 1), VECTOR2(GRIDSIZE * 3, GRIDSIZE * 2));
+	lpImage.GetID("image/map6.png", VECTOR2(1, 1), VECTOR2(GRIDSIZE * 3, GRIDSIZE * 3));
+	lpImage.GetID("image/map7.png", VECTOR2(1, 1), VECTOR2(GRIDSIZE, GRIDSIZE * 4));
+	lpImage.GetID("image/map8.png", VECTOR2(1, 1), VECTOR2(GRIDSIZE * 2, GRIDSIZE * 4));
+	// ----------------------------------------------------------------------------------
 
 	MapSize = VECTOR2(size.x / chipSize.x, size.y / chipSize.y);
 
@@ -291,98 +301,10 @@ objID Map::GetMapData(const VECTOR2 & pos)
 	return GetData(MapData,pos,objID::FLOOR);
 }
 
-bool Map::SetObj(WeakList objlist)
-{
-	Shared_ObjList tmplist(objlist.lock()->size());
-	for (int y = 0; y < MapSize.y; y++)
-	{
-		for (int x = 0; x < MapSize.x; x++)
-		{
-			auto Cursor = std::remove_copy_if(objlist.lock()->begin(), objlist.lock()->end(), tmplist.begin(), [](Objshared& obj) {return !(obj->GetType(TYPE_CURSOR)); });
-			for_each(tmplist.begin(), Cursor, [&](auto &cursor) {
-				VECTOR2 cursorPos = cursor->GetPos();
-				objID id = MapData[y][x];
-				switch (id)
-				{
-				case objID::FLOOR:
-					DrawRectGraph(cursorPos.x, cursorPos.y, 0, 0, GRIDSIZE, GRIDSIZE, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
-					break;
-				case objID::WALL:
-					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE, 0, GRIDSIZE, GRIDSIZE, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
-					break;
-				case objID::TABLE:
-					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 2, 0, GRIDSIZE * 2, GRIDSIZE * 3, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
-					break;
-				case objID::SUBTABLE:
-					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 4, 0, GRIDSIZE, GRIDSIZE * 4, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
-					break;
-				case objID::SUBMONITOR:
-					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 5, 0, GRIDSIZE, GRIDSIZE * 3, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
-					break;
-				case objID::MONITOR:
-					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 6, 0, GRIDSIZE * 3, GRIDSIZE * 3, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
-					break;
-				case objID::BED:
-					DrawRectGraph(cursorPos.x, cursorPos.y, 0, GRIDSIZE, GRIDSIZE * 2, GRIDSIZE * 3, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
-					break;
-				case objID::VASE_1:
-					DrawRectGraph(cursorPos.x, cursorPos.y, 0, GRIDSIZE * 4, GRIDSIZE, GRIDSIZE * 2, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
-					break;
-				case objID::VASE_2:
-					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE, GRIDSIZE * 4, GRIDSIZE, GRIDSIZE * 2, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
-					break;
-				case objID::DESK:
-					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 2, GRIDSIZE * 4, GRIDSIZE * 3, GRIDSIZE * 2, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
-					break;
-				case objID::MIRRORTABLE:
-					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 5, GRIDSIZE * 3, GRIDSIZE, GRIDSIZE * 3, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
-					break;
-				case objID::FACE:
-					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 6, GRIDSIZE * 3, GRIDSIZE, GRIDSIZE * 3, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
-					break;
-				case objID::KITCHIN_1:
-					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 7, GRIDSIZE * 3, GRIDSIZE, GRIDSIZE * 3, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
-					break;
-				case objID::KITCHIN_2:
-					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 8, GRIDSIZE * 3, GRIDSIZE, GRIDSIZE * 3, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
-					break;
-				case objID::BOOKSHELF:
-					DrawRectGraph(cursorPos.x, cursorPos.y, 0, GRIDSIZE * 6, GRIDSIZE, GRIDSIZE * 2, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
-					break;
-				case objID::DRAWER:
-					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE, GRIDSIZE * 6, GRIDSIZE, GRIDSIZE * 2, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
-					break;
-				case objID::LOCKER:
-					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 2, GRIDSIZE * 6, GRIDSIZE, GRIDSIZE * 2, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
-					break;
-				case objID::CHAIR_1:
-					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 3, GRIDSIZE * 6, GRIDSIZE, GRIDSIZE, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
-					break;
-				case objID::CHAIR_2:
-					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 4, GRIDSIZE * 6, GRIDSIZE, GRIDSIZE, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
-					break;
-				case objID::CHAIR_3:
-					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 5, GRIDSIZE * 6, GRIDSIZE, GRIDSIZE, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
-					break;
-				case objID::CHAIR_4:
-					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 6, GRIDSIZE * 6, GRIDSIZE, GRIDSIZE, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
-					break;
-				case objID::NON:
-					DrawRectGraph(cursorPos.x, cursorPos.y, GRIDSIZE * 7, GRIDSIZE * 6, GRIDSIZE, GRIDSIZE, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true, true);
-					break;
-				default:
-					break;
-				}
-			});
-		}
-	}
-
-	return true;
-}
-
 template<typename MapType, typename IDType>
 bool Map::setData(MapType maptype, const VECTOR2 & pos, IDType id)
 {
+	ChangeChipSize();
 	VECTOR2 tmp = VECTOR2(pos.x / ChipSize.x , pos.y / ChipSize.y );
 
 	// Mapì‡Ç≈Ç»Ç¢èÍçáÇÕï`âÊÇµÇ»Ç¢
@@ -410,6 +332,135 @@ IDType Map::GetData(MapType maptype, const VECTOR2 & pos, IDType defID)
 	return maptype[tmp.y][tmp.x];
 }
 
+bool Map::ChangeChipSize(void)
+{
+	for (int y = 0; y < MapSize.y; y++)
+	{
+		for (int x = 0; x < MapSize.x; x++)
+		{
+			objID id = MapData[y][x];
+			VECTOR2 changedSize;
+			switch (id)
+			{
+			case objID::FLOOR:
+				changedSize.x = GRIDSIZE;
+				changedSize.y = GRIDSIZE;
+				break;
+			case objID::WALL:
+				changedSize.x = GRIDSIZE;
+				changedSize.y = GRIDSIZE;
+				break;
+
+			case objID::TABLE:
+				changedSize.x = GRIDSIZE * 2;
+				changedSize.y = GRIDSIZE * 4;
+				break;
+
+			case objID::SUBTABLE:
+				changedSize.x = GRIDSIZE;
+				changedSize.y = GRIDSIZE * 4;
+				break;
+
+			case objID::SUBMONITOR:
+				changedSize.x = GRIDSIZE;
+				changedSize.y = GRIDSIZE * 3;
+				break;
+
+			case objID::MONITOR:
+				changedSize.x = GRIDSIZE * 3;
+				changedSize.y = GRIDSIZE * 3;
+				break;
+
+			case objID::BED:
+				changedSize.x = GRIDSIZE * 2;
+				changedSize.y = GRIDSIZE * 3;
+				break;
+
+			case objID::VASE_1:
+				changedSize.x = GRIDSIZE;
+				changedSize.y = GRIDSIZE * 2;
+				break;
+
+			case objID::VASE_2:
+				changedSize.x = GRIDSIZE;
+				changedSize.y = GRIDSIZE * 2;
+				break;
+
+			case objID::DESK:
+				changedSize.x = GRIDSIZE * 3;
+				changedSize.y = GRIDSIZE * 2;
+				break;
+
+			case objID::MIRRORTABLE:
+				changedSize.x = GRIDSIZE;
+				changedSize.y = GRIDSIZE * 3;
+				break;
+
+			case objID::FACE:
+				changedSize.x = GRIDSIZE;
+				changedSize.y = GRIDSIZE * 3;
+				break;
+
+			case objID::KITCHIN_1:
+				changedSize.x = GRIDSIZE;
+				changedSize.y = GRIDSIZE * 3;
+				break;
+
+			case objID::KITCHIN_2:
+				changedSize.x = GRIDSIZE;
+				changedSize.y = GRIDSIZE * 3;
+				break;
+
+			case objID::BOOKSHELF:
+				changedSize.x = GRIDSIZE;
+				changedSize.y = GRIDSIZE * 2;
+				break;
+
+			case objID::DRAWER:
+				changedSize.x = GRIDSIZE;
+				changedSize.y = GRIDSIZE * 2;
+				break;
+
+			case objID::LOCKER:
+				changedSize.x = GRIDSIZE;
+				changedSize.y = GRIDSIZE * 2;
+				break;
+
+			case objID::CHAIR_1:
+				changedSize.x = GRIDSIZE;
+				changedSize.y = GRIDSIZE;
+				break;
+
+			case objID::CHAIR_2:
+				changedSize.x = GRIDSIZE;
+				changedSize.y = GRIDSIZE;
+				break;
+
+			case objID::CHAIR_3:
+				changedSize.x = GRIDSIZE;
+				changedSize.y = GRIDSIZE;
+				break;
+
+			case objID::CHAIR_4:
+				changedSize.x = GRIDSIZE;
+				changedSize.y = GRIDSIZE;
+				break;
+
+			case objID::NON:
+				changedSize.x = GRIDSIZE;
+				changedSize.y = GRIDSIZE;
+				break;
+
+			default:
+				changedSize.x = GRIDSIZE;
+				changedSize.y = GRIDSIZE;
+				break;
+			}
+		}
+	}
+	return true;
+}
+
 Map::Map()
 {
 	Init();
@@ -418,109 +469,4 @@ Map::Map()
 
 Map::~Map()
 {
-}
-
-bool Map::ChangeCursorShape(void)
-{
-	for (int y = 0; y < MapSize.y; y++)
-	{
-		for (int x = 0; x < MapSize.x; x++)
-		{
-				objID id = MapData[y][x];
-				switch (id)
-				{
-				case objID::FLOOR:
-					cursorShape.x = GRIDSIZE;
-					cursorShape.y = GRIDSIZE;
-					break;
-				case objID::WALL:
-					cursorShape.x = GRIDSIZE;
-					cursorShape.y = GRIDSIZE;
-					break;
-				case objID::TABLE:
-					cursorShape.x = GRIDSIZE * 2;
-					cursorShape.y = GRIDSIZE * 4;
-					break;
-				case objID::SUBTABLE:
-					cursorShape.x = GRIDSIZE;
-					cursorShape.y = GRIDSIZE * 4;
-					break;
-				case objID::SUBMONITOR:
-					cursorShape.x = GRIDSIZE;
-					cursorShape.y = GRIDSIZE * 3;
-					break;
-				case objID::MONITOR:
-					cursorShape.x = GRIDSIZE * 3;
-					cursorShape.y = GRIDSIZE * 3;
-					break;
-				case objID::BED:
-					cursorShape.x = GRIDSIZE * 2;
-					cursorShape.y = GRIDSIZE * 3;
-					break;
-				case objID::VASE_1:
-					cursorShape.x = GRIDSIZE;
-					cursorShape.y = GRIDSIZE * 2;
-					break;
-				case objID::VASE_2:
-					cursorShape.x = GRIDSIZE;
-					cursorShape.y = GRIDSIZE * 2;
-					break;
-				case objID::DESK:
-					cursorShape.x = GRIDSIZE * 3;
-					cursorShape.y = GRIDSIZE * 2;
-					break;
-				case objID::MIRRORTABLE:
-					cursorShape.x = GRIDSIZE;
-					cursorShape.y = GRIDSIZE * 3;
-					break;
-				case objID::FACE:
-					cursorShape.x = GRIDSIZE;
-					cursorShape.y = GRIDSIZE * 3;
-					break;
-				case objID::KITCHIN_1:
-					cursorShape.x = GRIDSIZE;
-					cursorShape.y = GRIDSIZE * 3;
-					break;
-				case objID::KITCHIN_2:
-					cursorShape.x = GRIDSIZE;
-					cursorShape.y = GRIDSIZE * 3;
-					break;
-				case objID::BOOKSHELF:
-					cursorShape.x = GRIDSIZE;
-					cursorShape.y = GRIDSIZE * 2;
-					break;
-				case objID::DRAWER:
-					cursorShape.x = GRIDSIZE;
-					cursorShape.y = GRIDSIZE * 2;
-					break;
-				case objID::LOCKER:
-					cursorShape.x = GRIDSIZE;
-					cursorShape.y = GRIDSIZE * 2;
-					break;
-				case objID::CHAIR_1:
-					cursorShape.x = GRIDSIZE;
-					cursorShape.y = GRIDSIZE;
-					break;
-				case objID::CHAIR_2:
-					cursorShape.x = GRIDSIZE;
-					cursorShape.y = GRIDSIZE;
-					break;
-				case objID::CHAIR_3:
-					cursorShape.x = GRIDSIZE;
-					cursorShape.y = GRIDSIZE;
-					break;
-				case objID::CHAIR_4:
-					cursorShape.x = GRIDSIZE;
-					cursorShape.y = GRIDSIZE;
-					break;
-				case objID::NON:
-					cursorShape.x = GRIDSIZE;
-					cursorShape.y = GRIDSIZE;
-					break;
-				default:
-					break;
-				}
-		}
-	}
-	return true;
 }

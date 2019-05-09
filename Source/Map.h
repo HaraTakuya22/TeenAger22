@@ -85,8 +85,6 @@ public:
 	bool setMapData(const VECTOR2& pos, objID id);
 	objID GetMapData(const VECTOR2& pos);
 
-	bool SetObj(WeakList objlist);
-
 	// Ï¯Ìß‚ÌÎß¼Ş¼®İæ“¾
 	VECTOR2& GetMapPos(void)
 	{
@@ -96,8 +94,10 @@ public:
 	{
 		return VECTOR2(MAPSIZE_X, MAPSIZE_Y);
 	}
-	bool ChangeCursorShape(void);
-	VECTOR2 cursorShape;
+
+	// Á¯Ìß‚Ì1–‡‚Ì»²½ŞÁªİ¼Ş
+	bool ChangeChipSize(void);
+
 	// ÌßÚ²Ô°‚Ìl”‚ÌŠi”[•Ï”
 	PLAYER player;
 

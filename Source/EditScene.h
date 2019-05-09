@@ -15,7 +15,7 @@ private:
 	virtual int Init(void);
 
 	Shared_ObjListptr objlist;
-
+	List_Obj_itr obj;
 	void EditDraw(void);
 
 };

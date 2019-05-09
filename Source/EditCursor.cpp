@@ -315,7 +315,76 @@ void EditCursor::Draw(void)
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	//DrawBox(pos.x, pos.y, pos.x + 80, pos.y + 80, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA,flickCnt);
-	DrawGraph(pos.x, pos.y, lpImage.GetID("image/mapblock.png")[static_cast<int>(id)], true);
+	// 処理が重い（要改善！）
+	switch (id)
+	{
+	case objID::FLOOR:
+
+		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map1.png")[0], true);
+		break;
+	case objID::WALL:
+		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map1.png")[1], true);
+		break;
+	case objID::TABLE:
+		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map8.png")[0], true);
+		break;
+	case objID::SUBTABLE:
+		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map7.png")[0], true);
+		break;
+	case objID::SUBMONITOR:
+		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map3.png")[4], true);
+		break;
+	case objID::MONITOR:
+		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map6.png")[0], true);
+		break;
+	case objID::BED:
+		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map4.png")[0], true);
+		break;
+	case objID::VASE_1:
+		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map2.png")[3], true);
+		break;
+	case objID::VASE_2:
+		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map2.png")[4], true);
+		break;
+	case objID::DESK:
+		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map5.png")[0], true);
+		break;
+	case objID::MIRRORTABLE:
+		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map3.png")[0], true);
+		break;
+	case objID::FACE:
+		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map3.png")[1], true);
+		break;
+	case objID::KITCHIN_1:
+		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map3.png")[2], true);
+		break;
+	case objID::KITCHIN_2:
+		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map3.png")[3], true);
+		break;
+	case objID::BOOKSHELF:
+		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map2.png")[0], true);
+		break;
+	case objID::DRAWER:
+		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map2.png")[1], true);
+		break;
+	case objID::LOCKER:
+		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map2.png")[2], true);
+		break;
+	case objID::CHAIR_1:
+		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map1.png")[2], true);
+		break;
+	case objID::CHAIR_2:
+		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map1.png")[3], true);
+		break;
+	case objID::CHAIR_3:
+		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map1.png")[4], true);
+		break;
+	case objID::CHAIR_4:
+		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map1.png")[5], true);
+		break;
+	default:
+		break;
+	}
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	flickCnt += 5;
 	if (flickCnt >= 300)

@@ -192,10 +192,9 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	// åªç›âEŒﬁ¿›Çâüâ∫--------------------------------------
 	if (cnt_now[KEY_INPUT_RIGHT])
 	{
-		
 		tmp.x += GRIDSIZE;
 
-		//setId.set_pos.x -= GRIDSIZE;
+
 		if (tmp.x >= Scr.x)
 		{
 			lpMap.GetMapPos().x = -(pos.x / gridSize.x) * gridSize.x;
@@ -243,17 +242,18 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (cnt_now[KEY_INPUT_UP])
 	{
 		tmp.y -= GRIDSIZE;
-
-		lpMap.GetMapPos().y = -(tmp.y + gridSize.y);
+		
+		
+	
 		if (tmp.y <= 0)
 		{
-			lpMap.GetMapPos().y += GRIDSIZE;
-			tmp.y = 0;
+			lpMap.GetMapPos().y = -(tmp.y + gridSize.y);
+			//tmp.y = 0;
 		}
 		if (lpMap.GetMapPos().y + lpMap.GetMapSize().y >= lpMap.GetMapSize().y - Scr.y)
 		{
 			// MapÇÃà⁄ìÆêßå‰
-			lpMap.GetMapPos().y = 0;
+			//lpMap.GetMapPos().y = 0;
 			// ∂∞øŸÇÃŒﬂºﬁºÆ›êßå‰
 			if (tmp.y <= GRIDSIZE)
 			{
@@ -267,11 +267,10 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (cnt_now[KEY_INPUT_DOWN])
 	{
 		tmp.y += GRIDSIZE;
-		cursorPos.y += GRIDSIZE;
+		
 		if (tmp.y >= Scr.y - 20)
 		{
-			lpMap.GetMapPos().y -= GRIDSIZE;
-			tmp.y = Scr.y - GRIDSIZE -20;
+			lpMap.GetMapPos().y = -(pos.y / gridSize.y) * gridSize.y;
 		}
 		
 		// MapÇÃà⁄ìÆêßå‰
@@ -279,9 +278,9 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 		{
 			// MapÇÃŒﬂºﬁºÆ›êßå‰
 			lpMap.GetMapPos().y = -((lpMap.GetMapSize().y - Scr.y) + 20);
-			if (tmp.y >= ((Scr.y - (GRIDSIZE * 2)) - 20))
+			if (tmp.y >= MAPSIZE_Y - (GRIDSIZE * 2 + 20))
 			{
-				tmp.y = ((Scr.y - (GRIDSIZE * 2)) - 20);
+				tmp.y = MAPSIZE_Y - (GRIDSIZE * 2 + 20);
 			}
 		}
 	}
@@ -356,6 +355,10 @@ void EditCursor::Draw(void)
 		{
 			DrawGraph(lpScene.GetScrSize().x - GRIDSIZE, pos.y, lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
 		}
+		else if (pos.y >= lpScene.GetScrSize().y)
+		{
+			DrawGraph(pos.x, lpScene.GetScrSize().y - (GRIDSIZE * 2 + 20), lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
+		}
 		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
 
 	/*	else if (lpMap.GetMapPos().x <= 0)
@@ -368,6 +371,7 @@ void EditCursor::Draw(void)
 	case objID::LOCKER:
 	case objID::VASE_1:
 	case objID::VASE_2:
+		
 		DrawGraph(pos.x,pos.y, lpImage.GetID("image/map2.png")[static_cast<int>(id - 6)], true);
 		break;
 	case objID::MIRRORTABLE:

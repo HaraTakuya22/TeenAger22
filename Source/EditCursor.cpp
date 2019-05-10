@@ -211,7 +211,6 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 			tmp.x = Scr.x - GRIDSIZE;
 		}
 	}
-	
 	// ---------------------------------------------------------
 
 	// Œ»İ¶ÎŞÀİ‚ğ‰Ÿ‰º-----------------------------------------
@@ -236,7 +235,6 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 			}
 		}
 	}
-	
 	//--------------------------------------------------------
 
 	// Œ»İãÎŞÀİ‚ğ‰Ÿ‰º---------------------------------------
@@ -259,9 +257,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 			{
 				tmp.y = GRIDSIZE;
 			}
-			
 		}
-		
 	}
 	//----------------------------------------------------
 
@@ -286,7 +282,6 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 				tmp.y = ((Scr.y - (GRIDSIZE * 2)) - 20);
 			}
 		}
-		
 	}
 
 	//¶°¿Ù‚ÌˆÚ“®i™X‚É‘¬‚­‚È‚Á‚Ä‚¢‚­ˆ—j-----------------------------
@@ -330,8 +325,6 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	{
 		setF = true;
 		lpMap.setMapData(pos, id);
-		setId.set_pos = pos;
-		setId.set_id = id;
 	}
 	else
 	{

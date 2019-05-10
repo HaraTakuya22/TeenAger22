@@ -5,7 +5,18 @@
 #include "Prey.h"
 #include "Image.h"
 
+struct DataHeader {
+	char fileID[13];		//ﾌｧｲﾙのID
+	char VerID;				//ﾊﾞｰｼﾞｮﾝ番号
+	char reserve1[2];		//予約領域
+	int	 SizeX;				//ﾏｯﾌﾟのﾏｽ目数X
+	int  SizeY;				//ﾏｯﾌﾟのﾏｽ目数Y
+	char reserve2[3];		//予約領域
+	char sum;				//sum値
+};
 
+#define SAVE_FILE_ID		"saveFile"
+#define SAVE_FILE_VER_ID	0x01
 
 void Map::Draw(void)
 {
@@ -136,9 +147,6 @@ bool Map::Init(void)
 	MapImage = LoadGraph("MAP/map_new.png");
 
 	//----------------------------------
-
-	
-
 	return true;
 }
 
@@ -184,6 +192,8 @@ void Map::CreateIndividualsDisplay(void)
 
 void Map::IndividualsDraw(WeakList weaklist,bool gameF)
 {
+	
+
 	// Map画面表示
 	if (player == PLAYER_1 || player == PLAYER_2 || player == PLAYER_3)
 	{
@@ -199,7 +209,6 @@ void Map::IndividualsDraw(WeakList weaklist,bool gameF)
 	// player1の画面表示
 	if (player == PLAYER_1)
 	{
-		is_makePrey = false;
 
 		// ﾃﾞﾊﾞｯｸﾞ用-----------------------------------
 		DrawFormatString(50, 50, 0xffffff, "Player1");
@@ -307,11 +316,100 @@ objID Map::GetMapData(const VECTOR2 & pos)
 	return GetData(MapData,pos,objID::FLOOR);
 }
 
+bool Map::SaveMap(void)
+{
+	DataHeader expData = { SAVE_FILE_ID ,SAVE_FILE_VER_ID ,{ 0,0 },MapSize.x,MapSize.y ,{ 0,0,0 },0xff };
+
+	// sum値
+	int sumValue = 0;
+	//sum値の計算
+	for (auto data : BaseMap)
+	{
+		sumValue += (int)data;
+	}
+
+	expData.sum = (char)sumValue;
+
+	FILE *file;
+	fopen_s(&file, "MapData/SaveData.map", "wb");				//開く
+	fwrite(&expData, sizeof(expData), 1, file);				//書き込み
+															//↓map上にﾌﾞﾛｯｸをどこに配置したかのﾃﾞｰﾀ
+	fwrite(BaseMap.data(), sizeof(objID) * BaseMap.size(), 1, file);		//map_b_data.data()←生のﾎﾟｲﾝﾀ	fwrite(書き込みたいﾃﾞｰﾀが入っている先頭ﾎﾟｲﾝﾀ,渡すﾃﾞｰﾀのﾊﾞｲﾄ数,最小単位のﾃﾞｰﾀの塊を何回書き込むか,書き込むべきﾌｧｲﾙのﾎﾟｲﾝﾀ)
+																				//map_b_data.size()で書いた方が絶対変わらない値なので、安全。
+																				//どちらでも記述OK
+																				//fwrite(&map_b_data[0], sizeof(map_b_data[0]), 1, file);
+	fclose(file);											//閉じる
+	return false;
+}
+
+bool Map::LoadMap(void)
+{
+	FILE* file;
+	DataHeader expData;
+	fopen_s(&file, "MapData/SaveData.map", "rb");		//	開く
+	fread(&expData, sizeof(expData), 1, file);		//	読み込む
+													//ﾍｯﾀﾞｰのｻｲｽﾞ情報を元にmap_b_dataのｻｲｽﾞをﾘｻｲｽﾞする。//map_b_dataを読み込むまでに一番最速且つ最遅。
+	BaseMap.resize(expData.SizeX * expData.SizeY);
+	fread(BaseMap.data(), sizeof(objID) * BaseMap.size(), 1, file);//	読み込む
+	fclose(file);	//	閉じる
+
+	// isCmp : 比較するﾌﾗｸﾞ
+	bool isCmp = true;
+	if ((std::string)expData.fileID != SAVE_FILE_ID)
+	{
+		isCmp = false;
+	}
+	//ﾍｯﾀﾞｰのﾊﾞｰｼﾞｮﾝ番号と内部で持っている番号を比べる。
+	if (expData.VerID != SAVE_FILE_VER_ID)
+	{
+		isCmp = false;
+	}
+	//sum値とﾍｯﾀﾞｰの値を比べて違ったら、ﾃﾞｰﾀをｸﾘｱする。
+	int SumValue = 0;
+
+	//取得した値をSumに入れていき、どんどん加算していく。
+	for (auto data : BaseMap)
+	{
+		SumValue += (int)data;
+	}
+
+	//Sumの値と元の値が違うのであれば、falseに。
+	if (expData.sum != (char)SumValue)
+	{
+		isCmp = false;
+	}
+	if (!isCmp)
+	{
+		for (int j = 0; j < BaseMap.size(); j++)
+		{
+			BaseMap[j] = objID::NON;
+		}
+		//auto参照にすることでmap_b_data全体を見てるということになる
+		//値渡しにするとmap_b_dataを見ることにはならない。
+		for (auto &data : BaseMap)
+		{
+			data = objID::NON;
+		}
+	}
+	//isCmp == true →　正しくloadされたとき
+	if (isCmp)
+	{
+		SetObj();
+	}
+
+	return isCmp;
+}
+
 template<typename MapType, typename IDType>
 bool Map::setData(MapType maptype, const VECTOR2 & pos, IDType id)
 {
 	//ChangeChipSize();
 	VECTOR2 tmp = VECTOR2(pos.x / ChipSize.x , pos.y / ChipSize.y );
+
+	// ＊ｾｯﾄしたﾁｯﾌﾟのﾎﾟｼﾞｼｮﾝ情報をそのまま全体のﾏｯﾌﾟに格納
+	// ﾏｯﾌﾟの移動と共にﾁｯﾌﾟも動かさないといけないので
+
+
 
 	// Map内でない場合は描画しない
 	/*if (!SetCheck()(tmp, MapSize));
@@ -395,6 +493,8 @@ bool Map::SetObj(void)
 Map::Map()
 {
 	Init();
+
+	is_makePrey = false;
 }
 
 

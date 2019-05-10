@@ -25,6 +25,24 @@ unique_Base EditScene::Update(unique_Base own, const Controller & Controller)
 	{
 		(*itr)->Update(Controller, objlist);
 	}
+	//	Sを押したとき、ﾃﾞｰﾀをｾｰﾌﾞする
+	if (input[KEY_INPUT_S])
+	{
+		// save処理(Message表示処理)
+		if (MessageBox(NULL, "Do you want to save now??", "Check Dialog.", MB_OKCANCEL) == IDOK)
+		{
+			lpMap.SaveMap();
+		}
+	}
+	//	Lを押したとき、ﾃﾞｰﾀをﾛｰﾄﾞする
+	if (input[KEY_INPUT_L])
+	{
+		// load処理(Message表示処理)
+		if (MessageBox(NULL, "Do you want to load now??", "Check Dialog.", MB_OKCANCEL) == IDOK)
+		{
+			lpMap.LoadMap();
+		}
+	}
 
 	// ｹﾞｰﾑﾊﾟｯﾄﾞのStartｷｰを押下 → GameSceneに移行
 	if (Pad & PAD_INPUT_12)
@@ -47,7 +65,7 @@ int EditScene::Init(void)
 		objlist = std::make_shared<Shared_ObjList>();
 	}
 	objlist->clear();
-	lpMap.setUp(VECTOR2(SCREENSIZE_X, SCREENSIZE_Y), VECTOR2(GRIDSIZE, GRIDSIZE));
+	lpMap.setUp(VECTOR2(MAPSIZE_X, MAPSIZE_Y), VECTOR2(GRIDSIZE, GRIDSIZE));
 	obj = AddList()(objlist, std::make_unique<EditCursor>(VECTOR2(GRIDSIZE, GRIDSIZE)));
 	// ﾁｯﾌﾟ1枚1枚を格納----------------------------------------------------------------
 	/*(*obj)->Init("image/map1.png", VECTOR2(3, 2), VECTOR2(GRIDSIZE,GRIDSIZE));
@@ -66,12 +84,12 @@ int EditScene::Init(void)
 void EditScene::EditDraw(void)
 {
 	ClsDrawScreen();
-
-	lpMap.CreateIndividualsDisplay();
-	lpMap.IndividualsDraw(objlist,false);
-	
-	lpMap.MapDraw(false);
+	lpMap.IndividualsDraw(objlist, false);
 	lpMap.SetObj();
+	lpMap.CreateIndividualsDisplay();
+
+	lpMap.MapDraw(false);
+
 	//	ｴﾃﾞｨｯﾄｼｰﾝ時の描画
 	auto itr = objlist->begin();
 	(*itr)->Draw();

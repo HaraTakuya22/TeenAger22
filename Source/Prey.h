@@ -8,6 +8,10 @@
 #define PREYSIZE_X GRIDSIZE
 #define PREYSIZE_Y GRIDSIZE * 1.5
 
+
+// ÌßÚ²Ô°‚Ì½Ëß°ÄÞ
+#define SPEED	GRIDSIZE
+
 enum TBL_ID {
 	TBL_MAIN,
 	TBL_SUB,

@@ -1,4 +1,5 @@
 #include <DxLib.h>
+#include "Scene.h"
 #include "Prey.h"
 #include "Controller.h"
 
@@ -57,72 +58,148 @@ Prey::~Prey()
 
 void Prey::Move(const Controller & controll, WeakList objlist)
 {
-	auto &keyTbl = controll.GetButtonInfo(KEY_TYPE_NOW);
-	auto &keyTblOld = controll.GetButtonInfo(KEY_TYPE_OLD);
+	auto mapSize = lpMap.GetMapSize();
+	auto gridSize = lpMap.GetGridSize();
+	auto Scr = lpScene.GetScrSize();
 
-	auto SidePos = [&](DIR dir, VECTOR2 pos, int speed, SIDE_CHECK sideFlag) {
-		VECTOR2 side;
-		switch (dir)
-		{
-		case DIR_LEFT:
-			side = { speed - (sideFlag ^ 1), 0 };
-			break;
-		case DIR_RIGHT:
-			side = { speed + (GRIDSIZE - sideFlag), 0 };
-			break;
-		case DIR_DOWN:
-			side = { 0, speed + (GRIDSIZE - sideFlag) };
-			break;
-		case DIR_UP:
-			side = { 0, speed - (sideFlag ^ 1) };
-			break;
-		}
-		return pos + side;
-	};
+	auto input    = controll.GetButtonInfo(KEY_TYPE_NOW);
+	auto inputOld = controll.GetButtonInfo(KEY_TYPE_OLD);
 
-	auto move = [&, dir = Prey::dir](DIR_TBL_ID id){
-		if (keyTbl[keyIdTbl[dirTbl[Prey::dir][id]]])
-		{
-			// ï˚å¸ÇÃæØƒ
-			Prey::dir = dirTbl[dir][id];
-			if (!PassageTbl[static_cast<int>(lpMap.GetMapData(SidePos(Prey::dir, pos, speedTbl[Prey::dir], IN_SIDE)))])
-			{
-				// ï«Ç™ó◊Ç…Ç†Ç¡ÇΩèÍçá
-				return false;
-			}
-			else
-			{
-				// ï‚ê≥èàóù
-				if ((*posTbl[Prey::dir][TBL_SUB]) % GRIDSIZE)
-				{
-					(*posTbl[Prey::dir][TBL_SUB]) = (((*posTbl[Prey::dir][TBL_SUB] + GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE);
-				}
-			}
-			// à⁄ìÆèàóù
-			if (!(*posTbl[Prey::dir][TBL_SUB] % GRIDSIZE))
-			{
-				(*posTbl[Prey::dir][TBL_MAIN]) += speedTbl[Prey::dir];
-				return true;
-			}
-		}
-		return false;
-	};
-
-	//if (!(move((DIR_TBL_ID)(DIR_TBL_SUB1 - (afterKeyFlag << 1)))
-	//	|| move((DIR_TBL_ID)(DIR_TBL_SUB2 - (afterKeyFlag << 1)))))	// ºÃƒââéZÇ≈afterKeyFlagÇ1ƒﬁØƒÇ∏ÇÁÇ∑
-	//{
-	//	afterKeyFlag = false;
-	//	if (!(move((DIR_TBL_ID)(DIR_TBL_MAIN + (afterKeyFlag << 1))) || move((DIR_TBL_ID)(DIR_TBL_OPP + (afterKeyFlag << 1)))))
-	//	{
-	//		SetAnim("í‚é~");
-	//		return;
-	//	}
-	//}
-	//else
+	// à⁄ìÆèàóù(MapÇÃà⁄ìÆ & Ãﬂ⁄≤‘∞ÇÃà⁄ìÆ)-----------------------------
+	// ç∂à⁄ìÆ
+	if (input[KEY_INPUT_NUMPAD6] & ~inputOld[KEY_INPUT_NUMPAD6])
 	{
-		afterKeyFlag = keyTbl[keyIdTbl[dirTbl[dir][DIR_TBL_SUB1]]] || keyTbl[keyIdTbl[dirTbl[dir][DIR_TBL_SUB2]]] ^ (int)(GetAnimation() == "í‚é~");
+		pos.x += SPEED;
+		if (pos.x >= Scr.x - PREYSIZE_X)
+		{
+			pos.x = Scr.x - PREYSIZE_X;
+			lpMap.GetMapPos().x -= gridSize.x;
+		}
+		if (lpMap.GetMapPos().x <= -(mapSize.x - Scr.x))
+		{
+			lpMap.GetMapPos().x = -(mapSize.x - Scr.x);
+			pos.x = Scr.x - (gridSize.x * 2);
+		}
 	}
-	SetAnim("à⁄ìÆ");
+	// âEà⁄ìÆ
+	if (input[KEY_INPUT_NUMPAD4] & ~inputOld[KEY_INPUT_NUMPAD4])
+	{
+		pos.x -= SPEED;
+		if (pos.x <= 0)
+		{
+			pos.x = gridSize.x;
+			lpMap.GetMapPos().x += gridSize.x;
+		}
+		if (lpMap.GetMapPos().x + mapSize.x >= mapSize.x - Scr.x)
+		{
+			lpMap.GetMapPos().x = 0;
+		}
+	}
+	// è„à⁄ìÆ
+	if (input[KEY_INPUT_NUMPAD8] & ~inputOld[KEY_INPUT_NUMPAD8])
+	{
+		pos.y -= SPEED;
+		if (pos.y <= 0)
+		{
+			pos.y = gridSize.y;
+			lpMap.GetMapPos().y += gridSize.y;
+		}
+		if (lpMap.GetMapPos().y + lpMap.GetMapSize().y >= lpMap.GetMapSize().y - Scr.y)
+		{
+			lpMap.GetMapPos().y = 0;
+		}
+	}
+	// â∫à⁄ìÆ
+	if (input[KEY_INPUT_NUMPAD2] & ~inputOld[KEY_INPUT_NUMPAD2])
+	{
+		pos.y += SPEED;
+		if (pos.y >= Scr.y - gridSize.y)
+		{
+			pos.y = Scr.y - gridSize.y;
+			lpMap.GetMapPos().y -= gridSize.y;
+		}
+		if (lpMap.GetMapPos().y <= -((lpMap.GetMapSize().y - Scr.y) + 20))
+		{
+			lpMap.GetMapPos().y = -((lpMap.GetMapSize().y - Scr.y) + 20);
+			if (pos.y >= ((Scr.y - (GRIDSIZE * 2)) - 20))
+			{
+				pos.y = ((Scr.y - (GRIDSIZE * 2)) - 20);
+			}
+		}
+	}
+	//----------------------------------------------------------------------------
+
+	// ÅñÃﬂ⁄≤‘∞ÇÃŒﬂºﬁºÆ›Çë´å≥Ç…ê›íËÇ∑ÇÈÅB
+
+
+
+
+	//auto &keyTbl = controll.GetButtonInfo(KEY_TYPE_NOW);
+	//auto &keyTblOld = controll.GetButtonInfo(KEY_TYPE_OLD);
+
+	//auto SidePos = [&](DIR dir, VECTOR2 pos, int speed, SIDE_CHECK sideFlag) {
+	//	VECTOR2 side;
+	//	switch (dir)
+	//	{
+	//	case DIR_LEFT:
+	//		side = { speed - (sideFlag ^ 1), 0 };
+	//		break;
+	//	case DIR_RIGHT:
+	//		side = { speed + (GRIDSIZE - sideFlag), 0 };
+	//		break;
+	//	case DIR_DOWN:
+	//		side = { 0, speed + (GRIDSIZE - sideFlag) };
+	//		break;
+	//	case DIR_UP:
+	//		side = { 0, speed - (sideFlag ^ 1) };
+	//		break;
+	//	}
+	//	return pos + side;
+	//};
+
+	//auto move = [&, dir = Prey::dir](DIR_TBL_ID id){
+	//	if (keyTbl[keyIdTbl[dirTbl[Prey::dir][id]]])
+	//	{
+	//		// ï˚å¸ÇÃæØƒ
+	//		Prey::dir = dirTbl[dir][id];
+	//		if (!PassageTbl[static_cast<int>(lpMap.GetMapData(SidePos(Prey::dir, pos, speedTbl[Prey::dir], IN_SIDE)))])
+	//		{
+	//			// ï«Ç™ó◊Ç…Ç†Ç¡ÇΩèÍçá
+	//			return false;
+	//		}
+	//		else
+	//		{
+	//			// ï‚ê≥èàóù
+	//			if ((*posTbl[Prey::dir][TBL_SUB]) % GRIDSIZE)
+	//			{
+	//				(*posTbl[Prey::dir][TBL_SUB]) = (((*posTbl[Prey::dir][TBL_SUB] + GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE);
+	//			}
+	//		}
+	//		// à⁄ìÆèàóù
+	//		if (!(*posTbl[Prey::dir][TBL_SUB] % GRIDSIZE))
+	//		{
+	//			(*posTbl[Prey::dir][TBL_MAIN]) += speedTbl[Prey::dir];
+	//			return true;
+	//		}
+	//	}
+	//	return false;
+	//};
+
+	////if (!(move((DIR_TBL_ID)(DIR_TBL_SUB1 - (afterKeyFlag << 1)))
+	////	|| move((DIR_TBL_ID)(DIR_TBL_SUB2 - (afterKeyFlag << 1)))))	// ºÃƒââéZÇ≈afterKeyFlagÇ1ƒﬁØƒÇ∏ÇÁÇ∑
+	////{
+	////	afterKeyFlag = false;
+	////	if (!(move((DIR_TBL_ID)(DIR_TBL_MAIN + (afterKeyFlag << 1))) || move((DIR_TBL_ID)(DIR_TBL_OPP + (afterKeyFlag << 1)))))
+	////	{
+	////		SetAnim("í‚é~");
+	////		return;
+	////	}
+	////}
+	////else
+	//{
+	//	afterKeyFlag = keyTbl[keyIdTbl[dirTbl[dir][DIR_TBL_SUB1]]] || keyTbl[keyIdTbl[dirTbl[dir][DIR_TBL_SUB2]]] ^ (int)(GetAnimation() == "í‚é~");
+	//}
+	//SetAnim("à⁄ìÆ");
 	_RPTN(_CRT_WARN, "character.pos:%d,%d\n", pos.x, pos.y);
 }
 

@@ -24,6 +24,9 @@
 #define MAPSIZE_X	12000
 #define MAPSIZE_Y	8640
 
+
+
+
 // player‚Ìæ‚ª•Ç‚©“¹‚©
 enum PASSAGE
 {
@@ -85,19 +88,28 @@ public:
 	bool setMapData(const VECTOR2& pos, objID id);
 	objID GetMapData(const VECTOR2& pos);
 
+	//	ÃŞ°À¾°ÌŞŠÖ”
+	bool SaveMap(void);
+	//	ÃŞ°ÀÛ°ÄŞŠÖ”
+	bool LoadMap(void);
+
 	// Ï¯Ìß‚ÌÎß¼Ş¼®İæ“¾
 	VECTOR2& GetMapPos(void)
 	{
 		return mapPos;
 	}
+	// Map‚Ì»²½Şæ“¾
 	VECTOR2 GetMapSize(void)
 	{
 		return VECTOR2(MAPSIZE_X, MAPSIZE_Y);
 	}
+	// ˆêÏ½‚Ì»²½Ş‚Ìæ“¾
+	VECTOR2 GetGridSize(void)
+	{
+		return VECTOR2(GRIDSIZE, GRIDSIZE);
+	}
 
-	// Á¯Ìß‚Ì1–‡‚Ì»²½ŞÁªİ¼Ş
-	bool ChangeChipSize(void);
-
+	// ¾¯Ä‚µ‚½µÌŞ¼Şª¸Ä‚Ì•`‰æ
 	bool SetObj(void);
 
 	// ÌßÚ²Ô°‚Ìl”‚ÌŠi”[•Ï”

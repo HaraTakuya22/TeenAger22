@@ -31,8 +31,6 @@ unique_Base GameScene::Update(unique_Base own, const Controller & Controller)
 		return std::make_unique<EditScene>();
 	}
 
-	lpMap.MapInit();
-
 	ClsDrawScreen();
 	Draw();
 	ScreenFlip();
@@ -47,6 +45,8 @@ int GameScene::Init(void)
 	{
 		objlist = std::make_shared<Shared_ObjList>();
 	}
+	lpMap.setUp(VECTOR2(MAPSIZE_X,MAPSIZE_Y),VECTOR2(GRIDSIZE,GRIDSIZE));
+	lpMap.LoadMap();
 	return 0;
 }
 

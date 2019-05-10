@@ -23,8 +23,11 @@ private:
 	void Draw(void);
 
 	int button1[BUTTON_MAX];
+	int button1_flag;
 	int button2[BUTTON_MAX];
+	int button2_flag;
 	int button3[BUTTON_MAX];
+	int button3_flag;
 	VECTOR2 one_pos;
 	VECTOR2 two_pos;
 	VECTOR2 three_pos;

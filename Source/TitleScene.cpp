@@ -22,8 +22,9 @@ unique_Base TitleScene::Update(unique_Base own, const Controller & Controller)
 	
 	if (CheckHitKey(KEY_INPUT_RETURN))
 	{
-		return std::make_unique<EditScene>();
+		return std::make_unique<SelectScene>();
 	}
+
 	// ƒ}ƒbƒv‚ÌˆÚ“®
 	if ((titleRightPos.x >= 1200) && (titleRightPos.y >= 1440))
 	{

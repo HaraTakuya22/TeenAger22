@@ -13,8 +13,6 @@ EditCursor::EditCursor(VECTOR2 pos)
 	this->pos.x = pos.x;
 	this->pos.y = pos.y;
 
-	cursorPos = { 0,0 };
-
 	keyDefRng = EDITCURSOR_DEF_RNG;
 	inputFrame = EDITCURSOR_DEF_RNG;
 	setF = false;
@@ -194,17 +192,16 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	{
 		tmp.x += GRIDSIZE;
 
-
-		if (tmp.x >= Scr.x)
+		if (tmp.x > Scr.x)
 		{
-			lpMap.GetMapPos().x = -(pos.x / gridSize.x) * gridSize.x;
+			lpMap.GetMapPos().x -= gridSize.x;
 		}
 
 		// MapÇÃà⁄ìÆêßå‰
-		if (lpMap.GetMapPos().x <= -(Scr.x * 9))
+		if (lpMap.GetMapPos().x <= -(lpMap.GetMapSize().x - gridSize.x))
 		{
 			// MapÇÃà⁄ìÆêßå‰
-			lpMap.GetMapPos().x = -(Scr.x * 9);
+			//lpMap.GetMapPos().x = -(lpMap.GetMapSize().x - gridSize.x);
 			// ∂∞øŸÇÃà⁄ìÆêßå‰
 			if (tmp.x >= MAPSIZE_X - GRIDSIZE)
 			{
@@ -218,7 +215,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (cnt_now[KEY_INPUT_LEFT])
 	{
 		tmp.x -= GRIDSIZE;
-		lpMap.GetMapPos().x = -(tmp.x + gridSize.x);
+		lpMap.GetMapPos().x = -(pos.x + gridSize.x);
 
 		if (tmp.x <= 0)
 		{
@@ -243,8 +240,6 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	{
 		tmp.y -= GRIDSIZE;
 		
-		
-	
 		if (tmp.y <= 0)
 		{
 			lpMap.GetMapPos().y = -(tmp.y + gridSize.y);
@@ -268,13 +263,13 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	{
 		tmp.y += GRIDSIZE;
 		
-		if (tmp.y >= Scr.y - 20)
+		if (tmp.y > (Scr.y - 20) - gridSize.y)
 		{
-			lpMap.GetMapPos().y = -(pos.y / gridSize.y) * gridSize.y;
+			lpMap.GetMapPos().y = -((pos.y / gridSize.y)) * gridSize.y;
 		}
 		
 		// MapÇÃà⁄ìÆêßå‰
-		if (lpMap.GetMapPos().y <= -((lpMap.GetMapSize().y - Scr.y) + 20))
+		if (lpMap.GetMapPos().y <= -lpMap.GetMapSize().y)
 		{
 			// MapÇÃŒﬂºﬁºÆ›êßå‰
 			lpMap.GetMapPos().y = -((lpMap.GetMapSize().y - Scr.y) + 20);
@@ -355,9 +350,9 @@ void EditCursor::Draw(void)
 		{
 			DrawGraph(lpScene.GetScrSize().x - GRIDSIZE, pos.y, lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
 		}
-		else if (pos.y >= lpScene.GetScrSize().y)
+		else if (pos.y > lpScene.GetScrSize().y)
 		{
-			DrawGraph(pos.x, lpScene.GetScrSize().y - (GRIDSIZE * 2 + 20), lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
+			DrawGraph(pos.x, (lpScene.GetScrSize().y - GRIDSIZE) - 20, lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
 		}
 		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
 

@@ -40,6 +40,8 @@ private:
 	// ýėp
 	bool setF;
 
+	VECTOR2 cursorPos;
+
 	int keyDefRng;
 	int inputFrame;
 

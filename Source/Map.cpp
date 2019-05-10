@@ -404,7 +404,9 @@ template<typename MapType, typename IDType>
 bool Map::setData(MapType maptype, const VECTOR2 & pos, IDType id)
 {
 	//ChangeChipSize();
-	VECTOR2 tmp = VECTOR2(pos.x / ChipSize.x , pos.y / ChipSize.y );
+	VECTOR2 tmp = VECTOR2(pos.x / ChipSize.x ,pos.y / ChipSize.y);
+	
+
 
 	// –¾¯Ä‚µ‚½Á¯Ìß‚ÌÎß¼Ş¼®İî•ñ‚ğ‚»‚Ì‚Ü‚Ü‘S‘Ì‚ÌÏ¯Ìß‚ÉŠi”[
 	// Ï¯Ìß‚ÌˆÚ“®‚Æ‹¤‚ÉÁ¯Ìß‚à“®‚©‚³‚È‚¢‚Æ‚¢‚¯‚È‚¢‚Ì‚Å
@@ -451,7 +453,7 @@ bool Map::SetObj(void)
 			case objID::CHAIR_2:	
 			case objID::CHAIR_3:
 			case objID::CHAIR_4:
-				DrawGraph(x * ChipSize.x, y * ChipSize.y, lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
+				DrawGraph(x * ChipSize.x,y * ChipSize.y, lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
 				break;
 			case objID::BOOKSHELF:
 			case objID::DRAWER:

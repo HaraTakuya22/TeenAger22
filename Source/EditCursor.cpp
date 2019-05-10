@@ -13,6 +13,8 @@ EditCursor::EditCursor(VECTOR2 pos)
 	this->pos.x = pos.x;
 	this->pos.y = pos.y;
 
+	cursorPos = { 0,0 };
+
 	keyDefRng = EDITCURSOR_DEF_RNG;
 	inputFrame = EDITCURSOR_DEF_RNG;
 	setF = false;
@@ -174,12 +176,12 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	{
 		SetInput = PAD_INPUT_OLD;
 	}
-	
+
 	if (SetInput & ~SetInputOld)
 	{
 		setF = true;
 		lpMap.setMapData(pos, id);
-		
+
 	}
 	else
 	{
@@ -189,26 +191,26 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	// åªç›âEŒﬁ¿›Çâüâ∫--------------------------------------
 	if (cnt_now[KEY_INPUT_RIGHT])
 	{
+		
 		tmp.x += GRIDSIZE;
-		setId.set_pos.x -= GRIDSIZE;
-		if (tmp.x >= Scr.x)
+
+		//setId.set_pos.x -= GRIDSIZE;
+		if (tmp.x > Scr.x - GRIDSIZE)
 		{
 			lpMap.GetMapPos().x -= GRIDSIZE;
+			
 		}
-		
+
 		// MapÇÃà⁄ìÆêßå‰
 		if (lpMap.GetMapPos().x <= -(Scr.x * 9))
 		{
 			// MapÇÃà⁄ìÆêßå‰
 			lpMap.GetMapPos().x = -(Scr.x * 9);
 			// ∂∞øŸÇÃà⁄ìÆêßå‰
-			tmp.x = Scr.x - (GRIDSIZE * 2);
-		}
-		// ∂∞øŸÇÃŒﬂºﬁºÆ›êßå‰
-		if (tmp.x >= Scr.x - GRIDSIZE)
-		{
-			//lpMap.GetMapPos().x += Scr.x;
-			tmp.x = Scr.x - GRIDSIZE;
+			if (tmp.x >= Scr.x - (GRIDSIZE * 2))
+			{
+				tmp.x = Scr.x - (GRIDSIZE * 2);
+			}
 		}
 	}
 	// ---------------------------------------------------------
@@ -217,7 +219,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (cnt_now[KEY_INPUT_LEFT])
 	{
 		tmp.x -= GRIDSIZE;
-		setId.set_pos += GRIDSIZE;
+		
 		if (tmp.x <= 0)
 		{
 			lpMap.GetMapPos().x += GRIDSIZE;
@@ -241,7 +243,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (cnt_now[KEY_INPUT_UP])
 	{
 		tmp.y -= GRIDSIZE;
-		setId.set_pos.y += GRIDSIZE;
+		cursorPos.y -= GRIDSIZE;
 
 		if (tmp.y <= 0)
 		{
@@ -265,7 +267,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (cnt_now[KEY_INPUT_DOWN])
 	{
 		tmp.y += GRIDSIZE;
-		setId.set_pos.y -= GRIDSIZE;
+		cursorPos.y += GRIDSIZE;
 		if (tmp.y >= Scr.y - 20)
 		{
 			lpMap.GetMapPos().y -= GRIDSIZE;
@@ -320,21 +322,23 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 		id = (objID)((id <= objID::FLOOR) ? objID::NON : id - 1);	//id+1 = CursorÇÃ±≤∫›ÇÃéü
 	}
 	//-----------------------------------------------------------
-	
+
 	if (cnt_now[KEY_INPUT_SPACE] & ~cnt_old[KEY_INPUT_SPACE])
 	{
 		setF = true;
-		lpMap.setMapData(pos, id);
+		lpMap.setMapData(VECTOR2(pos.x,pos.y), id);
 	}
 	else
 	{
 		setF = false;
 	}
+	_RPTN(_CRT_WARN, "ID:[%d:%d]%d\n", cursorPos.x,cursorPos.y, id);
+	_RPTN(_CRT_WARN, "ID:[%d:%d]%d\n", tmp.x, tmp.y, id);
+
 }
 
 void EditCursor::Draw(void)
 {
-	
 	// ∂∞øŸÇåıÇÁÇπÇÈèàóù
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	//DrawBox(pos.x, pos.y, pos.x + 80, pos.y + 80, 0x000000, true);
@@ -347,7 +351,15 @@ void EditCursor::Draw(void)
 	case objID::CHAIR_2:
 	case objID::CHAIR_3:
 	case objID::CHAIR_4:
-		DrawGraph(pos.x,pos.y, lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
+
+		if (lpMap.GetMapPos().x >= 0)
+		{
+			DrawGraph(pos.x, pos.y, lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
+		}
+		/*else if (lpMap.GetMapPos().x <= 0)
+		{
+			DrawGraph(lpScene.GetScrSize().x - GRIDSIZE, pos.y, lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
+		}*/
 		break;
 	case objID::BOOKSHELF:
 	case objID::DRAWER:
@@ -394,5 +406,7 @@ void EditCursor::Draw(void)
 	{
 		DrawFormatString(SCREENSIZE_X - 100, SCREENSIZE_Y - 100, 0x00ff00, "id:%d", id);
 	}
-
+	DrawFormatString(50, 50, 0x00ff00, "cursorpos.x:%d\ncursorpos.y:%d", cursorPos.x, cursorPos.y);
+	DrawFormatString(50, 100, 0x00ff00, "pos.x:%d\npos.y:%d", pos.x, pos.y);
+	DrawFormatString(50, 150, 0x0000ff, "mapPos.x:%d\nmapPos.y:%d", lpMap.GetMapPos().x, lpMap.GetMapPos().y);
 }

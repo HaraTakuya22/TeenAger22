@@ -40,6 +40,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	auto cnt_old = controll.GetButtonInfo(KEY_TYPE_OLD);
 
 	auto Scr = lpScene.GetScrSize();
+	auto gridSize = lpMap.GetGridSize();
 
 	// ‰Ÿ‚µ‚½uŠÔ‚ðŽæ“¾[¹Þ°ÑÊß¯ÄÞ‘€ì]
 	// Œ»Ý‰EÎÞÀÝ‚ð‰Ÿ‰º--------------------------------------
@@ -195,10 +196,9 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 		tmp.x += GRIDSIZE;
 
 		//setId.set_pos.x -= GRIDSIZE;
-		if (tmp.x > Scr.x - GRIDSIZE)
+		if (tmp.x >= Scr.x)
 		{
-			lpMap.GetMapPos().x -= GRIDSIZE;
-			
+			lpMap.GetMapPos().x = -(pos.x / gridSize.x) * gridSize.x;
 		}
 
 		// Map‚ÌˆÚ“®§Œä
@@ -207,9 +207,9 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 			// Map‚ÌˆÚ“®§Œä
 			lpMap.GetMapPos().x = -(Scr.x * 9);
 			// ¶°¿Ù‚ÌˆÚ“®§Œä
-			if (tmp.x >= Scr.x - (GRIDSIZE * 2))
+			if (tmp.x >= MAPSIZE_X - GRIDSIZE)
 			{
-				tmp.x = Scr.x - (GRIDSIZE * 2);
+				tmp.x = MAPSIZE_X - GRIDSIZE;
 			}
 		}
 	}
@@ -219,14 +219,14 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (cnt_now[KEY_INPUT_LEFT])
 	{
 		tmp.x -= GRIDSIZE;
-		
+		lpMap.GetMapPos().x = -(tmp.x + gridSize.x);
+
 		if (tmp.x <= 0)
 		{
-			lpMap.GetMapPos().x += GRIDSIZE;
 			tmp.x = 0;
 		}
 		// Map‚ÌˆÚ“®§Œä
-		if (lpMap.GetMapPos().x + lpMap.GetMapSize().x >= lpMap.GetMapSize().x - Scr.x)
+		if (tmp.x <= 0)
 		{
 			// Map‚ÌˆÚ“®§Œä
 			lpMap.GetMapPos().x = 0;
@@ -243,8 +243,8 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (cnt_now[KEY_INPUT_UP])
 	{
 		tmp.y -= GRIDSIZE;
-		cursorPos.y -= GRIDSIZE;
 
+		lpMap.GetMapPos().y = -(tmp.y + gridSize.y);
 		if (tmp.y <= 0)
 		{
 			lpMap.GetMapPos().y += GRIDSIZE;
@@ -352,11 +352,13 @@ void EditCursor::Draw(void)
 	case objID::CHAIR_3:
 	case objID::CHAIR_4:
 
-		if (lpMap.GetMapPos().x >= 0)
+		if (pos.x >= lpScene.GetScrSize().x)
 		{
-			DrawGraph(pos.x, pos.y, lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
+			DrawGraph(lpScene.GetScrSize().x - GRIDSIZE, pos.y, lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
 		}
-		/*else if (lpMap.GetMapPos().x <= 0)
+		DrawGraph(pos.x, pos.y, lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
+
+	/*	else if (lpMap.GetMapPos().x <= 0)
 		{
 			DrawGraph(lpScene.GetScrSize().x - GRIDSIZE, pos.y, lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
 		}*/

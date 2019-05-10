@@ -412,7 +412,6 @@ bool Map::setData(MapType maptype, const VECTOR2 & pos, IDType id)
 	// Ï¯Ìß‚ÌˆÚ“®‚Æ‹¤‚ÉÁ¯Ìß‚à“®‚©‚³‚È‚¢‚Æ‚¢‚¯‚È‚¢‚Ì‚Å
 
 
-
 	// Map“à‚Å‚È‚¢ê‡‚Í•`‰æ‚µ‚È‚¢
 	/*if (!SetCheck()(tmp, MapSize));
 	{

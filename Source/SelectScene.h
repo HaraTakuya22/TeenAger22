@@ -36,6 +36,12 @@ private:
 
 	// 表示するマップ
 	int titleMapImage;
-
+	// PADの押下情報格納領域
+	int inputRightNow;
+	int inputRightOld;
+	int inputLeftNow;
+	int inputLeftOld;
+	int inputStartNow;
+	int inputStartOld;
 };
 

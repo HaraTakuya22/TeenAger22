@@ -140,6 +140,7 @@
     <ClCompile Include="Source\objID.cpp" />
     <ClCompile Include="Source\Prey.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
+    <ClCompile Include="Source\SelectScene.cpp" />
     <ClCompile Include="Source\TitleScene.cpp" />
     <ClCompile Include="Source\VECTOR2.cpp" />
   </ItemGroup>
@@ -158,6 +159,7 @@
     <ClInclude Include="Source\objID.h" />
     <ClInclude Include="Source\Prey.h" />
     <ClInclude Include="Source\Scene.h" />
+    <ClInclude Include="Source\SelectScene.h" />
     <ClInclude Include="Source\TitleScene.h" />
     <ClInclude Include="Source\VECTOR2.h" />
   </ItemGroup>

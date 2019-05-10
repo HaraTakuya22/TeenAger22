@@ -22,7 +22,7 @@ unique_Base TitleScene::Update(unique_Base own, const Controller & Controller)
 	
 	if (CheckHitKey(KEY_INPUT_RETURN))
 	{
-		return std::make_unique<SelectScene>();
+		return std::make_unique<EditScene>();
 	}
 
 	// ƒ}ƒbƒv‚ÌˆÚ“®

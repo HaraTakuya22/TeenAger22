@@ -25,45 +25,53 @@ SelectScene::~SelectScene()
 
 unique_Base SelectScene::Update(unique_Base own, const Controller & controll)
 {
-	if (CheckHitKey(KEY_INPUT_1))
-	{
-		lpMap.player = PLAYER_1;
-	}
-	if (CheckHitKey(KEY_INPUT_2))
-	{
-		lpMap.player = PLAYER_2;
-	}
-	if (CheckHitKey(KEY_INPUT_3))
-	{
-		lpMap.player = PLAYER_3;
-	}
+	auto cnt_now = controll.GetButtonInfo(KEY_TYPE_NOW);
+	auto cnt_old = controll.GetButtonInfo(KEY_TYPE_OLD);
 
-	if (CheckHitKey(KEY_INPUT_SPACE) &&
-		(lpMap.player == PLAYER_1
-			|| lpMap.player == PLAYER_2
-			|| lpMap.player == PLAYER_3))
-	{
-		return std::make_unique<EditScene>();
-	}
-	
 	if (cursorPos.x == ONE_PLAY_POS)
 	{
-		button1[BUTTON_OFF] = button1[BUTTON_ON];
+		button1_flag = BUTTON_ON;
+		if (cnt_now[KEY_INPUT_SPACE])
+		{
+			lpMap.player = PLAYER_1;
+			return std::make_unique<GameScene>();
+
+		}
+	}
+	else
+	{
+		button1_flag = BUTTON_OFF;
 	}
 	
 	if (cursorPos.x == TWO_PLAY_POS)
 	{
-		button2[BUTTON_OFF] = button2[BUTTON_ON];
+		button2_flag = BUTTON_ON;
+		if (cnt_now[KEY_INPUT_SPACE])
+		{
+			lpMap.player = PLAYER_2;
+			return std::make_unique<GameScene>();
+
+		}
 	}
-	
+	else
+	{
+		button2_flag = BUTTON_OFF;
+	}
 	if (cursorPos.x == THREE_PLAY_POS)
 	{
-		button3[BUTTON_OFF] = button3[BUTTON_ON];
-	}
-	
+		button3_flag = BUTTON_ON;
+		if (cnt_now[KEY_INPUT_SPACE])
+		{
+			lpMap.player = PLAYER_3;
+			return std::make_unique<GameScene>();
 
-	auto cnt_now = controll.GetButtonInfo(KEY_TYPE_NOW);
-	auto cnt_old = controll.GetButtonInfo(KEY_TYPE_OLD);
+		}
+	}
+	else
+	{
+		button3_flag = BUTTON_OFF;
+	}
+
 
 	// åªç›âEŒﬁ¿›Çâüâ∫--------------------------------------
 	if ((cnt_now[KEY_INPUT_RIGHT]) && (!cnt_old[KEY_INPUT_RIGHT]))
@@ -72,7 +80,7 @@ unique_Base SelectScene::Update(unique_Base own, const Controller & controll)
 	}
 
 	// åªç›ç∂Œﬁ¿›Çâüâ∫-----------------------------------------
-	if (cnt_now[KEY_INPUT_LEFT])
+	if ((cnt_now[KEY_INPUT_LEFT]) && (!cnt_old[KEY_INPUT_LEFT]))
 	{
 		cursorPos.x -= CURSOR_POS_SPEED;
 	}
@@ -87,9 +95,12 @@ unique_Base SelectScene::Update(unique_Base own, const Controller & controll)
 
 int SelectScene::Init(void)
 {
-	LoadDivGraph("image/button_hakkou_one.png", 2, 1, 2, 360, 240, button1);
-	LoadDivGraph("image/button_hakkou_two.png", 2, 1, 2, 360, 240, button2);
-	LoadDivGraph("image/button_hakkou_three.png", 2, 1, 2, 360, 240, button3);
+	LoadDivGraph("image/button_red_hakkou_one.png", 2, 1, 2, 360, 240, button1);
+	LoadDivGraph("image/button_red_hakkou_two.png", 2, 1, 2, 360, 240, button2);
+	LoadDivGraph("image/button_red_hakkou_three.png", 2, 1, 2, 360, 240, button3);
+	button1_flag = BUTTON_OFF;
+	button2_flag = BUTTON_OFF;
+	button3_flag = BUTTON_OFF;
 	one_pos = { 0,0 };
 	two_pos = { 0,0 };
 	three_pos = { 0,0 };
@@ -108,7 +119,7 @@ void SelectScene::Draw(void)
 		titleMapImage,
 		false);
 
-	DrawGraph(20, 220, button1[BUTTON_OFF], true);
-	DrawGraph(20 + 400, 220, button2[BUTTON_OFF], true);
-	DrawGraph(20 + 800, 220, button3[BUTTON_OFF], true);
+	DrawGraph(20, 220, button1[button1_flag], true);
+	DrawGraph(20 + 400, 220, button2[button2_flag], true);
+	DrawGraph(20 + 800, 220, button3[button3_flag], true);
 }

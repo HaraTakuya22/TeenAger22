@@ -66,54 +66,106 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	auto inputOld = controll.GetButtonInfo(KEY_TYPE_OLD);
 
 	// à⁄ìÆèàóù(MapÇÃà⁄ìÆ & Ãﬂ⁄≤‘∞ÇÃà⁄ìÆ)-----------------------------
-	// ç∂à⁄ìÆ
+	// âEà⁄ìÆ
 	if (input[KEY_INPUT_NUMPAD6] & ~inputOld[KEY_INPUT_NUMPAD6])
 	{
-		pos.x += SPEED;
-		if (pos.x >= Scr.x - PREYSIZE_X)
+		if (pos.x >= 80)
 		{
-			pos.x = Scr.x - PREYSIZE_X;
-			lpMap.GetMapPos().x -= gridSize.x;
+			if (pos.x < 320)
+			{
+				if (lpMap.GetMapPos().x >= 0)
+				{
+					pos.x += SPEED;
+				}
+			}
 		}
-		if (lpMap.GetMapPos().x <= -(mapSize.x - Scr.x))
+		if (pos.x >= 320)
 		{
-			lpMap.GetMapPos().x = -(mapSize.x - Scr.x);
-			pos.x = Scr.x - (gridSize.x * 2);
+			lpMap.GetMapPos().x -= SPEED;
 		}
+			/*if (pos.x >= Scr.x - PREYSIZE_X)
+			{
+				pos.x = Scr.x - PREYSIZE_X;
+				lpMap.GetMapPos().x -= gridSize.x;
+			}*/
+			/*if (lpMap.GetMapPos().x <= -(mapSize.x - Scr.x))
+			{
+				lpMap.GetMapPos().x = -(mapSize.x - Scr.x);
+				pos.x = Scr.x - (gridSize.x * 2);
+			}*/
 	}
-	// âEà⁄ìÆ
+	// ç∂à⁄ìÆ
 	if (input[KEY_INPUT_NUMPAD4] & ~inputOld[KEY_INPUT_NUMPAD4])
 	{
-		pos.x -= SPEED;
-		if (pos.x <= 0)
+		if (pos.x > 80)
+		{
+			if (pos.x <= 320)
+			{
+				if (lpMap.GetMapPos().x >= 0)
+				{
+					pos.x -= SPEED;
+				}
+			}
+		}
+		if (pos.x >= 320)
+		{
+			lpMap.GetMapPos().x += SPEED;
+		}
+		/*if (pos.x <= 0)
 		{
 			pos.x = gridSize.x;
 			lpMap.GetMapPos().x += gridSize.x;
-		}
-		if (lpMap.GetMapPos().x + mapSize.x >= mapSize.x - Scr.x)
+		}*/
+		/*if (lpMap.GetMapPos().x + mapSize.x >= mapSize.x - Scr.x)
 		{
 			lpMap.GetMapPos().x = 0;
-		}
+		}*/
 	}
 	// è„à⁄ìÆ
 	if (input[KEY_INPUT_NUMPAD8] & ~inputOld[KEY_INPUT_NUMPAD8])
 	{
-		pos.y -= SPEED;
-		if (pos.y <= 0)
+		if (pos.y > 40)
+		{
+			if (pos.y <= 280)
+			{
+				if (lpMap.GetMapPos().y >= 0)
+				{
+					pos.y -= SPEED;
+				}
+			}
+		}
+		if (pos.y >= 280)
+		{
+			lpMap.GetMapPos().y += SPEED;
+		}
+		/*if (pos.y <= 0)
 		{
 			pos.y = gridSize.y;
 			lpMap.GetMapPos().y += gridSize.y;
-		}
-		if (lpMap.GetMapPos().y + lpMap.GetMapSize().y >= lpMap.GetMapSize().y - Scr.y)
+		}*/
+		/*if (lpMap.GetMapPos().y + lpMap.GetMapSize().y >= lpMap.GetMapSize().y - Scr.y)
 		{
 			lpMap.GetMapPos().y = 0;
-		}
+		}*/
 	}
 	// â∫à⁄ìÆ
 	if (input[KEY_INPUT_NUMPAD2] & ~inputOld[KEY_INPUT_NUMPAD2])
 	{
-		pos.y += SPEED;
-		if (pos.y >= Scr.y - gridSize.y)
+		if (pos.y >= 40)
+		{
+			if (pos.y < 280)
+			{
+				if (lpMap.GetMapPos().y >= 0)
+				{
+					pos.y += SPEED;
+				}
+			}
+		}
+		if (pos.y >= 280)
+		{
+			lpMap.GetMapPos().y -= SPEED;
+		}
+		/*if (pos.y >= Scr.y - gridSize.y)
 		{
 			pos.y = Scr.y - gridSize.y;
 			lpMap.GetMapPos().y -= gridSize.y;
@@ -125,7 +177,7 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 			{
 				pos.y = ((Scr.y - (GRIDSIZE * 2)) - 20);
 			}
-		}
+		}*/
 	}
 	//----------------------------------------------------------------------------
 
@@ -201,6 +253,7 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	//}
 	//SetAnim("à⁄ìÆ");
 	_RPTN(_CRT_WARN, "character.pos:%d,%d\n", pos.x, pos.y);
+	_RPTN(_CRT_WARN, "map.pos:%d,%d\n", lpMap.GetMapPos().x, lpMap.GetMapPos().y);
 }
 
 void Prey::Draw(void)

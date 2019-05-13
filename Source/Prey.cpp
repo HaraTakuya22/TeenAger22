@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "Prey.h"
 #include "Controller.h"
+#include "Image.h"
 
 
 
@@ -46,7 +47,7 @@ Prey::Prey(VECTOR2 pos)
 
 	// player(ãSà»äO)ÇÃŒﬂºﬁºÆ›ÇÃæØƒ
 	SetPos(pos);
-	Obj::Init("character/character.png", VECTOR2(4, 4), VECTOR2(320 / 4, 480 / 4));
+	//Obj::Init("character/character.png", VECTOR2(4, 4), VECTOR2(320 / 4, 480 / 4));
 	Prey::Init();
 	afterKeyFlag = false;
 }
@@ -62,14 +63,16 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	auto gridSize = lpMap.GetGridSize();
 	auto Scr = lpScene.GetScrSize();
 
-	auto input    = controll.GetButtonInfo(KEY_TYPE_NOW);
+	auto input = controll.GetButtonInfo(KEY_TYPE_NOW);
 	auto inputOld = controll.GetButtonInfo(KEY_TYPE_OLD);
 
 	// à⁄ìÆèàóù(MapÇÃà⁄ìÆ & Ãﬂ⁄≤‘∞ÇÃà⁄ìÆ)-----------------------------
 	// âEà⁄ìÆ
 	if (input[KEY_INPUT_NUMPAD6] & ~inputOld[KEY_INPUT_NUMPAD6])
 	{
-		if (pos.x >= 80)
+		camera.x = pos.x += SPEED;
+		lpMap.GetMapPos().x -= SPEED;
+		/*if (pos.x >= 80)
 		{
 			if (pos.x < 320)
 			{
@@ -82,22 +85,24 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 		if (pos.x >= 320)
 		{
 			lpMap.GetMapPos().x -= SPEED;
-		}
-			/*if (pos.x >= Scr.x - PREYSIZE_X)
-			{
-				pos.x = Scr.x - PREYSIZE_X;
-				lpMap.GetMapPos().x -= gridSize.x;
-			}*/
-			/*if (lpMap.GetMapPos().x <= -(mapSize.x - Scr.x))
-			{
-				lpMap.GetMapPos().x = -(mapSize.x - Scr.x);
-				pos.x = Scr.x - (gridSize.x * 2);
-			}*/
+		}*/
+		/*if (pos.x >= Scr.x - PREYSIZE_X)
+		{
+			pos.x = Scr.x - PREYSIZE_X;
+			lpMap.GetMapPos().x -= gridSize.x;
+		}*/
+		/*if (lpMap.GetMapPos().x <= -(mapSize.x - Scr.x))
+		{
+			lpMap.GetMapPos().x = -(mapSize.x - Scr.x);
+			pos.x = Scr.x - (gridSize.x * 2);
+		}*/
 	}
 	// ç∂à⁄ìÆ
 	if (input[KEY_INPUT_NUMPAD4] & ~inputOld[KEY_INPUT_NUMPAD4])
 	{
-		if (pos.x > 80)
+		camera.x = pos.x -= SPEED;
+		lpMap.GetMapPos().x += SPEED;
+		/*if (pos.x > 80)
 		{
 			if (pos.x <= 320)
 			{
@@ -110,13 +115,13 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 		if (pos.x >= 320)
 		{
 			lpMap.GetMapPos().x += SPEED;
-		}
+		}*/
 		/*if (pos.x <= 0)
 		{
 			pos.x = gridSize.x;
 			lpMap.GetMapPos().x += gridSize.x;
-		}*/
-		/*if (lpMap.GetMapPos().x + mapSize.x >= mapSize.x - Scr.x)
+		}
+		if (lpMap.GetMapPos().x + mapSize.x >= mapSize.x - Scr.x)
 		{
 			lpMap.GetMapPos().x = 0;
 		}*/
@@ -124,7 +129,9 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	// è„à⁄ìÆ
 	if (input[KEY_INPUT_NUMPAD8] & ~inputOld[KEY_INPUT_NUMPAD8])
 	{
-		if (pos.y > 40)
+		camera.y = pos.y -= SPEED;
+		lpMap.GetMapPos().y += SPEED;
+		/*if (pos.y > 40)
 		{
 			if (pos.y <= 280)
 			{
@@ -137,13 +144,13 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 		if (pos.y >= 280)
 		{
 			lpMap.GetMapPos().y += SPEED;
-		}
+		}*/
 		/*if (pos.y <= 0)
 		{
 			pos.y = gridSize.y;
 			lpMap.GetMapPos().y += gridSize.y;
-		}*/
-		/*if (lpMap.GetMapPos().y + lpMap.GetMapSize().y >= lpMap.GetMapSize().y - Scr.y)
+		}
+		if (lpMap.GetMapPos().y + lpMap.GetMapSize().y >= lpMap.GetMapSize().y - Scr.y)
 		{
 			lpMap.GetMapPos().y = 0;
 		}*/
@@ -151,7 +158,9 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	// â∫à⁄ìÆ
 	if (input[KEY_INPUT_NUMPAD2] & ~inputOld[KEY_INPUT_NUMPAD2])
 	{
-		if (pos.y >= 40)
+		camera.y = pos.y += SPEED;
+		lpMap.GetMapPos().y -= SPEED;
+		/*if (pos.y >= 40)
 		{
 			if (pos.y < 280)
 			{
@@ -164,7 +173,7 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 		if (pos.y >= 280)
 		{
 			lpMap.GetMapPos().y -= SPEED;
-		}
+		}*/
 		/*if (pos.y >= Scr.y - gridSize.y)
 		{
 			pos.y = Scr.y - gridSize.y;
@@ -183,88 +192,17 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 
 	// ÅñÃﬂ⁄≤‘∞ÇÃŒﬂºﬁºÆ›Çë´å≥Ç…ê›íËÇ∑ÇÈÅB
 
-
-
-
-	//auto &keyTbl = controll.GetButtonInfo(KEY_TYPE_NOW);
-	//auto &keyTblOld = controll.GetButtonInfo(KEY_TYPE_OLD);
-
-	//auto SidePos = [&](DIR dir, VECTOR2 pos, int speed, SIDE_CHECK sideFlag) {
-	//	VECTOR2 side;
-	//	switch (dir)
-	//	{
-	//	case DIR_LEFT:
-	//		side = { speed - (sideFlag ^ 1), 0 };
-	//		break;
-	//	case DIR_RIGHT:
-	//		side = { speed + (GRIDSIZE - sideFlag), 0 };
-	//		break;
-	//	case DIR_DOWN:
-	//		side = { 0, speed + (GRIDSIZE - sideFlag) };
-	//		break;
-	//	case DIR_UP:
-	//		side = { 0, speed - (sideFlag ^ 1) };
-	//		break;
-	//	}
-	//	return pos + side;
-	//};
-
-	//auto move = [&, dir = Prey::dir](DIR_TBL_ID id){
-	//	if (keyTbl[keyIdTbl[dirTbl[Prey::dir][id]]])
-	//	{
-	//		// ï˚å¸ÇÃæØƒ
-	//		Prey::dir = dirTbl[dir][id];
-	//		if (!PassageTbl[static_cast<int>(lpMap.GetMapData(SidePos(Prey::dir, pos, speedTbl[Prey::dir], IN_SIDE)))])
-	//		{
-	//			// ï«Ç™ó◊Ç…Ç†Ç¡ÇΩèÍçá
-	//			return false;
-	//		}
-	//		else
-	//		{
-	//			// ï‚ê≥èàóù
-	//			if ((*posTbl[Prey::dir][TBL_SUB]) % GRIDSIZE)
-	//			{
-	//				(*posTbl[Prey::dir][TBL_SUB]) = (((*posTbl[Prey::dir][TBL_SUB] + GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE);
-	//			}
-	//		}
-	//		// à⁄ìÆèàóù
-	//		if (!(*posTbl[Prey::dir][TBL_SUB] % GRIDSIZE))
-	//		{
-	//			(*posTbl[Prey::dir][TBL_MAIN]) += speedTbl[Prey::dir];
-	//			return true;
-	//		}
-	//	}
-	//	return false;
-	//};
-
-	////if (!(move((DIR_TBL_ID)(DIR_TBL_SUB1 - (afterKeyFlag << 1)))
-	////	|| move((DIR_TBL_ID)(DIR_TBL_SUB2 - (afterKeyFlag << 1)))))	// ºÃƒââéZÇ≈afterKeyFlagÇ1ƒﬁØƒÇ∏ÇÁÇ∑
-	////{
-	////	afterKeyFlag = false;
-	////	if (!(move((DIR_TBL_ID)(DIR_TBL_MAIN + (afterKeyFlag << 1))) || move((DIR_TBL_ID)(DIR_TBL_OPP + (afterKeyFlag << 1)))))
-	////	{
-	////		SetAnim("í‚é~");
-	////		return;
-	////	}
-	////}
-	////else
-	//{
-	//	afterKeyFlag = keyTbl[keyIdTbl[dirTbl[dir][DIR_TBL_SUB1]]] || keyTbl[keyIdTbl[dirTbl[dir][DIR_TBL_SUB2]]] ^ (int)(GetAnimation() == "í‚é~");
-	//}
-	//SetAnim("à⁄ìÆ");
 	_RPTN(_CRT_WARN, "character.pos:%d,%d\n", pos.x, pos.y);
 	_RPTN(_CRT_WARN, "map.pos:%d,%d\n", lpMap.GetMapPos().x, lpMap.GetMapPos().y);
 }
 
 void Prey::Draw(void)
 {
-	//DrawBox(pos.x, pos.y, pos.x + GRIDSIZE, pos.y - (GRIDSIZE + 40), 0xff0000, true);
 	Obj::Draw();
+	DrawRectGraph(camera.x + 320 - camera.x, camera.y + 280 - camera.y, 0, 0, 80, 120, lpImage.GetID("character/character.png")[0], true, false);
 }
 
 bool Prey::Init(void)
 {
-	AddAnim("í‚é~", 0, 0, 2, 6);
-	AddAnim("à⁄ìÆ", 0, 2, 2, 6);
 	return true;
 }

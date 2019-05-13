@@ -72,5 +72,6 @@ private:
 	DIR_TBL_DIR dirTbl;
 	PASSAGE_TBL PassageTbl;		// ƒAƒ^ƒŠ”»’è
 
+	VECTOR2 camera;
 };
 

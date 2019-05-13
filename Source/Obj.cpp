@@ -28,7 +28,7 @@ void Obj::Draw(void)
 		int start = animTbl[AnimationName][ANIM_START];
 		int inter = (AniCnt / animTbl[AnimationName][ANIM_INTERVAL]);
 		int flame = animTbl[AnimationName][ANIM_FLAME];
-		ID = start + (inter % flame) * DivCnt.x;
+		ID = start + (int)dir + (inter % flame) * DivCnt.x;
 	}
 	DrawGraph(pos.x, pos.y, ImageID(ImageName)[ID], true);
 }

@@ -59,7 +59,7 @@ Prey::~Prey()
 void Prey::Move(const Controller & controll, WeakList objlist)
 {
 	auto mapSize = lpMap.GetMapSize();
-	auto gridSize = lpMap.GetGridSize();
+	auto gridSize = lpMap.GetGridSize().x;
 	auto Scr = lpScene.GetScrSize();
 
 	auto input = controll.GetButtonInfo(KEY_TYPE_NOW);
@@ -105,6 +105,69 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	//----------------------------------------------------------------------------
 
 	// –ÌßÚ²Ô°‚ÌÎß¼Ş¼®İ‚ğ‘«Œ³‚Éİ’è‚·‚éB
+	auto sidePos = [&](DIR dir, VECTOR2 pos, int speed, SIDE_CHECK sideFlag) {
+		VECTOR2 side;
+		switch (dir)
+		{
+		case DIR_LEFT:
+			side = { speed - (sideFlag ^ 1), 0 };
+			break;
+		case DIR_RIGHT:
+			side = { speed + (gridSize - sideFlag), 0 };
+			break;
+		case DIR_DOWN:
+			side = { 0, speed + (gridSize - sideFlag) };
+			break;
+		case DIR_UP:
+			side = { 0, speed - (sideFlag ^ 1) };
+			break;
+		}
+		return pos + side;
+	};
+
+	auto move = [&, dir = Prey::dir](DIR_TBL_ID id){
+		if (input[keyIdTbl[dirTbl[dir][id]]])
+		{
+			// •ûŒü‚Ì¾¯Ä
+			Prey::dir = dirTbl[dir][id];
+			if (!PassageTbl[static_cast<int>(lpMap.GetMapData(sidePos(Prey::dir, pos, speedTbl[Prey::dir], IN_SIDE)))])
+			{
+				// ˆÚ“®•s‰Â‚ÌµÌŞ¼Şª¸Ä‚ª—×‚É‚ ‚Á‚½ê‡
+				return false;
+			}
+			else
+			{
+				// •â³ˆ—
+				if ((*posTbl[Prey::dir][TBL_SUB]) % gridSize)
+				{
+					(*posTbl[Prey::dir][TBL_SUB]) = (((*posTbl[Prey::dir][TBL_SUB] + gridSize / 2) / gridSize) * gridSize);
+				}
+			}
+			// ˆÚ“®ˆ—
+			if (!(*posTbl[Prey::dir][TBL_SUB] % gridSize))
+			{
+				(*posTbl[Prey::dir][TBL_MAIN]) += speedTbl[Prey::dir];
+				return true;
+			}
+		}
+		return false;
+	};
+
+	if (!(move((DIR_TBL_ID)(DIR_TBL_SUB1 - (afterKeyFlag << 1)))
+		|| move((DIR_TBL_ID)(DIR_TBL_SUB2 - (afterKeyFlag << 1)))))	// ¼ÌÄ‰‰Z‚ÅafterKeyFlag‚ğ1ÄŞ¯Ä‚¸‚ç‚·
+	{
+		afterKeyFlag = false;
+		if (!(move((DIR_TBL_ID)(DIR_TBL_MAIN + (afterKeyFlag << 1))) || move((DIR_TBL_ID)(DIR_TBL_OPP + (afterKeyFlag << 1)))))
+		{
+			SetAnim("’â~");
+			return;
+		}
+	}
+	else
+	{
+		afterKeyFlag = input[keyIdTbl[dirTbl[dir][DIR_TBL_SUB1]]] || input[keyIdTbl[dirTbl[dir][DIR_TBL_SUB2]]] ^ (int)(GetAnimation() == "’â~");
+	}
+	SetAnim("ˆÚ“®");
 
 	_RPTN(_CRT_WARN, "character.pos:%d,%d\n", pos.x, pos.y);
 	_RPTN(_CRT_WARN, "map.pos:%d,%d\n", lpMap.GetMapPos().x, lpMap.GetMapPos().y);
@@ -113,10 +176,13 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 void Prey::Draw(void)
 {
 	Obj::Draw();
-	DrawRectGraph(camera.x + 320 - camera.x, camera.y + 280 - camera.y, 0, 0, 80, 120, lpImage.GetID("character/character.png")[0], true, false);
+	//DrawRectGraph(camera.x + 320 - camera.x, camera.y + 280 - camera.y, 0, 0, 80, 120, lpImage.GetID("character/character.png")[0], true, false);
 }
 
 bool Prey::Init(void)
 {
+	Obj::Init("character/character.png", VECTOR2(4, 4), VECTOR2(320 / 4, 480 / 4));
+	AddAnim("’â~", 0, 0, 2, 6);
+	AddAnim("ˆÚ“®", 0, 2, 2, 6);
 	return true;
 }

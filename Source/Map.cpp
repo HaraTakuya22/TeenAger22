@@ -89,7 +89,7 @@ void Map::MapDraw(bool gameF)
 	{
 		DrawFormatString(0, 0, 0xff0000, "GameMode");
 	}
-	
+
 }
 
 //bool Map::CheckPassage(VECTOR2 pos, PASSAGE passage,DIR dir)
@@ -226,6 +226,7 @@ void Map::IndividualsDraw(WeakList weaklist,bool gameF)
 			AddList()(weaklist, std::make_unique<Prey>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4 - 40)));
 			is_makePrey = true;
 		}
+		
 	}
 
 	// player2ÇÃâÊñ ï\é¶
@@ -404,18 +405,19 @@ bool Map::setData(MapType maptype, const VECTOR2 & pos, IDType id)
 	//ChangeChipSize();
 	VECTOR2 tmp = VECTOR2(pos.x / ChipSize.x ,pos.y / ChipSize.y);
 
-	setPos = tmp;
 	// ÅñæØƒÇµÇΩ¡ØÃﬂÇÃŒﬂºﬁºÆ›èÓïÒÇÇªÇÃÇ‹Ç‹ëSëÃÇÃœØÃﬂÇ…äiî[
 	// œØÃﬂÇÃà⁄ìÆÇ∆ã§Ç…¡ØÃﬂÇ‡ìÆÇ©Ç≥Ç»Ç¢Ç∆Ç¢ÇØÇ»Ç¢ÇÃÇ≈
-
-
+	//setPos = tmp;
 	// Mapì‡Ç≈Ç»Ç¢èÍçáÇÕï`âÊÇµÇ»Ç¢
 	/*if (!SetCheck()(tmp, MapSize));
 	{
 		return false;
 	}*/
 	// Mapì‡ÇÃèÍçáÇÕï`âÊOK
-	maptype[setPos.y][setPos.x] = id;
+	//maptype[setPos.y][setPos.x] = maptype[tmp.y][tmp.x];
+
+	maptype[tmp.y][tmp.x] = id;
+	
 	_RPTN(_CRT_WARN, "ID:[%d:%d]%d\n", pos.x, pos.y, id);
 	return true;
 }
@@ -442,52 +444,58 @@ VECTOR2 Map::MapCalcPos(VECTOR2 c_pos,VECTOR2 scroll)
 
 bool Map::SetObj(void)
 {
-	objID id = MapData[setPos.y][setPos.x];
-
-	switch (id)
+	for (int y = 0; y < MapSize.y; y++)
 	{
-	case objID::FLOOR:
-	case objID::WALL:	
-	case objID::CHAIR_1:	
-	case objID::CHAIR_2:	
-	case objID::CHAIR_3:
-	case objID::CHAIR_4:
-		DrawGraph(setPos.x * ChipSize.x,setPos.y * ChipSize.y, lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
-		break;
-	case objID::BOOKSHELF:
-	case objID::DRAWER:
-	case objID::LOCKER:
-	case objID::VASE_1:
-	case objID::VASE_2:
-		DrawGraph(setPos.x * ChipSize.x, setPos.y * ChipSize.y, lpImage.GetID("image/map2.png")[static_cast<int>(id) - 6], true);
-		break;
-	case objID::MIRRORTABLE:
-	case objID::FACE:
-	case objID::KITCHIN_1:
-	case objID::KITCHIN_2:
-	case objID::S_MONITOR:
-		DrawGraph(setPos.x * ChipSize.x, setPos.y * ChipSize.y, lpImage.GetID("image/map3.png")[static_cast<int>(id) - 11], true);
-		break;
-	case objID::BED:
-		DrawGraph(setPos.x * ChipSize.x, setPos.y * ChipSize.y, lpImage.GetID("image/map4.png")[0], true);
-		break;
-	case objID::DESK:
-		DrawGraph(setPos.x * ChipSize.x, setPos.y * ChipSize.y, lpImage.GetID("image/map5.png")[0], true);
-		break;
-	case objID::MONITOR:
-		DrawGraph(setPos.x * ChipSize.x, setPos.y * ChipSize.y, lpImage.GetID("image/map6.png")[0], true);
-		break;
-	case objID::S_TABLE:
-		DrawGraph(setPos.x * ChipSize.x, setPos.y * ChipSize.y, lpImage.GetID("image/map7.png")[0], true);
-		break;
-	case objID::TABLE:
-		DrawGraph(setPos.x * ChipSize.x, setPos.y * ChipSize.y, lpImage.GetID("image/map8.png")[0], true);
-		break;
-	default:
-		break;
+		for (int x = 0; x < MapSize.x; x++)
+		{
+			objID id = MapData[y][x];
+			switch (id)
+			{
+			case objID::FLOOR:
+			case objID::WALL:
+			case objID::CHAIR_1:
+			case objID::CHAIR_2:
+			case objID::CHAIR_3:
+			case objID::CHAIR_4:
+				DrawGraph((x * ChipSize.x) + mapPos.x, (y * ChipSize.y) + mapPos.y, lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
+				break;
+			case objID::BOOKSHELF:
+			case objID::DRAWER:
+			case objID::LOCKER:
+			case objID::VASE_1:
+			case objID::VASE_2:
+				DrawGraph((x * ChipSize.x) + mapPos.x, (y * ChipSize.y) + mapPos.y, lpImage.GetID("image/map2.png")[static_cast<int>(id) - 6], true);
+				break;
+			case objID::MIRRORTABLE:
+			case objID::FACE:
+			case objID::KITCHIN_1:
+			case objID::KITCHIN_2:
+			case objID::S_MONITOR:
+				DrawGraph((x * ChipSize.x) + mapPos.x, (y * ChipSize.y) + mapPos.y, lpImage.GetID("image/map3.png")[static_cast<int>(id) - 11], true);
+				break;
+			case objID::BED:
+				DrawGraph((x * ChipSize.x) + mapPos.x, (y * ChipSize.y) + mapPos.y, lpImage.GetID("image/map4.png")[0], true);
+				break;
+			case objID::DESK:
+				DrawGraph((x * ChipSize.x) + mapPos.x, (y * ChipSize.y) + mapPos.y, lpImage.GetID("image/map5.png")[0], true);
+				break;
+			case objID::MONITOR:
+				DrawGraph((x * ChipSize.x) + mapPos.x, (y * ChipSize.y) + mapPos.y, lpImage.GetID("image/map6.png")[0], true);
+				break;
+			case objID::S_TABLE:
+				DrawGraph((x * ChipSize.x) + mapPos.x, (y * ChipSize.y) + mapPos.y, lpImage.GetID("image/map7.png")[0], true);
+				break;
+			case objID::TABLE:
+				DrawGraph((x * ChipSize.x) + mapPos.x, (y * ChipSize.y) + mapPos.y, lpImage.GetID("image/map8.png")[0], true);
+				break;
+			default:
+				break;
+			}
+			DrawFormatString((x * ChipSize.x) + mapPos.x, (y * ChipSize.y) + mapPos.y, 0xff0000, "x:%d\ny:%d\n%d", x, y,id);
+		}
 	}
-		DrawFormatString(setPos.x * ChipSize.x, setPos.y * ChipSize.y, 0xff0000, "%d", id);
-		return true;
+	
+	return true;
 }
 
 Map::Map()

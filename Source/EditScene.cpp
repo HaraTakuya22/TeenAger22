@@ -88,6 +88,7 @@ void EditScene::EditDraw(void)
 
 	lpMap.CreateIndividualsDisplay();
 
+
 	lpMap.MapDraw(false);
 	lpMap.SetObj();
 	//	´ÃÞ¨¯Ä¼°ÝŽž‚Ì•`‰æ

@@ -28,4 +28,14 @@ private:
 
 	// PUSH START BUTTON
 	int startButtonImage;
+	// startButton‚Ì•`‰æˆÊ’u
+	VECTOR2 startPos1;
+	VECTOR2 startPos2;
+	VECTOR2 startPos3;
+	VECTOR2 startPos4;
+	int buttonLeftX;
+	int buttonLeftY;
+	int buttonRightX;
+	int buttonRightY;
+	int startButtonCnt;
 };

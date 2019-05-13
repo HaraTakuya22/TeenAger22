@@ -25,6 +25,13 @@ SelectScene::~SelectScene()
 
 unique_Base SelectScene::Update(unique_Base own, const Controller & controll)
 {
+	// ¹Ş°ÑÊß¯ÄŞ‚Ì“ü—Í
+	inputRightOld = inputRightNow;
+	inputLeftOld = inputLeftNow;
+	inputStartOld = inputStartNow;
+
+	auto Pad = GetJoypadInputState(DX_INPUT_PAD1);
+
 	auto cnt_now = controll.GetButtonInfo(KEY_TYPE_NOW);
 	auto cnt_old = controll.GetButtonInfo(KEY_TYPE_OLD);
 
@@ -72,15 +79,36 @@ unique_Base SelectScene::Update(unique_Base own, const Controller & controll)
 		button3_flag = BUTTON_OFF;
 	}
 
-
 	// Œ»İ‰EÎŞÀİ‚ğ‰Ÿ‰º--------------------------------------
-	if ((cnt_now[KEY_INPUT_RIGHT]) && (!cnt_old[KEY_INPUT_RIGHT]))
+	if ((Pad & PAD_INPUT_RIGHT) || (cnt_now[KEY_INPUT_RIGHT]) && (!cnt_old[KEY_INPUT_RIGHT]))
+	{
+		// ‰Ÿ‚µ‚Ä‚¢‚é
+		inputRightNow = PAD_INPUT_NOW;
+	}
+	else
+	{
+		// ‰Ÿ‚µ‚Ä‚¢‚È‚¢
+		inputRightNow = PAD_INPUT_OLD;
+	}
+	// ‰EÎŞÀİ‚ğ‰Ÿ‚µ‚Ä‚¢‚éuŠÔ
+	if (inputRightNow & ~inputRightOld)
 	{
 		cursorPos.x += CURSOR_POS_SPEED;
 	}
 
 	// Œ»İ¶ÎŞÀİ‚ğ‰Ÿ‰º-----------------------------------------
-	if ((cnt_now[KEY_INPUT_LEFT]) && (!cnt_old[KEY_INPUT_LEFT]))
+	if ((Pad & PAD_INPUT_LEFT) || (cnt_now[KEY_INPUT_LEFT]) && (!cnt_old[KEY_INPUT_LEFT]))
+	{
+		// ‰Ÿ‚µ‚Ä‚¢‚é
+		inputLeftNow = PAD_INPUT_NOW;
+	}
+	else
+	{
+		// ‰Ÿ‚µ‚Ä‚¢‚È‚¢
+		inputLeftNow = PAD_INPUT_OLD;
+	}
+	// ¶ÎŞÀİ‚ğ‰Ÿ‚µ‚Ä‚¢‚éuŠÔ
+	if (inputLeftNow & ~inputLeftOld)
 	{
 		cursorPos.x -= CURSOR_POS_SPEED;
 	}

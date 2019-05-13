@@ -25,5 +25,8 @@ private:
 	VECTOR2 titleRightPos;
 	// 表示してるマップの移動速度
 	int moveSpeed;
+
+	// PUSH START BUTTON
+	int startButtonImage;
 };
 

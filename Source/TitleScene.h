@@ -29,4 +29,3 @@ private:
 	// PUSH START BUTTON
 	int startButtonImage;
 };
-

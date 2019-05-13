@@ -64,6 +64,7 @@ unique_Base TitleScene::Update(unique_Base own, const Controller & controll)
 int TitleScene::Init(void)
 {
 	titleMapImage = LoadGraph("MAP/map(old).png");
+	startButtonImage = LoadGraph("image/TitleStart.png");
 	titleLeftPos = { 0 , 0 };
 	titleRightPos.x = 2400;
 	titleRightPos.y = 1440;
@@ -90,4 +91,6 @@ void TitleScene::Draw(void)
 		DrawBox((scr.x / 2) - 80, ((scr.y / 2) - 40) + i, (scr.x / 2) + 80, (scr.y / 2) + i, 0x00ff00, false);
 	}
 
+	// StartButton‚Ì•\Ž¦
+	DrawGraph(250, 500, startButtonImage, true);
 }

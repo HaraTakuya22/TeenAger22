@@ -109,6 +109,7 @@ public:
 		return VECTOR2(GRIDSIZE, GRIDSIZE);
 	}
 
+	VECTOR2 MapCalcPos(VECTOR2 c_pos,VECTOR2 scroll);
 	// ¾¯Ä‚µ‚½µÌŞ¼Şª¸Ä‚Ì•`‰æ
 	bool SetObj(void);
 
@@ -118,6 +119,8 @@ public:
 private:
 	Map();
 	~Map();
+
+	VECTOR2 setPos;
 
 	// Ï¯Ìß‚Ì¶ã‚ÌÎß¼Ş¼®İ
 	VECTOR2 mapPos;

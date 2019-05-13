@@ -20,8 +20,8 @@ enum class objID{
 	BED,			// ÍÞ¯ÄÞ
 	DESK,			// ‰¡‚É’·‚¢Š÷
 	MONITOR,		// ‘å‚«‚¢ÓÆÀ°
-	S_TABLE,		// ¬‚³‚¢ÓÆÀ°
-	TABLE,			// c‚É’·‚¢Š÷
+	S_TABLE,		// c‚É’·‚¢Š÷1
+	TABLE,			// c‚É’·‚¢Š÷2
 	NON,			// ‰½‚à‚È‚¢
 	ID_MAX
 };

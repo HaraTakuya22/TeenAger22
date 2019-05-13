@@ -47,7 +47,6 @@ Prey::Prey(VECTOR2 pos)
 
 	// player(‹SˆÈŠO)‚ÌÎß¼Þ¼®Ý‚Ì¾¯Ä
 	SetPos(pos);
-	//Obj::Init("character/character.png", VECTOR2(4, 4), VECTOR2(320 / 4, 480 / 4));
 	Prey::Init();
 	afterKeyFlag = false;
 }
@@ -70,123 +69,38 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	// ‰EˆÚ“®
 	if (input[KEY_INPUT_NUMPAD6] & ~inputOld[KEY_INPUT_NUMPAD6])
 	{
-		camera.x = pos.x += SPEED;
-		lpMap.GetMapPos().x -= SPEED;
-		/*if (pos.x >= 80)
+		if (lpMap.GetMapPos().x > -11520)
 		{
-			if (pos.x < 320)
-			{
-				if (lpMap.GetMapPos().x >= 0)
-				{
-					pos.x += SPEED;
-				}
-			}
-		}
-		if (pos.x >= 320)
-		{
+			camera.x = pos.x += SPEED;
 			lpMap.GetMapPos().x -= SPEED;
-		}*/
-		/*if (pos.x >= Scr.x - PREYSIZE_X)
-		{
-			pos.x = Scr.x - PREYSIZE_X;
-			lpMap.GetMapPos().x -= gridSize.x;
-		}*/
-		/*if (lpMap.GetMapPos().x <= -(mapSize.x - Scr.x))
-		{
-			lpMap.GetMapPos().x = -(mapSize.x - Scr.x);
-			pos.x = Scr.x - (gridSize.x * 2);
-		}*/
+		}
 	}
 	// ¶ˆÚ“®
 	if (input[KEY_INPUT_NUMPAD4] & ~inputOld[KEY_INPUT_NUMPAD4])
 	{
-		camera.x = pos.x -= SPEED;
-		lpMap.GetMapPos().x += SPEED;
-		/*if (pos.x > 80)
+		if (lpMap.GetMapPos().x < 240)
 		{
-			if (pos.x <= 320)
-			{
-				if (lpMap.GetMapPos().x >= 0)
-				{
-					pos.x -= SPEED;
-				}
-			}
-		}
-		if (pos.x >= 320)
-		{
+			camera.x = pos.x -= SPEED;
 			lpMap.GetMapPos().x += SPEED;
-		}*/
-		/*if (pos.x <= 0)
-		{
-			pos.x = gridSize.x;
-			lpMap.GetMapPos().x += gridSize.x;
 		}
-		if (lpMap.GetMapPos().x + mapSize.x >= mapSize.x - Scr.x)
-		{
-			lpMap.GetMapPos().x = 0;
-		}*/
 	}
 	// ãˆÚ“®
 	if (input[KEY_INPUT_NUMPAD8] & ~inputOld[KEY_INPUT_NUMPAD8])
 	{
-		camera.y = pos.y -= SPEED;
-		lpMap.GetMapPos().y += SPEED;
-		/*if (pos.y > 40)
+		if (lpMap.GetMapPos().y < 240)
 		{
-			if (pos.y <= 280)
-			{
-				if (lpMap.GetMapPos().y >= 0)
-				{
-					pos.y -= SPEED;
-				}
-			}
-		}
-		if (pos.y >= 280)
-		{
+			camera.y = pos.y -= SPEED;
 			lpMap.GetMapPos().y += SPEED;
-		}*/
-		/*if (pos.y <= 0)
-		{
-			pos.y = gridSize.y;
-			lpMap.GetMapPos().y += gridSize.y;
 		}
-		if (lpMap.GetMapPos().y + lpMap.GetMapSize().y >= lpMap.GetMapSize().y - Scr.y)
-		{
-			lpMap.GetMapPos().y = 0;
-		}*/
 	}
 	// ‰ºˆÚ“®
 	if (input[KEY_INPUT_NUMPAD2] & ~inputOld[KEY_INPUT_NUMPAD2])
 	{
-		camera.y = pos.y += SPEED;
-		lpMap.GetMapPos().y -= SPEED;
-		/*if (pos.y >= 40)
+		if (lpMap.GetMapPos().y > -8160)
 		{
-			if (pos.y < 280)
-			{
-				if (lpMap.GetMapPos().y >= 0)
-				{
-					pos.y += SPEED;
-				}
-			}
-		}
-		if (pos.y >= 280)
-		{
+			camera.y = pos.y += SPEED;
 			lpMap.GetMapPos().y -= SPEED;
-		}*/
-		/*if (pos.y >= Scr.y - gridSize.y)
-		{
-			pos.y = Scr.y - gridSize.y;
-			lpMap.GetMapPos().y -= gridSize.y;
 		}
-		if (lpMap.GetMapPos().y <= -((lpMap.GetMapSize().y - Scr.y) + 20))
-		{
-			lpMap.GetMapPos().y = -((lpMap.GetMapSize().y - Scr.y) + 20);
-			if (pos.y >= ((Scr.y - (GRIDSIZE * 2)) - 20))
-			{
-				pos.y = ((Scr.y - (GRIDSIZE * 2)) - 20);
-			}
-		}*/
 	}
 	//----------------------------------------------------------------------------
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "Controller.h"
 #include "VECTOR2.h"
 #include "AddList.h"
 #include "objID.h"
@@ -113,12 +114,18 @@ public:
 	// ¾¯Ä‚µ‚½µÌŞ¼Şª¸Ä‚Ì•`‰æ
 	bool SetObj(void);
 
+	// Map‚ÌŠg‘åk¬(EditScene‚Ì‚İ)
+	bool ChangeMapScale(bool editF,Controller ctrl);
+
 	// ÌßÚ²Ô°‚Ìl”‚ÌŠi”[•Ï”
 	PLAYER player;
 
 private:
 	Map();
 	~Map();
+
+	// Šg‘åk¬‚Ì¶³İÄ
+	int scaleCnt;
 
 	VECTOR2 setPos;
 

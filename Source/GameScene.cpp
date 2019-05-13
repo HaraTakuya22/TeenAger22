@@ -46,7 +46,6 @@ int GameScene::Init(void)
 		objlist = std::make_shared<Shared_ObjList>();
 	}
 	lpMap.setUp(VECTOR2(MAPSIZE_X,MAPSIZE_Y),VECTOR2(GRIDSIZE,GRIDSIZE));
-	lpMap.LoadMap();
 	return 0;
 }
 
@@ -58,6 +57,8 @@ void GameScene::Draw(void)
 	lpMap.CreateIndividualsDisplay();
 	lpMap.IndividualsDraw(objlist,true);
 	lpMap.MapDraw(true);
+
+	lpMap.LoadMap();
 
 	for (auto itr = objlist->begin(); itr != objlist->end(); itr++)
 	{

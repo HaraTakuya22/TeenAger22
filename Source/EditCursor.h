@@ -1,0 +1,53 @@
+#pragma once
+#include "Obj.h"
+
+struct SETID
+{
+	VECTOR2 set_pos;
+	objID set_id;
+};
+
+class EditCursor :
+	public Obj
+{
+public:
+	EditCursor(VECTOR2 pos);
+	~EditCursor();
+	void Move(const Controller& controll, WeakList objlist);
+
+	bool GetType(OBJ_TYPE type)
+	{
+		return (type == TYPE_CURSOR);
+	}
+
+private:
+	void Draw(void);
+
+	// ¶°¿Ù‚ªËßºËßº“_–Å‚·‚é¶³İÄ
+	int flickCnt;
+
+	// ¶°¿Ù‚Ì•ÏŠ·ÎŞÀİ‚Ì‰Ÿ‰ºÌ×¸Ş(idi‚ß‚é)
+	int ChangeInput;
+	int ChangeInputOld;
+	// ¶°¿Ù‚Ì•ÏŠ·ÎŞÀİ‚Ì‰Ÿ‰ºÌ×¸Ş(id–ß‚·)
+	int ChangeInputBack;
+	int ChangeInputBackOld;
+
+	// idî•ñ‚ğ–„‚ß‚ŞÎŞÀİ‚Ì‰Ÿ‰ºÌ×¸Ş
+	int SetInput;
+	int SetInputOld;
+
+	// Ã½Ä—p
+	bool setF;
+
+	// ¶°¿Ù‚ÌÎß¼Ş¼®İ•â³‚Ì‚½‚ß‚Ì¶Ò×Îß¼Ş¼®İ
+	VECTOR2 cameraPos;
+
+	int keyDefRng;
+	int inputFrame;
+
+	// ID
+	objID id;
+	SETID setId;
+};
+

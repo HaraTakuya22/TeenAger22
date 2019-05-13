@@ -193,7 +193,6 @@ void Map::CreateIndividualsDisplay(void)
 
 void Map::IndividualsDraw(WeakList weaklist,bool gameF)
 {
-	
 
 	// Map‰æ–Ê•\Ž¦
 	if (player == PLAYER_1 || player == PLAYER_2 || player == PLAYER_3)

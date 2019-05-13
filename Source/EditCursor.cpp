@@ -198,7 +198,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 		tmp.x += GRIDSIZE;
 		if (tmp.x >= lpMap.GetMapSize().x - (gridSize.x * 2))
 		{
-			tmp.x = lpMap.GetMapSize().x - (gridSize.x * 2);
+			tmp.x = (lpMap.GetMapSize().x - (gridSize.x * 2));
 		}
 		lpMap.GetMapPos().x = lpMap.MapCalcPos(tmp, cameraPos).x;
 		tmpMappos.y = lpMap.GetMapPos().y;

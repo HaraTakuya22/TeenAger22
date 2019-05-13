@@ -25,6 +25,7 @@ unique_Base EditScene::Update(unique_Base own, const Controller & Controller)
 	{
 		(*itr)->Update(Controller, objlist);
 	}
+	lpMap.ChangeMapScale(true, Controller);
 	//	SÇâüÇµÇΩÇ∆Ç´ÅA√ﬁ∞¿Çæ∞ÃﬁÇ∑ÇÈ
 	if (input[KEY_INPUT_S])
 	{
@@ -65,7 +66,7 @@ int EditScene::Init(void)
 		objlist = std::make_shared<Shared_ObjList>();
 	}
 	objlist->clear();
-	lpMap.setUp(VECTOR2(MAPSIZE_X, MAPSIZE_Y), VECTOR2(GRIDSIZE, GRIDSIZE));
+	lpMap.setUp(VECTOR2(MAPSIZE_X / lpMap.scaleCnt, MAPSIZE_Y / lpMap.scaleCnt), VECTOR2(GRIDSIZE, GRIDSIZE));
 	obj = AddList()(objlist, std::make_unique<EditCursor>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4)));
 
 	return 0;
@@ -76,8 +77,7 @@ void EditScene::EditDraw(void)
 	ClsDrawScreen();
 	lpMap.IndividualsDraw(objlist, false);
 
-	lpMap.CreateIndividualsDisplay();
-
+	//lpMap.CreateIndividualsDisplay();
 
 	lpMap.MapDraw(false);
 	lpMap.SetObj();

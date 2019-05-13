@@ -102,7 +102,7 @@ public:
 	// Map‚Ì»²½Şæ“¾
 	VECTOR2 GetMapSize(void)
 	{
-		return VECTOR2(MAPSIZE_X, MAPSIZE_Y);
+		return VECTOR2(MAPSIZE_X / scaleCnt, MAPSIZE_Y / scaleCnt);
 	}
 	// ˆêÏ½‚Ì»²½Ş‚Ìæ“¾
 	VECTOR2 GetGridSize(void)
@@ -117,6 +117,9 @@ public:
 	// Map‚ÌŠg‘åk¬(EditScene‚Ì‚İ)
 	bool ChangeMapScale(bool editF,Controller ctrl);
 
+	// Šg‘åk¬‚Ì¶³İÄ
+	double scaleCnt;
+
 	// ÌßÚ²Ô°‚Ìl”‚ÌŠi”[•Ï”
 	PLAYER player;
 
@@ -124,8 +127,7 @@ private:
 	Map();
 	~Map();
 
-	// Šg‘åk¬‚Ì¶³İÄ
-	int scaleCnt;
+	
 
 	VECTOR2 setPos;
 

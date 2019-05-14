@@ -61,6 +61,7 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	auto mapSize = lpMap.GetMapSize();
 	auto gridSize = lpMap.GetGridSize().x;
 	auto Scr = lpScene.GetScrSize();
+	//auto camera = lpMap.GetCamera();
 
 	auto input = controll.GetButtonInfo(KEY_TYPE_NOW);
 	auto inputOld = controll.GetButtonInfo(KEY_TYPE_OLD);
@@ -140,7 +141,7 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 				// ï‚ê≥èàóù
 				if ((*posTbl[Prey::dir][TBL_SUB]) % gridSize)
 				{
-					(*posTbl[Prey::dir][TBL_SUB]) = (((*posTbl[Prey::dir][TBL_SUB] + gridSize / 2) / gridSize) * gridSize);
+					//(*posTbl[Prey::dir][TBL_SUB]) = (((*posTbl[Prey::dir][TBL_SUB] + gridSize / 2) / gridSize) * gridSize);
 				}
 			}
 			// à⁄ìÆèàóù
@@ -176,12 +177,13 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 void Prey::Draw(void)
 {
 	Obj::Draw();
-	//DrawRectGraph(camera.x + 320 - camera.x, camera.y + 280 - camera.y, 0, 0, 80, 120, lpImage.GetID("character/character.png")[0], true, false);
+	DrawFormatString(0, 0, 0xffffff, "character.pos:%d,%d\n", pos.x, pos.y);
+	DrawFormatString(0, 20, 0xffffff, "map.pos:%d,%d\n", lpMap.GetMapPos().x, lpMap.GetMapPos().y);
 }
 
 bool Prey::Init(void)
 {
-	Obj::Init("character/character.png", VECTOR2(4, 4), VECTOR2(320 / 4, 480 / 4));
+	Obj::Init("character/character.png", camera.x + 320 - camera.x, camera.y + 280 - camera.y, VECTOR2(4, 4), VECTOR2(320 / 4, 480 / 4));
 	AddAnim("í‚é~", 0, 0, 2, 6);
 	AddAnim("à⁄ìÆ", 0, 2, 2, 6);
 	return true;

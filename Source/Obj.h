@@ -53,7 +53,7 @@ public:
 	//Še·¬×¸À°‚ÌˆÚ“®
 	void Update(const Controller& controll, WeakList objlist);
 	//Še·¬×¸À°‚Ì±ÆÒ°¼®İ‚ÉŠÖ‚·‚é‰Šú‰»
-	bool Init(std::string filename, VECTOR2 divcnt, VECTOR2 divsize);
+	bool Init(std::string filename, int posx, int posy, VECTOR2 divcnt, VECTOR2 divsize);
 
 	//±ÆÒ°¼®İ‚Ì’Ç‰Á
 	bool AddAnim(std::string animationName, int x, int y, int flame, int val);

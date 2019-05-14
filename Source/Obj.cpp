@@ -45,8 +45,10 @@ void Obj::Update(const Controller & controll, WeakList objlist)
 	Move(controll, objlist);
 }
 
-bool Obj::Init(std::string filename, VECTOR2 divcnt, VECTOR2 divsize)
+bool Obj::Init(std::string filename, int posx, int posy, VECTOR2 divcnt, VECTOR2 divsize)
 {
+	this->pos.x = posx;
+	this->pos.y = posy;
 	this->DivCnt = divcnt;
 	this->DivSize = divsize;
 	ImageName = filename;

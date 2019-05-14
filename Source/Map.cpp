@@ -144,6 +144,8 @@ bool Map::Init(void)
 
 	scaleCnt = 1;
 
+	mapScale = { MAPSIZE_X, MAPSIZE_Y };
+
 	mapPos = VECTOR2(0, 0);
 	MapImage = LoadGraph("MAP/map_new.png");
 
@@ -219,7 +221,7 @@ void Map::IndividualsDraw(WeakList weaklist,bool gameF)
 		// Map‚Ì•\Ž¦
 		//DrawRectGraph(mapPos.x, mapPos.y,0,0,MAPSIZE_X / scaleCnt,MAPSIZE_Y / scaleCnt, MapImage, true,false);
 
-		DrawExtendGraph(mapPos.x, mapPos.y, mapPos.x + MAPSIZE_X * scaleCnt, mapPos.y + MAPSIZE_Y * scaleCnt, MapImage, true);
+		DrawExtendGraph(mapPos.x, mapPos.y, mapPos.x + MAP_SCALEX(mapScale.x), mapPos.y + MAP_SCALEY(mapScale.y), MapImage, true);
 
 		// Prey(‰¼)‚Ì•\Ž¦
 		//DrawBox(GRIDSIZE * 4,(GRIDSIZE * 4) - 40,(GRIDSIZE * 4) + PREYSIZE_X,(GRIDSIZE * 5), 0xff0000, true);
@@ -497,7 +499,6 @@ bool Map::SetObj(void)
 			DrawFormatString((x * ChipSize.x) + mapPos.x, (y * ChipSize.y) + mapPos.y, 0xff0000, "x:%d\ny:%d\n%d", x, y,id);
 		}
 	}
-	
 	return true;
 }
 
@@ -507,13 +508,17 @@ bool Map::ChangeMapScale(bool editF,Controller ctrl)
 	auto cntOld = ctrl.GetButtonInfo(KEY_TYPE_OLD);
 	if (editF)
 	{
-		if ((cntNow[KEY_INPUT_COMMA] & ~cntOld[KEY_INPUT_COMMA]))
+		if (cntNow[KEY_INPUT_COMMA] & ~cntOld[KEY_INPUT_COMMA])
 		{
-			scaleCnt = 0.50;
+			mapScale 
 		}
 		if (cntNow[KEY_INPUT_PERIOD] & ~cntOld[KEY_INPUT_PERIOD])
 		{
-			scaleCnt = 2;
+			scaleCnt -= 0.250;
+			if (scaleCnt <= 1)
+			{
+				scaleCnt = 1;
+			}
 		}
 	}
 	return true;

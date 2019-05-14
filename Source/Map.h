@@ -25,7 +25,9 @@
 #define MAPSIZE_X	12000
 #define MAPSIZE_Y	8640
 
-
+// Map‚Ìk¬Œã‚Ì»²½Ş‚ğŠî‚É‚µ‚½Map‚Ì»²½Ş
+#define MAP_SCALEX(X) X
+#define MAP_SCALEY(Y) Y
 
 
 // player‚Ìæ‚ª•Ç‚©“¹‚©
@@ -127,8 +129,6 @@ private:
 	Map();
 	~Map();
 
-	
-
 	VECTOR2 setPos;
 
 	// Ï¯Ìß‚Ì¶ã‚ÌÎß¼Ş¼®İ
@@ -145,6 +145,9 @@ private:
 
 	// ½¸Ø°İ‘S‘Ì‚Ì»²½Ş
 	VECTOR2 Scr;
+
+	// Map‘S‘Ì‚Ìk¬Œã‚Ì»²½Ş
+	VECTOR2 mapScale;
 
 	// Ï¯Ìß‚Ì1Ï½1Ï½‚ÌÃŞ°À
 	std::vector<objID*>MapData;

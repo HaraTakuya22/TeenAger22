@@ -229,7 +229,6 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 		}
 		tmpMappos.x = lpMap.GetMapPos().x;
 		tmpMappos.y = lpMap.MapCalcPos(tmp, cameraPos).y;
-	
 	}
 	//----------------------------------------------------
 
@@ -296,7 +295,6 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 		setF = false;
 	}
 	_RPTN(_CRT_WARN, "ID:[%d:%d]%d\n", pos.x, pos.y, id);
-
 }
 
 void EditCursor::Draw(void)
@@ -313,7 +311,6 @@ void EditCursor::Draw(void)
 	case objID::CHAIR_2:
 	case objID::CHAIR_3:
 	case objID::CHAIR_4:
-
 		DrawGraph(cameraPos.x, cameraPos.y, lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
 		break;
 	case objID::BOOKSHELF:
@@ -321,7 +318,6 @@ void EditCursor::Draw(void)
 	case objID::LOCKER:
 	case objID::VASE_1:
 	case objID::VASE_2:
-		
 		DrawGraph(cameraPos.x + GRIDSIZE, cameraPos.y - GRIDSIZE, lpImage.GetID("image/map2.png")[static_cast<int>(id - 6)], true);
 		break;
 	case objID::MIRRORTABLE:

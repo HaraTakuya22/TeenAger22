@@ -124,6 +124,7 @@ public:
 	bool ChangeMapScale(bool editF,Controller ctrl);
 	// Map‘S‘Ì‚ÌŠg‘åk¬—¦
 	VECTOR2 scaleCnt;
+	VECTOR2 gameWindowScale;
 
 	// ÌßÚ²Ô°‚Ìl”‚ÌŠi”[•Ï”
 	PLAYER player;

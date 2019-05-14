@@ -31,10 +31,10 @@ void Map::MapDraw(bool gameF)
 		// ¸ÞØ¯ÄÞ‚Ì•\Ž¦
 		if (!is_scale)
 		{
-			for (int y = 0; y <= Scr.y; y += GRIDSIZE / scaleCnt.y)
+			for (int y = 0; y <= Scr.y; y += GRIDSIZE)
 			{
 				DrawLine(0, y, Scr.x, y, 0xffffff);
-				for (int x = 0; x <= Scr.x; x += GRIDSIZE / scaleCnt.x)
+				for (int x = 0; x <= Scr.x; x += GRIDSIZE)
 				{
 					DrawLine(x, 0, x, Scr.y, 0xffffff);
 				}
@@ -146,6 +146,7 @@ bool Map::Init(void)
 	MapWindow = 0;
 
 	scaleCnt = { 1,1 };
+	gameWindowScale = { 0,0 };
 
 	is_scale = false;
 
@@ -604,6 +605,26 @@ bool Map::ChangeMapScale(bool editF,Controller ctrl)
 			scaleCnt.x /= 4;
 			scaleCnt.y /= 4;
 			is_scale = false;
+		}
+	}
+	else
+	{
+		switch (player)
+		{
+		case PLAYER_1:
+			gameWindowScale.x = Scr.x;
+			gameWindowScale.y = Scr.y;
+			break;
+		case PLAYER_2:
+			gameWindowScale.x = Scr.x / 2;
+			gameWindowScale.y = Scr.y;
+			break;
+		case PLAYER_3:
+			gameWindowScale.x = Scr.x / 2;
+			gameWindowScale.y = Scr.y / 2;
+			break;
+		default:
+			break;
 		}
 	}
 	return true;

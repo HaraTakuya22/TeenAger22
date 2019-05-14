@@ -38,4 +38,8 @@ private:
 	int buttonRightX;
 	int buttonRightY;
 	int startButtonCnt;
+
+	// Title‰æ‘œ‚ÌŠi”[—Ìˆæ
+	int titleImage;
+
 };

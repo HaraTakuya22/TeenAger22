@@ -83,6 +83,8 @@ unique_Base TitleScene::Update(unique_Base own, const Controller & controll)
 
 int TitleScene::Init(void)
 {
+	titleImage = LoadGraph("image/Title.png");
+
 	titleMapImage = LoadGraph("MAP/map(old).png");
 	startButtonImage = LoadGraph("image/TitleStart.png");
 	titleLeftPos = { 0 , 0 };
@@ -112,7 +114,7 @@ void TitleScene::Draw(void)
 	//DrawFormatString(600, 0, 0xffff00, "title");
 
 	// Titleﾛｺﾞの配置位置(仮)
-	DrawBox((scr.x / 2) - 500, (scr.y / 2) - 280, (scr.x / 2) + 500, (scr.y / 2) + 50,  0x0000ff, false);
+	DrawGraph(0, 0, titleImage, true);
 
 	// ｹﾞｰﾑ選択文字の配置位置(仮)
 	//for (int i = 20; i <= 80; i *= 4)

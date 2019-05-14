@@ -45,8 +45,8 @@ int GameScene::Init(void)
 	{
 		objlist = std::make_shared<Shared_ObjList>();
 	}
-	lpMap.setUp(VECTOR2(MAPSIZE_X,MAPSIZE_Y),VECTOR2(GRIDSIZE,GRIDSIZE));
-
+	lpMap.setUp(VECTOR2(MAPSIZE_X, MAPSIZE_Y), VECTOR2(GRIDSIZE, GRIDSIZE));
+	lpMap.GetMapPos() = { 0,0 };
 	return 0;
 }
 
@@ -65,6 +65,4 @@ void GameScene::Draw(void)
 	{
 		(*itr)->Draw();
 	}
-	
-
 }

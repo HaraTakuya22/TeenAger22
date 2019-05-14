@@ -161,12 +161,14 @@ bool Map::Init(void)
 
 void Map::CreateIndividualsDisplay(void)
 {
+	// Mapの表示
+	DrawRectGraph(mapPos.x, mapPos.y, 0, 0, MAPSIZE_X, MAPSIZE_Y, MapImage, true, false);
 	// 各ﾌﾟﾚｲ人数毎にﾃﾞｨｽﾌﾟﾚｲを生成
 	if (PreyWindow >= 0)
 	{
 		PreyWindow = MakeScreen(gameWindowScale.x, gameWindowScale.y, true);
 		SetDrawScreen(PreyWindow);
-		DrawBox(0, 0, Scr.x, Scr.y, 0xffffff, false);
+		DrawExtendGraph(mapPos.x, mapPos.y, mapPos.x + gameWindowScale.x, mapPos.y + gameWindowScale.y, MapImage, true);
 		SetDrawScreen(DX_SCREEN_BACK);
 	}
 }
@@ -194,22 +196,16 @@ void Map::IndividualsDraw(WeakList weaklist,bool gameF)
 		DrawFormatString(50, 50, 0xffffff, "Player1");
 		//---------------------------------------------
 
+		
 		DrawGraph(0, 0, PreyWindow, true);
 
-		// Mapの表示
 		//DrawRectGraph(mapPos.x, mapPos.y,0,0,MAPSIZE_X / scaleCnt,MAPSIZE_Y / scaleCnt, MapImage, true,false);
-
-		DrawExtendGraph(mapPos.x, mapPos.y, mapPos.x + (MAPSIZE_X / scaleCnt.x), mapPos.y + (MAPSIZE_Y / scaleCnt.y), MapImage, true);
-
-		// Prey(仮)の表示
-		//DrawBox(GRIDSIZE * 4,(GRIDSIZE * 4) - 40,(GRIDSIZE * 4) + PREYSIZE_X,(GRIDSIZE * 5), 0xff0000, true);
 		// Preyのｲﾝｽﾀﾝｽ(GameSceneのみ)
 		if (gameF && !is_makePrey)
 		{
 			AddList()(weaklist, std::make_unique<Prey>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4 - 40)));
 			is_makePrey = true;
 		}
-		
 	}
 
 	// player2の画面表示
@@ -236,6 +232,10 @@ void Map::IndividualsDraw(WeakList weaklist,bool gameF)
 		DrawFormatString(Scr.x / 2 + 50, 50, 0xffffff, "Player2");
 		DrawFormatString(50, Scr.y / 2 + 50, 0xffffff, "Player3");
 		//----------------------------------------------------
+	}
+	if (!gameF)
+	{
+		DrawExtendGraph(mapPos.x, mapPos.y, mapPos.x + (MAPSIZE_X / scaleCnt.x), mapPos.y + (MAPSIZE_Y / scaleCnt.y), MapImage, true);
 	}
 }
 

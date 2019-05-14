@@ -160,40 +160,12 @@ bool Map::Init(void)
 void Map::CreateIndividualsDisplay(void)
 {
 	// ŠeÌßÚ²l”–ˆ‚ÉÃÞ¨½ÌßÚ²‚ð¶¬
-	switch (player)
+	if (PreyWindow >= 0)
 	{
-	case PLAYER_1:
-		if (PreyWindow >= 0)
-		{
-			PreyWindow = MakeScreen(Scr.x, Scr.y, true);
-			SetDrawScreen(PreyWindow);
-			DrawBox(0, 0, Scr.x, Scr.y, 0xffffff, false);
-			SetDrawScreen(DX_SCREEN_BACK);
-		}
-		break;
-
-	case PLAYER_2:
-		if (PreyWindow >= 0)
-		{
-			PreyWindow = MakeScreen(Scr.x / 2, Scr.y, true);
-			SetDrawScreen(PreyWindow);
-			DrawBox(0, 0, Scr.x / 2, Scr.y, 0xffffff, false);
-			SetDrawScreen(DX_SCREEN_BACK);
-		}
-		break;
-
-	case PLAYER_3:
-		if (PreyWindow >= 0)
-		{
-			PreyWindow = MakeScreen(Scr.x / 2, Scr.y / 2, true);
-			SetDrawScreen(PreyWindow);
-			DrawBox(0, 0, Scr.x / 2, Scr.y / 2, 0xffffff, false);
-			SetDrawScreen(DX_SCREEN_BACK);
-		}
-		break;
-	default:
-
-		break;
+		PreyWindow = MakeScreen(gameWindowScale.x, gameWindowScale.y, true);
+		SetDrawScreen(PreyWindow);
+		DrawBox(0, 0, Scr.x, Scr.y, 0xffffff, false);
+		SetDrawScreen(DX_SCREEN_BACK);
 	}
 }
 

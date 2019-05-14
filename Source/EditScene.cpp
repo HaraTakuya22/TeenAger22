@@ -1,5 +1,6 @@
 #include "Map.h"
 #include "Scene.h"
+#include "SelectScene.h"
 #include "GameScene.h"
 #include "EditScene.h"
 #include "EditCursor.h"
@@ -52,9 +53,9 @@ unique_Base EditScene::Update(unique_Base own, const Controller & Controller)
 	}
 
 	// AŒﬁ¿›Çâüâ∫Ç©Ç¬ägëÂÇµÇƒÇ¢Ç»Ç¢èÍçáÇ…ÇæÇØGameSceneÇ…à⁄çs
-	if (input[KEY_INPUT_A] && !lpMap.Get_isScale())
+	if (input[KEY_INPUT_X] && !lpMap.Get_isScale())
 	{
-		return std::make_unique<GameScene>();
+		return std::make_unique<SelectScene>();
 	}
 	EditDraw();
 	return move(own);
@@ -67,8 +68,8 @@ int EditScene::Init(void)
 		objlist = std::make_shared<Shared_ObjList>();
 	}
 	objlist->clear();
-	lpMap.setUp(VECTOR2(MAPSIZE_X / lpMap.scaleCnt.x, MAPSIZE_Y / lpMap.scaleCnt.y),
-				VECTOR2(GRIDSIZE / lpMap.scaleCnt.x, GRIDSIZE / lpMap.scaleCnt.y));
+	lpMap.setUp(VECTOR2(MAPSIZE_X, MAPSIZE_Y),
+				VECTOR2(GRIDSIZE, GRIDSIZE));
 	obj = AddList()(objlist, std::make_unique<EditCursor>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4)));
 
 	return 0;

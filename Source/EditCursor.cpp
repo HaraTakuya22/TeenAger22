@@ -13,7 +13,7 @@ EditCursor::EditCursor(VECTOR2 pos)
 	this->pos.x = pos.x;
 	this->pos.y = pos.y;
 
-	cameraPos = pos;
+	lpMap.GetCamera() = {320,320};
 
 	keyDefRng = EDITCURSOR_DEF_RNG;
 	inputFrame = EDITCURSOR_DEF_RNG;
@@ -200,7 +200,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 		{
 			tmp.x = (lpMap.GetMapSize().x - (gridSize.x * 2));
 		}
-		lpMap.GetMapPos().x = lpMap.MapCalcPos(tmp, cameraPos).x;
+		lpMap.GetMapPos().x = lpMap.MapCalcPos(tmp, lpMap.GetCamera()).x;
 		tmpMappos.y = lpMap.GetMapPos().y;
 	}
 	// ---------------------------------------------------------
@@ -213,7 +213,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 		{
 			tmp.x = 0;
 		}
-		lpMap.GetMapPos().x = lpMap.MapCalcPos(tmp, cameraPos).x;
+		lpMap.GetMapPos().x = lpMap.MapCalcPos(tmp, lpMap.GetCamera()).x;
 
 		tmpMappos.y = lpMap.GetMapPos().y;
 	}
@@ -228,7 +228,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 			tmp.y = 0;
 		}
 		tmpMappos.x = lpMap.GetMapPos().x;
-		tmpMappos.y = lpMap.MapCalcPos(tmp, cameraPos).y;
+		tmpMappos.y = lpMap.MapCalcPos(tmp, lpMap.GetCamera()).y;
 	}
 	//----------------------------------------------------
 
@@ -241,10 +241,10 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 			tmp.y = lpMap.GetMapSize().y - gridSize.y;
 		}
 		tmpMappos.x = lpMap.GetMapPos().x;
-		tmpMappos.y = lpMap.MapCalcPos(tmp, cameraPos).y;
+		tmpMappos.y = lpMap.MapCalcPos(tmp, lpMap.GetCamera()).y;
 		if (tmpMappos.y <= -(lpMap.GetMapSize().y - 500))
 		{
-			tmpMappos.y = -(lpMap.MapCalcPos(tmp, cameraPos).y - 500);
+			tmpMappos.y = -(lpMap.MapCalcPos(tmp, lpMap.GetCamera()).y - 500);
 		}
 	}
 
@@ -311,36 +311,36 @@ void EditCursor::Draw(void)
 	case objID::CHAIR_2:
 	case objID::CHAIR_3:
 	case objID::CHAIR_4:
-		DrawGraph(cameraPos.x, cameraPos.y, lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
+		DrawGraph(lpMap.GetCamera().x, lpMap.GetCamera().y, lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
 		break;
 	case objID::BOOKSHELF:
 	case objID::DRAWER:
 	case objID::LOCKER:
 	case objID::VASE_1:
 	case objID::VASE_2:
-		DrawGraph(cameraPos.x + GRIDSIZE, cameraPos.y - GRIDSIZE, lpImage.GetID("image/map2.png")[static_cast<int>(id - 6)], true);
+		DrawGraph(lpMap.GetCamera().x + GRIDSIZE, lpMap.GetCamera().y - GRIDSIZE, lpImage.GetID("image/map2.png")[static_cast<int>(id - 6)], true);
 		break;
 	case objID::MIRRORTABLE:
 	case objID::FACE:
 	case objID::KITCHIN_1:
 	case objID::KITCHIN_2:
 	case objID::S_MONITOR:
-		DrawGraph(cameraPos.x + GRIDSIZE, cameraPos.y - (GRIDSIZE * 2), lpImage.GetID("image/map3.png")[static_cast<int>(id - 11)], true);
+		DrawGraph(lpMap.GetCamera().x + GRIDSIZE, lpMap.GetCamera().y - (GRIDSIZE * 2), lpImage.GetID("image/map3.png")[static_cast<int>(id - 11)], true);
 		break;
 	case objID::BED:
-		DrawGraph(cameraPos.x + GRIDSIZE, cameraPos.y + GRIDSIZE, lpImage.GetID("image/map4.png")[0], true);
+		DrawGraph(lpMap.GetCamera().x + GRIDSIZE, lpMap.GetCamera().y + GRIDSIZE, lpImage.GetID("image/map4.png")[0], true);
 		break;
 	case objID::DESK:
-		DrawGraph(cameraPos.x, cameraPos.y, lpImage.GetID("image/map5.png")[0], true);
+		DrawGraph(lpMap.GetCamera().x, lpMap.GetCamera().y, lpImage.GetID("image/map5.png")[0], true);
 		break;
 	case objID::MONITOR:
-		DrawGraph(cameraPos.x + GRIDSIZE, cameraPos.y - (GRIDSIZE * 2), lpImage.GetID("image/map6.png")[0], true);
+		DrawGraph(lpMap.GetCamera().x + GRIDSIZE, lpMap.GetCamera().y - (GRIDSIZE * 2), lpImage.GetID("image/map6.png")[0], true);
 		break;
 	case objID::S_TABLE:
-		DrawGraph(cameraPos.x, cameraPos.y, lpImage.GetID("image/map7.png")[0], true);
+		DrawGraph(lpMap.GetCamera().x, lpMap.GetCamera().y, lpImage.GetID("image/map7.png")[0], true);
 		break;
 	case objID::TABLE:
-		DrawGraph(cameraPos.x, cameraPos.y, lpImage.GetID("image/map8.png")[0], true);
+		DrawGraph(lpMap.GetCamera().x, lpMap.GetCamera().y, lpImage.GetID("image/map8.png")[0], true);
 		break;
 	default:
 		break;

@@ -145,6 +145,8 @@ bool Map::Init(void)
 	PreyWindow = 0;
 	MapWindow = 0;
 
+	cameraPos = { 320,320 };
+
 	scaleCnt = { 1,1 };
 	gameWindowScale = { 0,0 };
 

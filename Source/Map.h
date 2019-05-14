@@ -115,6 +115,10 @@ public:
 	{
 		return is_scale;
 	}
+	VECTOR2 GetCamera(void)
+	{
+		return cameraPos;
+	}
 
 	VECTOR2 MapCalcPos(VECTOR2 c_pos,VECTOR2 scroll);
 	// ¾¯Ä‚µ‚½µÌŞ¼Şª¸Ä‚Ì•`‰æ
@@ -137,7 +141,8 @@ private:
 
 	// Ï¯Ìß‚Ì¶ã‚ÌÎß¼Ş¼®İ
 	VECTOR2 mapPos;
-
+	// ¶°¿Ù‚ÌÎß¼Ş¼®İ•â³‚Ì‚½‚ß‚Ì¶Ò×Îß¼Ş¼®İ
+	VECTOR2 cameraPos;
 
 	// Map‚ğŠg‘åk¬‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ÌÌ×¸Ş
 	bool is_scale;

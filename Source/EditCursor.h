@@ -40,8 +40,7 @@ private:
 	// Ã½Ä—p
 	bool setF;
 
-	// ¶°¿Ù‚ÌÎß¼Ş¼®İ•â³‚Ì‚½‚ß‚Ì¶Ò×Îß¼Ş¼®İ
-	VECTOR2 cameraPos;
+	
 
 	int keyDefRng;
 	int inputFrame;

@@ -51,7 +51,8 @@ unique_Base EditScene::Update(unique_Base own, const Controller & Controller)
 		return std::make_unique<GameScene>();
 	}
 
-	if (input[KEY_INPUT_A])
+	// AŒﬁ¿›Çâüâ∫Ç©Ç¬ägëÂÇµÇƒÇ¢Ç»Ç¢èÍçáÇ…ÇæÇØGameSceneÇ…à⁄çs
+	if (input[KEY_INPUT_A] && !lpMap.Get_isScale())
 	{
 		return std::make_unique<GameScene>();
 	}
@@ -66,7 +67,8 @@ int EditScene::Init(void)
 		objlist = std::make_shared<Shared_ObjList>();
 	}
 	objlist->clear();
-	lpMap.setUp(VECTOR2(MAPSIZE_X / lpMap.scaleCnt, MAPSIZE_Y / lpMap.scaleCnt), VECTOR2(GRIDSIZE, GRIDSIZE));
+	lpMap.setUp(VECTOR2(MAPSIZE_X / lpMap.scaleCnt.x, MAPSIZE_Y / lpMap.scaleCnt.y),
+				VECTOR2(GRIDSIZE / lpMap.scaleCnt.x, GRIDSIZE / lpMap.scaleCnt.y));
 	obj = AddList()(objlist, std::make_unique<EditCursor>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4)));
 
 	return 0;
@@ -80,7 +82,7 @@ void EditScene::EditDraw(void)
 	//lpMap.CreateIndividualsDisplay();
 
 	lpMap.MapDraw(false);
-	lpMap.SetObj();
+	lpMap.SetObj(lpMap.scaleCnt);
 	//	¥√ﬁ®Øƒº∞›éûÇÃï`âÊ
 	auto itr = objlist->begin();
 	(*itr)->Draw();

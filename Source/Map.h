@@ -104,23 +104,26 @@ public:
 	// Map‚Ì»²½Şæ“¾
 	VECTOR2 GetMapSize(void)
 	{
-		return VECTOR2(MAPSIZE_X / scaleCnt, MAPSIZE_Y / scaleCnt);
+		return VECTOR2(MAPSIZE_X, MAPSIZE_Y);
 	}
 	// ˆêÏ½‚Ì»²½Ş‚Ìæ“¾
 	VECTOR2 GetGridSize(void)
 	{
 		return VECTOR2(GRIDSIZE, GRIDSIZE);
 	}
+	bool Get_isScale(void)
+	{
+		return is_scale;
+	}
 
 	VECTOR2 MapCalcPos(VECTOR2 c_pos,VECTOR2 scroll);
 	// ¾¯Ä‚µ‚½µÌŞ¼Şª¸Ä‚Ì•`‰æ
-	bool SetObj(void);
+	bool SetObj(VECTOR2 scale);
 
 	// Map‚ÌŠg‘åk¬(EditScene‚Ì‚İ)
 	bool ChangeMapScale(bool editF,Controller ctrl);
-
-	// Šg‘åk¬‚Ì¶³İÄ
-	double scaleCnt;
+	// Map‘S‘Ì‚ÌŠg‘åk¬—¦
+	VECTOR2 scaleCnt;
 
 	// ÌßÚ²Ô°‚Ìl”‚ÌŠi”[•Ï”
 	PLAYER player;
@@ -134,6 +137,10 @@ private:
 	// Ï¯Ìß‚Ì¶ã‚ÌÎß¼Ş¼®İ
 	VECTOR2 mapPos;
 
+
+	// Map‚ğŠg‘åk¬‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ÌÌ×¸Ş
+	bool is_scale;
+
 	// Ï¯Ìß‚Ì‰æ‘œ
 	int MapImage;
 
@@ -146,8 +153,7 @@ private:
 	// ½¸Ø°İ‘S‘Ì‚Ì»²½Ş
 	VECTOR2 Scr;
 
-	// Map‘S‘Ì‚Ìk¬Œã‚Ì»²½Ş
-	VECTOR2 mapScale;
+
 
 	// Ï¯Ìß‚Ì1Ï½1Ï½‚ÌÃŞ°À
 	std::vector<objID*>MapData;

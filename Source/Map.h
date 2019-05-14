@@ -25,10 +25,6 @@
 #define MAPSIZE_X	12000
 #define MAPSIZE_Y	8640
 
-// Map‚Ìk¬Œã‚Ì»²½Ş‚ğŠî‚É‚µ‚½Map‚Ì»²½Ş
-#define MAP_SCALEX(X) X
-#define MAP_SCALEY(Y) Y
-
 
 // player‚Ìæ‚ª•Ç‚©“¹‚©
 enum PASSAGE
@@ -86,6 +82,7 @@ public:
 	// ŠeÌßÚ²Ô°‚ÌÃŞ¨½ÌßÚ²‚Ì•`‰æŠÖ”
 	void IndividualsDraw(WeakList weaklist,bool gameF);
 
+	// ‰æ–Ê‚Ì¾¯Ä
 	void setUp(const VECTOR2& size, const VECTOR2& chipSize);
 
 	bool setMapData(const VECTOR2& pos, objID id);
@@ -111,10 +108,13 @@ public:
 	{
 		return VECTOR2(GRIDSIZE, GRIDSIZE);
 	}
+	// Šg‘åk¬‚µ‚½‚©‚ÌÌ×¸Ş‚Ìæ“¾
 	bool Get_isScale(void)
 	{
 		return is_scale;
 	}
+
+	// camera‚ÌÎß¼Ş¼®İ‚Ìæ“¾
 	VECTOR2 GetCamera(void)
 	{
 		return cameraPos;

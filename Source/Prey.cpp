@@ -85,25 +85,22 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	auto input = controll.GetButtonInfo(KEY_TYPE_NOW);
 	auto inputOld = controll.GetButtonInfo(KEY_TYPE_OLD);
 
-	auto sidePos = [&](DIR dir, VECTOR2 pos, int speed, SIDE_CHECK sideFlag) {
+	auto sidePos = [&](DIR dir, VECTOR2 pos, SIDE_CHECK sideflag) {
 		VECTOR2 side;
 		switch (dir)
 		{
 		case DIR_LEFT:
-			side = { speed - (sideFlag ^ 1), 0 };
-			break;
+			side = { (sideflag - gridSize), 0 };
 		case DIR_RIGHT:
-			side = { speed + (gridSize - sideFlag), 0 };
-			break;
+			side = { sideflag, 0 };
 		case DIR_DOWN:
-			side = { 0, speed + (gridSize - sideFlag) };
-			break;
+			side = { 0, sideflag };
 		case DIR_UP:
-			side = { 0, speed - (sideFlag ^ 1) };
+			side = { 0,(sideflag - gridSize) };
 			break;
 		}
 		return pos + side;
-	};
+	}
 
 	// ˆÚ“®ˆ—(Map‚ÌˆÚ“® & ÌßÚ²Ô°‚ÌˆÚ“®)-----------------------------
 	// ‰EˆÚ“®
@@ -121,28 +118,37 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	// ¶ˆÚ“®
 	if (input[KEY_INPUT_NUMPAD4] & ~inputOld[KEY_INPUT_NUMPAD4])
 	{
-		if (lpMap.GetMapPos().x < 240)
+		if (PassageTbl[static_cast<int>(lpMap.GetMapData(sidePos(Prey::dir, pos, speedTbl[Prey::dir], IN_SIDE)))])
 		{
-			pos.x -= SPEED;
-			lpMap.GetMapPos().x += SPEED;
+			if (lpMap.GetMapPos().x < 240)
+			{
+				pos.x -= SPEED;
+				lpMap.GetMapPos().x += SPEED;
+			}
 		}
 	}
 	// ãˆÚ“®
 	if (input[KEY_INPUT_NUMPAD8] & ~inputOld[KEY_INPUT_NUMPAD8])
 	{
-		if (lpMap.GetMapPos().y < 240)
+		if (PassageTbl[static_cast<int>(lpMap.GetMapData(sidePos(Prey::dir, pos, speedTbl[Prey::dir], IN_SIDE)))])
 		{
-			pos.y -= SPEED;
-			lpMap.GetMapPos().y += SPEED;
+			if (lpMap.GetMapPos().y < 240)
+			{
+				pos.y -= SPEED;
+				lpMap.GetMapPos().y += SPEED;
+			}
 		}
 	}
 	// ‰ºˆÚ“®
 	if (input[KEY_INPUT_NUMPAD2] & ~inputOld[KEY_INPUT_NUMPAD2])
 	{
-		if (lpMap.GetMapPos().y > -8160)
+		if (PassageTbl[static_cast<int>(lpMap.GetMapData(sidePos(Prey::dir, pos, speedTbl[Prey::dir], IN_SIDE)))])
 		{
-			pos.y += SPEED;
-			lpMap.GetMapPos().y -= SPEED;
+			if (lpMap.GetMapPos().y > -8160)
+			{
+				pos.y += SPEED;
+				lpMap.GetMapPos().y -= SPEED;
+			}
 		}
 	}
 	//----------------------------------------------------------------------------
@@ -154,11 +160,18 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 		{
 			// •ûŒü‚Ì¾¯Ä
 			Prey::dir = dirTbl[dir][id];
-			
-			// •â³ˆ—
-			if ((*posTbl[Prey::dir][TBL_SUB]) % gridSize)
+			if (!PassageTbl[static_cast<int>(lpMap.GetMapData(sidePos(Prey::dir, pos, speedTbl[Prey::dir], IN_SIDE)))])
 			{
-				(*posTbl[Prey::dir][TBL_SUB]) = (((*posTbl[Prey::dir][TBL_SUB] + gridSize / 2) / gridSize) * gridSize);
+				// ˆÚ“®•s‰Â‚ÌµÌŞ¼Şª¸Ä‚ª—×‚É‚ ‚Á‚½ê‡
+				return false;
+			}
+			else
+			{
+				// •â³ˆ—
+				if ((*posTbl[Prey::dir][TBL_SUB]) % gridSize)
+				{
+					(*posTbl[Prey::dir][TBL_SUB]) = (((*posTbl[Prey::dir][TBL_SUB] + gridSize / 2) / gridSize) * gridSize);
+				}
 			}
 			// ˆÚ“®ˆ—
 			if (!(*posTbl[Prey::dir][TBL_SUB] % gridSize))

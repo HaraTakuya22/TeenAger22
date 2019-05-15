@@ -100,7 +100,7 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 			break;
 		}
 		return pos + side;
-	}
+	};
 
 	// ˆÚ“®ˆ—(Map‚ÌˆÚ“® & ÌßÚ²Ô°‚ÌˆÚ“®)-----------------------------
 	// ‰EˆÚ“®

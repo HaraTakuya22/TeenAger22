@@ -151,7 +151,7 @@ private:
 	int MapImage;
 
 	// Še³¨İÄŞ³(’ÇÕ‚³‚ê‚é‘¤)
-	int mapAllwindow;
+	int Preywindow;
 
 	// Ï¯Ìßê—p‚Ì³¨İÄŞ³
 	int MapWindow;

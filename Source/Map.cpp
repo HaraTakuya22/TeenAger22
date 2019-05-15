@@ -142,7 +142,7 @@ bool Map::Init(void)
 	Scr = lpScene.GetScrSize();
 
 	// 後に廃止予定(Map完成後)----------
-	mapAllwindow = 0;
+	Preywindow = 0;
 	MapWindow = 0;
 
 	cameraPos = { 320,320 };
@@ -164,11 +164,11 @@ void Map::CreateIndividualsDisplay(void)
 	// Mapの表示
 	//DrawRectGraph(mapPos.x, mapPos.y, 0, 0, MAPSIZE_X, MAPSIZE_Y, MapImage, true, false);
 	// 各ﾌﾟﾚｲ人数毎にﾃﾞｨｽﾌﾟﾚｲを生成
-	if (mapAllwindow >= 0)
+	if (Preywindow >= 0)
 	{
-		mapAllwindow = MakeScreen(MAPSIZE_X, MAPSIZE_Y, true);
-		SetDrawScreen(mapAllwindow);
-		DrawGraph(0,0,MapImage,true);
+		Preywindow = MakeScreen(gameWindowScale.x, gameWindowScale.y, true);
+		SetDrawScreen(Preywindow);
+		DrawRectGraph(mapPos.x, mapPos.y, 0, 0, MAPSIZE_X, MAPSIZE_Y, MapImage, true, false);
 		SetDrawScreen(DX_SCREEN_BACK);
 	}
 }
@@ -197,7 +197,7 @@ void Map::IndividualsDraw(WeakList weaklist,bool gameF)
 		//---------------------------------------------
 
 		
-		DrawGraph(0, 0, mapAllwindow, true);
+		DrawGraph(0, 0, Preywindow, true);
 
 		//DrawRectGraph(mapPos.x, mapPos.y,0,0,MAPSIZE_X / scaleCnt,MAPSIZE_Y / scaleCnt, MapImage, true,false);
 		// Preyのｲﾝｽﾀﾝｽ(GameSceneのみ)
@@ -211,8 +211,8 @@ void Map::IndividualsDraw(WeakList weaklist,bool gameF)
 	// player2の画面表示
 	if (player == PLAYER_2)
 	{
-		DrawGraph(0, 0, mapAllwindow, true);
-		DrawGraph(Scr.x / 2, 0, mapAllwindow, true);
+		DrawGraph(0, 0, Preywindow, true);
+		DrawGraph(Scr.x / 2, 0, Preywindow, true);
 
 		// ﾃﾞﾊﾞｯｸﾞ用--------------------------------------------------
 		DrawFormatString(50, 50, 0xffffff, "Player1");
@@ -223,9 +223,9 @@ void Map::IndividualsDraw(WeakList weaklist,bool gameF)
 	// player3の画面表示
 	if (player == PLAYER_3)
 	{
-		DrawGraph(0, 0, mapAllwindow, true);
-		DrawGraph(Scr.x / 2, 0, mapAllwindow, true);
-		DrawGraph(0, Scr.y / 2, mapAllwindow, true);
+		DrawGraph(0, 0, Preywindow, true);
+		DrawGraph(Scr.x / 2, 0, Preywindow, true);
+		DrawGraph(0, Scr.y / 2, Preywindow, true);
 
 		// ﾃﾞﾊﾞｯｸﾞ用------------------------------------------
 		DrawFormatString(50, 50, 0xffffff, "Player1");

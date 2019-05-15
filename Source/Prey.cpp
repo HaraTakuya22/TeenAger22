@@ -41,8 +41,28 @@ Prey::Prey(VECTOR2 pos)
 	};
 
 	PassageTbl = {
-		true,	//PASSAGE_WAY
-		false,	//PASSAGE_WALL
+	true,		//FLOOR			// 床
+	false,		//WALL			// 壁
+	false,		//CHAIR_1		// 椅子1
+	false,		//CHAIR_2		// 椅子2
+	false,		//CHAIR_3		// 椅子3
+	false,		//CHAIR_4		// 椅子4
+	false,		//BOOKSHELF		// 本棚
+	false,		//DRAWER		// 引き出し
+	false,		//LOCKER		// ﾛｯｶｰ
+	false,		//VASE_1		// 花瓶1
+	false,		//VASE_2		// 花瓶2
+	false,		//MIRRORTABLE	// 鏡台
+	false,		//FACE			// 洗面台
+	false,		//KITCHIN_1		// 台所1
+	false,		//KITCHIN_2		// 台所2
+	false,		//S_MONITOR		// 小さいﾓﾆﾀｰ
+	false,		//BED			// ﾍﾞｯﾄﾞ
+	false,		//DESK			// 横に長い机
+	false,		//MONITOR		// 大きいﾓﾆﾀｰ
+	false,		//S_TABLE		// 縦に長い机1
+	false,		//TABLE			// 縦に長い机2
+	true,		//NON			// 何もない
 	};
 
 	// player(鬼以外)のﾎﾟｼﾞｼｮﾝのｾｯﾄ
@@ -61,51 +81,10 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	auto mapSize = lpMap.GetMapSize();
 	auto gridSize = lpMap.GetGridSize().x;
 	auto Scr = lpScene.GetScrSize();
-	//auto camera = lpMap.GetCamera();
 
 	auto input = controll.GetButtonInfo(KEY_TYPE_NOW);
 	auto inputOld = controll.GetButtonInfo(KEY_TYPE_OLD);
 
-	// 移動処理(Mapの移動 & ﾌﾟﾚｲﾔｰの移動)-----------------------------
-	// 右移動
-	if (input[KEY_INPUT_NUMPAD6] & ~inputOld[KEY_INPUT_NUMPAD6])
-	{
-		if (lpMap.GetMapPos().x > -11520)
-		{
-			camera.x = pos.x += SPEED;
-			lpMap.GetMapPos().x -= SPEED;
-		}
-	}
-	// 左移動
-	if (input[KEY_INPUT_NUMPAD4] & ~inputOld[KEY_INPUT_NUMPAD4])
-	{
-		if (lpMap.GetMapPos().x < 240)
-		{
-			camera.x = pos.x -= SPEED;
-			lpMap.GetMapPos().x += SPEED;
-		}
-	}
-	// 上移動
-	if (input[KEY_INPUT_NUMPAD8] & ~inputOld[KEY_INPUT_NUMPAD8])
-	{
-		if (lpMap.GetMapPos().y < 240)
-		{
-			camera.y = pos.y -= SPEED;
-			lpMap.GetMapPos().y += SPEED;
-		}
-	}
-	// 下移動
-	if (input[KEY_INPUT_NUMPAD2] & ~inputOld[KEY_INPUT_NUMPAD2])
-	{
-		if (lpMap.GetMapPos().y > -8160)
-		{
-			camera.y = pos.y += SPEED;
-			lpMap.GetMapPos().y -= SPEED;
-		}
-	}
-	//----------------------------------------------------------------------------
-
-	// ＊ﾌﾟﾚｲﾔｰのﾎﾟｼﾞｼｮﾝを足元に設定する。
 	auto sidePos = [&](DIR dir, VECTOR2 pos, int speed, SIDE_CHECK sideFlag) {
 		VECTOR2 side;
 		switch (dir)
@@ -126,23 +105,60 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 		return pos + side;
 	};
 
+	// 移動処理(Mapの移動 & ﾌﾟﾚｲﾔｰの移動)-----------------------------
+	// 右移動
+	if (input[KEY_INPUT_NUMPAD6] & ~inputOld[KEY_INPUT_NUMPAD6])
+	{
+		if (PassageTbl[static_cast<int>(lpMap.GetMapData(sidePos(Prey::dir, pos, speedTbl[Prey::dir], IN_SIDE)))])
+		{
+			if (lpMap.GetMapPos().x > -11520)
+			{
+				pos.x += SPEED;
+				lpMap.GetMapPos().x -= SPEED;
+			}
+		}
+	}
+	// 左移動
+	if (input[KEY_INPUT_NUMPAD4] & ~inputOld[KEY_INPUT_NUMPAD4])
+	{
+		if (lpMap.GetMapPos().x < 240)
+		{
+			pos.x -= SPEED;
+			lpMap.GetMapPos().x += SPEED;
+		}
+	}
+	// 上移動
+	if (input[KEY_INPUT_NUMPAD8] & ~inputOld[KEY_INPUT_NUMPAD8])
+	{
+		if (lpMap.GetMapPos().y < 240)
+		{
+			pos.y -= SPEED;
+			lpMap.GetMapPos().y += SPEED;
+		}
+	}
+	// 下移動
+	if (input[KEY_INPUT_NUMPAD2] & ~inputOld[KEY_INPUT_NUMPAD2])
+	{
+		if (lpMap.GetMapPos().y > -8160)
+		{
+			pos.y += SPEED;
+			lpMap.GetMapPos().y -= SPEED;
+		}
+	}
+	//----------------------------------------------------------------------------
+
+	// ＊ﾌﾟﾚｲﾔｰのﾎﾟｼﾞｼｮﾝを足元に設定する。
+	
 	auto move = [&, dir = Prey::dir](DIR_TBL_ID id){
 		if (input[keyIdTbl[dirTbl[dir][id]]])
 		{
 			// 方向のｾｯﾄ
 			Prey::dir = dirTbl[dir][id];
-			if (!PassageTbl[static_cast<int>(lpMap.GetMapData(sidePos(Prey::dir, pos, speedTbl[Prey::dir], IN_SIDE)))])
+			
+			// 補正処理
+			if ((*posTbl[Prey::dir][TBL_SUB]) % gridSize)
 			{
-				// 移動不可のｵﾌﾞｼﾞｪｸﾄが隣にあった場合
-				return false;
-			}
-			else
-			{
-				// 補正処理
-				if ((*posTbl[Prey::dir][TBL_SUB]) % gridSize)
-				{
-					//(*posTbl[Prey::dir][TBL_SUB]) = (((*posTbl[Prey::dir][TBL_SUB] + gridSize / 2) / gridSize) * gridSize);
-				}
+				(*posTbl[Prey::dir][TBL_SUB]) = (((*posTbl[Prey::dir][TBL_SUB] + gridSize / 2) / gridSize) * gridSize);
 			}
 			// 移動処理
 			if (!(*posTbl[Prey::dir][TBL_SUB] % gridSize))
@@ -183,7 +199,7 @@ void Prey::Draw(void)
 
 bool Prey::Init(void)
 {
-	Obj::Init("character/character.png", camera.x + 320 - camera.x, camera.y + 280 - camera.y, VECTOR2(4, 4), VECTOR2(320 / 4, 480 / 4));
+	Obj::Init("character/character.png", VECTOR2(4, 4), VECTOR2(320 / 4, 480 / 4));
 	AddAnim("停止", 0, 0, 2, 6);
 	AddAnim("移動", 0, 2, 2, 6);
 	return true;

@@ -30,7 +30,7 @@ void Obj::Draw(void)
 		int flame = animTbl[AnimationName][ANIM_FLAME];
 		ID = start + (int)dir + (inter % flame) * DivCnt.x;
 	}
-	DrawGraph(pos.x, pos.y, ImageID(ImageName)[ID], true);
+	DrawGraph(pos.x + 320 - pos.x, pos.y + 280 - pos.y, ImageID(ImageName)[ID], true);
 }
 void Obj::Draw(unsigned int id)
 {
@@ -45,10 +45,8 @@ void Obj::Update(const Controller & controll, WeakList objlist)
 	Move(controll, objlist);
 }
 
-bool Obj::Init(std::string filename, int posx, int posy, VECTOR2 divcnt, VECTOR2 divsize)
+bool Obj::Init(std::string filename, VECTOR2 divcnt, VECTOR2 divsize)
 {
-	this->pos.x = posx;
-	this->pos.y = posy;
 	this->DivCnt = divcnt;
 	this->DivSize = divsize;
 	ImageName = filename;

@@ -3,6 +3,7 @@
 #include "Map.h"
 #include "Scene.h"
 #include "Prey.h"
+#include "It.h"
 #include "Image.h"
 
 struct DataHeader {
@@ -25,12 +26,9 @@ void Map::Draw(void)
 void Map::MapDraw(bool gameF)
 {	
 	// 画面分割(player人数毎に)
-	switch (player)
-	{
-	case PLAYER_1:
-		// ｸﾞﾘｯﾄﾞの表示
-		if (!is_scale)
+		switch (player)
 		{
+		case PLAYER_MIN:
 			for (int y = 0; y <= Scr.y; y += GRIDSIZE)
 			{
 				DrawLine(0, y, Scr.x, y, 0xffffff);
@@ -39,40 +37,65 @@ void Map::MapDraw(bool gameF)
 					DrawLine(x, 0, x, Scr.y, 0xffffff);
 				}
 			}
-		}
-		// Mapを画面右下に配置
-		if (gameF)
-		{
-			DrawGraph(Scr.x - (GRIDSIZE * 6), 0, MapWindow, false);
-			DrawFormatString(Scr.x / 2 - 150, Scr.y - (Scr.y / 3) + 50, 0xffffff, "Map");
-		}
-		break;
-	case PLAYER_2:
-		DrawLine(Scr.x / 2, 0, Scr.x / 2, Scr.y, 0xffffff);
+			if (gameF)
+			{
+				DrawGraph(Scr.x - (GRIDSIZE * 6), 0, MapWindow, false);
+				DrawFormatString(Scr.x / 2 - 150, Scr.y - (Scr.y / 3) + 50, 0xffffff, "Map");
+			}
+			break;
+		case PLAYER_1:
+			// ｸﾞﾘｯﾄﾞの表示
+			if (!is_scale)
+			{
+				for (int y = 0; y <= Scr.y; y += GRIDSIZE)
+				{
+					DrawLine(0, y, Scr.x, y, 0xffffff);
+					for (int x = 0; x <= Scr.x; x += GRIDSIZE)
+					{
+						DrawLine(x, 0, x, Scr.y, 0xffffff);
+					}
+				}
+			}
+			// Mapを画面右下に配置
+			if (gameF)
+			{
+				DrawGraph(Scr.x - (GRIDSIZE * 6), 0, MapWindow, false);
+				DrawFormatString(Scr.x / 2 - 150, Scr.y - (Scr.y / 3) + 50, 0xffffff, "Map");
+			}
+			break;
+		case PLAYER_2:
+			DrawLine(Scr.x / 2, 0, Scr.x / 2, Scr.y, 0xffffff);
 
-		// Mapの配置
-		if (gameF)
-		{
-			DrawGraph(Scr.x / 2 - (MAPWINDOW_SIZE_X / 2), 0, MapWindow, false);
-			DrawFormatString(Scr.x / 2 - 150, Scr.y - (Scr.y / 3) + 50, 0xffffff, "Map");
+			// Mapの配置
+			if (gameF)
+			{
+				DrawGraph(Scr.x / 2 - (MAPWINDOW_SIZE_X / 2), 0, MapWindow, false);
+				DrawFormatString(Scr.x / 2 - 150, Scr.y - (Scr.y / 3) + 50, 0xffffff, "Map");
+			}
+			break;
+
+		case PLAYER_3:
+			DrawLine(Scr.x / 2, 0, Scr.x / 2, Scr.y, 0xffffff);
+			DrawLine(0, Scr.y / 2, Scr.x, Scr.y / 2, 0xffffff);
+
+			// Mapの配置
+			if (gameF)
+			{
+				DrawGraph((Scr.x - (Scr.x / 4)) - (MAPWINDOW_SIZE_X / 2), (Scr.y - (Scr.y / 4)) - (MAPWINDOW_SIZE_Y / 2), MapWindow, false);
+				DrawFormatString(Scr.x / 2 + 150, Scr.y / 2 + (((Scr.y / 3) / 2) / 2) + 50, 0xffffff, "Map");
+			}
+			break;
+
+		default:
+			break;
 		}
-		break;
-
-	case PLAYER_3:
-		DrawLine(Scr.x / 2, 0, Scr.x / 2, Scr.y, 0xffffff);
-		DrawLine(0, Scr.y / 2, Scr.x, Scr.y / 2, 0xffffff);
-
-		// Mapの配置
-		if (gameF)
-		{
-			DrawGraph((Scr.x - (Scr.x / 4)) - (MAPWINDOW_SIZE_X / 2), (Scr.y - (Scr.y / 4)) - (MAPWINDOW_SIZE_Y / 2), MapWindow, false);
-			DrawFormatString(Scr.x / 2 + 150, Scr.y / 2 + (((Scr.y / 3) / 2) / 2) + 50, 0xffffff, "Map");
-		}
-		break;
-
-	default:
-		break;
-	}
+	
+// Mapを画面右下に配置
+if (gameF)
+{
+	DrawGraph(Scr.x - (GRIDSIZE * 6), 0, MapWindow, false);
+	DrawFormatString(Scr.x / 2 - 150, Scr.y - (Scr.y / 3) + 50, 0xffffff, "Map");
+}
 	/*for (int y = 0; y < MapSize.y; y++)
 	{
 		for (int x = 0; x < MapSize.x; x++)
@@ -155,6 +178,7 @@ bool Map::Init(void)
 	mapPos = VECTOR2(0, 0);
 	MapImage = LoadGraph("MAP/map_new.png");
 
+	player = PLAYER_MIN;
 	//----------------------------------
 	return true;
 }
@@ -189,7 +213,7 @@ void Map::IndividualsDraw(WeakList weaklist,bool gameF)
 	}
 
 	// player1の画面表示
-	if (player == PLAYER_1)
+	if (player == PLAYER_1 || player == PLAYER_MIN)
 	{
 
 		// ﾃﾞﾊﾞｯｸﾞ用-----------------------------------
@@ -201,10 +225,18 @@ void Map::IndividualsDraw(WeakList weaklist,bool gameF)
 
 		//DrawRectGraph(mapPos.x, mapPos.y,0,0,MAPSIZE_X / scaleCnt,MAPSIZE_Y / scaleCnt, MapImage, true,false);
 		// Preyのｲﾝｽﾀﾝｽ(GameSceneのみ)
-		if (gameF && !is_makePrey)
+		if (gameF)
 		{
-			AddList()(weaklist, std::make_unique<Prey>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4 - 40)));
-			is_makePrey = true;
+			if (!is_makePrey)
+			{
+				AddList()(weaklist, std::make_unique<Prey>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4 - 40)));
+				is_makePrey = true;
+			}
+			if (!is_makeIt && PLAYER_MIN)
+			{
+				AddList()(weaklist, std::make_unique<It>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4 - 40)));
+				is_makeIt = true;
+			}
 		}
 	}
 
@@ -585,6 +617,9 @@ bool Map::ChangeMapScale(bool editF,Controller ctrl)
 	{
 		switch (player)
 		{
+		case PLAYER_MIN:
+			gameWindowScale.x = Scr.x;
+			gameWindowScale.y = Scr.y;
 		case PLAYER_1:
 			gameWindowScale.x = Scr.x;
 			gameWindowScale.y = Scr.y;

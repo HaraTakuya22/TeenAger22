@@ -9,6 +9,12 @@ public:
 	~It();
 	void Draw(void);
 	void Move(const Controller& controll, WeakList objlist);
+
+	bool GetType(OBJ_TYPE type)
+	{
+		return (type == TYPE_IT);
+	}
+
 private:
 	bool Init(void);
 };

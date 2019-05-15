@@ -106,7 +106,7 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	// âEà⁄ìÆ
 	if (input[KEY_INPUT_NUMPAD6] & ~inputOld[KEY_INPUT_NUMPAD6])
 	{
-		if (PassageTbl[static_cast<int>(lpMap.GetMapData(sidePos(Prey::dir, pos, speedTbl[Prey::dir], IN_SIDE)))])
+		if (PassageTbl[static_cast<int>(lpMap.GetMapData(sidePos(Prey::dir, pos, IN_SIDE)))])
 		{
 			if (lpMap.GetMapPos().x > -11520)
 			{
@@ -118,7 +118,7 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	// ç∂à⁄ìÆ
 	if (input[KEY_INPUT_NUMPAD4] & ~inputOld[KEY_INPUT_NUMPAD4])
 	{
-		if (PassageTbl[static_cast<int>(lpMap.GetMapData(sidePos(Prey::dir, pos, speedTbl[Prey::dir], IN_SIDE)))])
+		if (PassageTbl[static_cast<int>(lpMap.GetMapData(sidePos(Prey::dir, pos, IN_SIDE)))])
 		{
 			if (lpMap.GetMapPos().x < 240)
 			{
@@ -130,7 +130,7 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	// è„à⁄ìÆ
 	if (input[KEY_INPUT_NUMPAD8] & ~inputOld[KEY_INPUT_NUMPAD8])
 	{
-		if (PassageTbl[static_cast<int>(lpMap.GetMapData(sidePos(Prey::dir, pos, speedTbl[Prey::dir], IN_SIDE)))])
+		if (PassageTbl[static_cast<int>(lpMap.GetMapData(sidePos(Prey::dir, pos, IN_SIDE)))])
 		{
 			if (lpMap.GetMapPos().y < 240)
 			{
@@ -142,7 +142,7 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	// â∫à⁄ìÆ
 	if (input[KEY_INPUT_NUMPAD2] & ~inputOld[KEY_INPUT_NUMPAD2])
 	{
-		if (PassageTbl[static_cast<int>(lpMap.GetMapData(sidePos(Prey::dir, pos, speedTbl[Prey::dir], IN_SIDE)))])
+		if (PassageTbl[static_cast<int>(lpMap.GetMapData(sidePos(Prey::dir, pos, IN_SIDE)))])
 		{
 			if (lpMap.GetMapPos().y > -8160)
 			{

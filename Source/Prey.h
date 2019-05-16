@@ -32,10 +32,6 @@ enum  SIDE_CHECK {
 	SIDE_MAX
 };
 
-
-
-
-
 #define PLAYER_DEF_SPEED 2
 
 // ‹S‚¶‚á‚È‚¢‘¤‚Ì»²½Þ(Prey = ’Ç‚í‚ê‚é‚à‚Ì)
@@ -72,7 +68,7 @@ private:
 
 
 	
-	DIR_TBL_ARRAY keyIdTbl;
+	DIR_TBL_ARRAY keyIdTbl[PREY_NUM::PREY_MAX];
 	DIR_TBL_PTR_ARRAY posTbl;
 	DIR_TBL_DIR dirTbl;
 	PASSAGE_TBL idTbl;		// ƒAƒ^ƒŠ”»’è

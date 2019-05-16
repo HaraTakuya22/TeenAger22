@@ -24,10 +24,15 @@ Prey::Prey(VECTOR2 pos, PREY_NUM p_num)
 
 	//lpMap.GetMapPos() = { -640,-640 };
 	//			MAIN			
-	keyIdTbl = { KEY_INPUT_NUMPAD2,	// 下
-				 KEY_INPUT_NUMPAD4,	// 左
-				 KEY_INPUT_NUMPAD6,	// 右
-				 KEY_INPUT_NUMPAD8,	// 上
+	keyIdTbl[PREY_1] = { KEY_INPUT_NUMPAD2,	// 下
+					KEY_INPUT_NUMPAD4,	// 左
+					KEY_INPUT_NUMPAD6,	// 右
+					KEY_INPUT_NUMPAD8,	// 上
+	};
+	keyIdTbl[PREY_2] = { KEY_INPUT_S,
+					KEY_INPUT_A,
+					KEY_INPUT_D,
+					KEY_INPUT_W,
 	};
 	//			MAIN		OPP			SUB1		SUB2
 	dirTbl = { DIR_DOWN,	DIR_UP,		DIR_LEFT,	DIR_RIGHT,	// 下（上・左・右）
@@ -35,7 +40,6 @@ Prey::Prey(VECTOR2 pos, PREY_NUM p_num)
 				DIR_RIGHT,	DIR_LEFT,	DIR_DOWN,	DIR_UP,		// 右（左・下・上）
 				DIR_UP,		DIR_DOWN,	DIR_LEFT,	DIR_RIGHT,	// 上（下・左・右）
 	};
-
 	idTbl = {
 	true,		//FLOOR			// 床
 	false,		//WALL			// 壁
@@ -61,7 +65,7 @@ Prey::Prey(VECTOR2 pos, PREY_NUM p_num)
 	true,		//NON			// 何もない
 	};
 
-	// player(鬼以外)のﾎﾟｼﾞｼｮﾝのｾｯﾄ
+	// playerのﾎﾟｼﾞｼｮﾝのｾｯﾄ
 	SetPos(pos);
 	Prey::Init(p_num);
 	afterKeyFlag = false;
@@ -102,7 +106,7 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	// 右移動
 	if (input[KEY_INPUT_NUMPAD6] & ~inputOld[KEY_INPUT_NUMPAD6])
 	{
-		if (lpMap.GetMapPos().x > -11520)
+		if (lpMap.GetMapPos().x > -(mapSize.x - GRIDSIZE * 6))
 		{
 			pos.x += SPEED;
 			lpMap.GetMapPos().x -= SPEED;
@@ -113,7 +117,7 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	// 左移動
 	if (input[KEY_INPUT_NUMPAD4] & ~inputOld[KEY_INPUT_NUMPAD4])
 	{
-		if (lpMap.GetMapPos().x < 240)
+		if (lpMap.GetMapPos().x < GRIDSIZE * 3)
 		{
 			pos.x -= SPEED;
 			lpMap.GetMapPos().x += SPEED;
@@ -123,7 +127,7 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	// 上移動
 	if (input[KEY_INPUT_NUMPAD8] & ~inputOld[KEY_INPUT_NUMPAD8])
 	{
-		if (lpMap.GetMapPos().y < 240)
+		if (lpMap.GetMapPos().y < GRIDSIZE * 3)
 		{
 			pos.y -= SPEED;
 			lpMap.GetMapPos().y += SPEED;
@@ -133,7 +137,7 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	// 下移動
 	if (input[KEY_INPUT_NUMPAD2] & ~inputOld[KEY_INPUT_NUMPAD2])
 	{
-		if (lpMap.GetMapPos().y > -8160)
+		if (lpMap.GetMapPos().y > -(mapSize.y - GRIDSIZE * 6))
 		{
 			pos.y += SPEED;
 			lpMap.GetMapPos().y -= SPEED;
@@ -147,7 +151,7 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	// ＊ﾌﾟﾚｲﾔｰのﾎﾟｼﾞｼｮﾝを足元に設定する。
 	
 	auto move = [&, dir = Prey::dir](DIR_TBL_ID id){
-		if (input[keyIdTbl[dirTbl[dir][id]]])
+		if (input[keyIdTbl[PREY_1][dirTbl[dir][id]]])
 		{
 			// 方向のｾｯﾄ
 			Prey::dir = dirTbl[dir][id];
@@ -186,7 +190,7 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	}
 	else
 	{
-		afterKeyFlag = input[keyIdTbl[dirTbl[dir][DIR_TBL_SUB1]]] || input[keyIdTbl[dirTbl[dir][DIR_TBL_SUB2]]] ^ (int)(GetAnimation() == "停止");
+		afterKeyFlag = input[keyIdTbl[PREY_1][dirTbl[dir][DIR_TBL_SUB1]]] || input[keyIdTbl[PREY_1][dirTbl[dir][DIR_TBL_SUB2]]] ^ (int)(GetAnimation() == "停止");
 	}
 	SetAnim("移動");
 	

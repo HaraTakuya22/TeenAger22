@@ -50,6 +50,8 @@ It::It(VECTOR2 pos)
 	afterKeyFlag = false;
 	// ‹S‚ÌÎß¼Þ¼®Ý‚Ì¾¯Ä
 	SetPos(pos);
+
+	itflag = true;
 }
 
 
@@ -81,7 +83,7 @@ void It::Move(const Controller & controll, WeakList objlist)
 	{
 		if (lpMap.GetMapPos().x > -11520)
 		{
-			camera.x = pos.x += SPEED;
+			pos.x += SPEED;
 			lpMap.GetMapPos().x -= SPEED;
 		}
 	}
@@ -90,7 +92,7 @@ void It::Move(const Controller & controll, WeakList objlist)
 	{
 		if (lpMap.GetMapPos().x < 240)
 		{
-			camera.x = pos.x -= SPEED;
+			pos.x -= SPEED;
 			lpMap.GetMapPos().x += SPEED;
 		}
 	}
@@ -99,7 +101,7 @@ void It::Move(const Controller & controll, WeakList objlist)
 	{
 		if (lpMap.GetMapPos().y < 240)
 		{
-			camera.y = pos.y -= SPEED;
+			pos.y -= SPEED;
 			lpMap.GetMapPos().y += SPEED;
 		}
 	}
@@ -108,7 +110,7 @@ void It::Move(const Controller & controll, WeakList objlist)
 	{
 		if (lpMap.GetMapPos().y > -8160)
 		{
-			camera.y = pos.y += SPEED;
+			pos.y += SPEED;
 			lpMap.GetMapPos().y -= SPEED;
 		}
 	}
@@ -185,7 +187,7 @@ void It::Move(const Controller & controll, WeakList objlist)
 
 bool It::Init(void)
 {
-	Obj::Init("character/character.png", camera.x + 320 - camera.x, camera.y + 280 - camera.y, VECTOR2(4, 4), VECTOR2(320 / 4, 480 / 4));
+	Obj::Init("character/character.png", VECTOR2(4, 4), VECTOR2(320 / 4, 480 / 4));
 	AddAnim("’âŽ~", 0, 0, 2, 6);
 	AddAnim("ˆÚ“®", 0, 2, 2, 6);
 	return true;

@@ -32,10 +32,6 @@ enum  SIDE_CHECK {
 	SIDE_MAX
 };
 
-
-
-
-
 #define PLAYER_DEF_SPEED 2
 
 // 鬼じゃない側のｻｲｽﾞ(Prey = 追われるもの)
@@ -72,11 +68,10 @@ private:
 
 
 	
-	DIR_TBL_ARRAY keyIdTbl;
-	DIR_TBL_ARRAY speedTbl;
+	DIR_TBL_ARRAY keyIdTbl[PREY_NUM::PREY_MAX];
 	DIR_TBL_PTR_ARRAY posTbl;
 	DIR_TBL_DIR dirTbl;
-	PASSAGE_TBL PassageTbl;		// アタリ判定
+	PASSAGE_TBL idTbl;		// アタリ判定
 
 };
 

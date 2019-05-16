@@ -12,16 +12,15 @@ Prey::Prey()
 
 Prey::Prey(VECTOR2 pos, PREY_NUM p_num)
 {
-	
-		this->pos.x = pos.x;
-		this->pos.y = pos.y;
+	this->pos.x = pos.x;
+	this->pos.y = pos.y;
 
-		//			MAIN	
-		posTbl = {	&pos.y,	&pos.x,	// 下
-					&pos.x,	&pos.y, // 左
-					&pos.x,	&pos.y, // 右
-					&pos.y,	&pos.x, // 上
-		};
+	//			MAIN	
+	posTbl = {	&pos.y,	&pos.x,	// 下
+				&pos.x,	&pos.y, // 左
+				&pos.x,	&pos.y, // 右
+				&pos.y,	&pos.x, // 上
+	};
 
 	//lpMap.GetMapPos() = { -640,-640 };
 	//			MAIN			
@@ -30,13 +29,6 @@ Prey::Prey(VECTOR2 pos, PREY_NUM p_num)
 				 KEY_INPUT_NUMPAD6,	// 右
 				 KEY_INPUT_NUMPAD8,	// 上
 	};
-	
-	//			MAIN
-	speedTbl = { PLAYER_DEF_SPEED,	// 下
-				 -PLAYER_DEF_SPEED,	// 左
-				 PLAYER_DEF_SPEED,	// 右
-				 -PLAYER_DEF_SPEED,	// 上
-	};
 	//			MAIN		OPP			SUB1		SUB2
 	dirTbl = { DIR_DOWN,	DIR_UP,		DIR_LEFT,	DIR_RIGHT,	// 下（上・左・右）
 				DIR_LEFT,	DIR_RIGHT,	DIR_DOWN,	DIR_UP,		// 左（右・下・上）
@@ -44,7 +36,7 @@ Prey::Prey(VECTOR2 pos, PREY_NUM p_num)
 				DIR_UP,		DIR_DOWN,	DIR_LEFT,	DIR_RIGHT,	// 上（下・左・右）
 	};
 
-	PassageTbl = {
+	idTbl = {
 	true,		//FLOOR			// 床
 	false,		//WALL			// 壁
 	false,		//CHAIR_1		// 椅子1
@@ -89,21 +81,18 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	auto input = controll.GetButtonInfo(KEY_TYPE_NOW);
 	auto inputOld = controll.GetButtonInfo(KEY_TYPE_OLD);
 
-	auto sidePos = [&](DIR dir, VECTOR2 pos, int speed, SIDE_CHECK sideFlag) {
+	auto sidePos = [&](DIR dir, VECTOR2 pos, SIDE_CHECK sideflag) {
 		VECTOR2 side;
 		switch (dir)
 		{
 		case DIR_LEFT:
-			side = { speed - (sideFlag ^ 1), 0 };
-			break;
+			side = { (sideflag - gridSize), 0 };
 		case DIR_RIGHT:
-			side = { speed + (gridSize - sideFlag), 0 };
-			break;
+			side = { sideflag, 0 };
 		case DIR_DOWN:
-			side = { 0, speed + (gridSize - sideFlag) };
-			break;
+			side = { 0, sideflag };
 		case DIR_UP:
-			side = { 0, speed - (sideFlag ^ 1) };
+			side = { 0,(sideflag - gridSize) };
 			break;
 		}
 		return pos + side;
@@ -113,48 +102,44 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	// 右移動
 	if (input[KEY_INPUT_NUMPAD6] & ~inputOld[KEY_INPUT_NUMPAD6])
 	{
-
-		if (PassageTbl[static_cast<int>(lpMap.GetMapData(sidePos(Prey::dir, pos, speedTbl[Prey::dir], IN_SIDE)))])
+		if (lpMap.GetMapPos().x > -11520)
 		{
-			if (lpMap.GetMapPos().x > -11520)
-			{
-				pos.x += SPEED;
-				lpMap.GetMapPos().x -= SPEED;
-				lpMap.individualsMapPos.x += GRIDSIZE;
-			}
+			pos.x += SPEED;
+			lpMap.GetMapPos().x -= SPEED;
+			lpMap.individualsMapPos.x += GRIDSIZE;
 		}
 	}
 
-		// 左移動
-		if (input[KEY_INPUT_NUMPAD4] & ~inputOld[KEY_INPUT_NUMPAD4])
+	// 左移動
+	if (input[KEY_INPUT_NUMPAD4] & ~inputOld[KEY_INPUT_NUMPAD4])
+	{
+		if (lpMap.GetMapPos().x < 240)
 		{
-			if (lpMap.GetMapPos().x < 240)
-			{
-				pos.x -= SPEED;
-				lpMap.GetMapPos().x += SPEED;
-				lpMap.individualsMapPos.x -= GRIDSIZE;
-			}
+			pos.x -= SPEED;
+			lpMap.GetMapPos().x += SPEED;
+			lpMap.individualsMapPos.x -= GRIDSIZE;
 		}
-		// 上移動
-		if (input[KEY_INPUT_NUMPAD8] & ~inputOld[KEY_INPUT_NUMPAD8])
+	}
+	// 上移動
+	if (input[KEY_INPUT_NUMPAD8] & ~inputOld[KEY_INPUT_NUMPAD8])
+	{
+		if (lpMap.GetMapPos().y < 240)
 		{
-			if (lpMap.GetMapPos().y < 240)
-			{
-				pos.y -= SPEED;
-				lpMap.GetMapPos().y += SPEED;
-				lpMap.individualsMapPos.y -= GRIDSIZE;
-			}
+			pos.y -= SPEED;
+			lpMap.GetMapPos().y += SPEED;
+			lpMap.individualsMapPos.y -= GRIDSIZE;
 		}
-		// 下移動
-		if (input[KEY_INPUT_NUMPAD2] & ~inputOld[KEY_INPUT_NUMPAD2])
+	}
+	// 下移動
+	if (input[KEY_INPUT_NUMPAD2] & ~inputOld[KEY_INPUT_NUMPAD2])
+	{
+		if (lpMap.GetMapPos().y > -8160)
 		{
-			if (lpMap.GetMapPos().y > -8160)
-			{
-				pos.y += SPEED;
-				lpMap.GetMapPos().y -= SPEED;
-				lpMap.individualsMapPos.y += GRIDSIZE;
-			}
+			pos.y += SPEED;
+			lpMap.GetMapPos().y -= SPEED;
+			lpMap.individualsMapPos.y += GRIDSIZE;
 		}
+	}
 
 
 	//----------------------------------------------------------------------------
@@ -166,16 +151,23 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 		{
 			// 方向のｾｯﾄ
 			Prey::dir = dirTbl[dir][id];
-			
-			// 補正処理
-			if ((*posTbl[Prey::dir][TBL_SUB]) % gridSize)
+			if (!idTbl[static_cast<int>(lpMap.GetMapData(sidePos(Prey::dir, pos, IN_SIDE)))])
 			{
-				(*posTbl[Prey::dir][TBL_SUB]) = (((*posTbl[Prey::dir][TBL_SUB] + gridSize / 2) / gridSize) * gridSize);
+				// 移動不可のｵﾌﾞｼﾞｪｸﾄが隣にあった場合
+				return false;
+			}
+			else
+			{
+				// 補正処理
+				if ((*posTbl[Prey::dir][TBL_SUB]) % gridSize)
+				{
+					(*posTbl[Prey::dir][TBL_SUB]) = (((*posTbl[Prey::dir][TBL_SUB] + gridSize / 2) / gridSize) * gridSize);
+				}
 			}
 			// 移動処理
 			if (!(*posTbl[Prey::dir][TBL_SUB] % gridSize))
 			{
-				(*posTbl[Prey::dir][TBL_MAIN]) += speedTbl[Prey::dir];
+				(*posTbl[Prey::dir][TBL_MAIN]) += SPEED;
 				return true;
 			}
 		}
@@ -197,7 +189,6 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 		afterKeyFlag = input[keyIdTbl[dirTbl[dir][DIR_TBL_SUB1]]] || input[keyIdTbl[dirTbl[dir][DIR_TBL_SUB2]]] ^ (int)(GetAnimation() == "停止");
 	}
 	SetAnim("移動");
-
 	
 	_RPTN(_CRT_WARN, "character.pos:%d,%d\n", pos.x, pos.y);
 	_RPTN(_CRT_WARN, "map.pos:%d,%d\n", lpMap.GetMapPos().x, lpMap.GetMapPos().y);
@@ -223,7 +214,6 @@ bool Prey::Init(PREY_NUM p_num)
 	}
 	
 	lpMap.IndividualsMapCalcPos(pos, player_cameraPos);
-	
 
 	AddAnim("停止", 0, 0, 2, 6);
 	AddAnim("移動", 0, 2, 2, 6);

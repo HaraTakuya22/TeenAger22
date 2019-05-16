@@ -73,10 +73,9 @@ private:
 
 	
 	DIR_TBL_ARRAY keyIdTbl;
-	DIR_TBL_ARRAY speedTbl;
 	DIR_TBL_PTR_ARRAY posTbl;
 	DIR_TBL_DIR dirTbl;
-	PASSAGE_TBL PassageTbl;		// アタリ判定
+	PASSAGE_TBL idTbl;		// アタリ判定
 
 };
 

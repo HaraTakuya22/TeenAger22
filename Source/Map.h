@@ -1,10 +1,12 @@
 #pragma once
 #include <vector>
+
+#include "Obj.h"
+
 #include "Controller.h"
 #include "VECTOR2.h"
 #include "AddList.h"
 #include "objID.h"
-#include "Obj.h"
 
 
 #define lpMap Map::getIns()
@@ -38,7 +40,6 @@ enum PASSAGE
 // 逃げる側の人数
 enum PLAYER
 {
-	PLAYER_MIN,		// 鬼モード
 	PLAYER_1,		// 1人
 	PLAYER_2,		// 2人
 	PLAYER_3,		// 3人
@@ -115,15 +116,23 @@ public:
 		return is_scale;
 	}
 
-	// cameraのﾎﾟｼﾞｼｮﾝの取得
+	// ｶｰｿﾙのcameraﾎﾟｼﾞｼｮﾝの取得
 	VECTOR2 GetCamera(void)
 	{
 		return cameraPos;
 	}
 
+	// ﾏｯﾌﾟのﾎﾟｼﾞｼｮﾝ計算関数
 	VECTOR2 MapCalcPos(VECTOR2 c_pos,VECTOR2 scroll);
+
+	// 個別のﾏｯﾌﾟｳｨﾝﾄﾞｳのﾎﾟｼﾞｼｮﾝ計算関数
+	VECTOR2& IndividualsMapCalcPos(VECTOR2 pos,VECTOR2 camera);
+
+	// ﾌﾟﾚｲﾔｰ毎のﾏｯﾌﾟ画面のﾎﾟｼﾞｼｮﾝ
+	VECTOR2 individualsMapPos;
+
 	// ｾｯﾄしたｵﾌﾞｼﾞｪｸﾄの描画
-	bool SetObj(VECTOR2 scale);
+	bool SetObj(VECTOR2 scale,bool is_edit);
 
 	// Mapの拡大縮小(EditSceneのみ)
 	bool ChangeMapScale(bool editF,Controller ctrl);
@@ -145,14 +154,24 @@ private:
 	// ｶｰｿﾙのﾎﾟｼﾞｼｮﾝ補正のためのｶﾒﾗﾎﾟｼﾞｼｮﾝ
 	VECTOR2 cameraPos;
 
+
+
 	// Mapを拡大縮小しているかどうかのﾌﾗｸﾞ
 	bool is_scale;
 
 	// ﾏｯﾌﾟの画像
 	int MapImage;
 
-	// 各ｳｨﾝﾄﾞｳ(追跡される側)
-	int Preywindow;
+	// 全体のﾏｯﾌﾟ画像
+	int mapAllwindow;
+	
+	// 各ｳｨﾝﾄﾞｳ、全体ﾏｯﾌﾟの描画制御ﾌﾗｸﾞ
+	bool is_mapCreate;
+
+	// 各ﾌﾟﾚｲﾔｰのｳｨﾝﾄﾞｳ
+	int preyWindow;
+	// 各ﾌﾟﾚｲﾔｰのｳｨﾝﾄﾞｳの描画制御ﾌﾗｸﾞ
+	bool is_preyWindowCreate;
 
 	// ﾏｯﾌﾟ専用のｳｨﾝﾄﾞｳ
 	int MapWindow;
@@ -180,8 +199,6 @@ private:
 	// ﾌﾟﾚｲﾔｰｲﾝｽﾀﾝｽﾌﾗｸﾞ(繰り返しｲﾝｽﾀﾝｽの防止)
 	bool is_makePrey;
 	
-	// 鬼のｲﾝｽﾀﾝｽﾌﾗｸﾞ(繰り返しｲﾝｽﾀﾝｽの防止)
-	bool is_makeIt;
 
 	//	引数のところで置き換えた型で宣言するということ
 	template<typename MapType, typename IDType>

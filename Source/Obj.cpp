@@ -1,4 +1,5 @@
 #include <DxLib.h>
+
 #include "Obj.h"
 #include "Image.h"
 
@@ -6,7 +7,8 @@
 Obj::Obj()
 {
 	deleteflag = false;
-
+	
+	player_cameraPos = { 320,280 };
 }
 
 
@@ -30,13 +32,14 @@ void Obj::Draw(void)
 		int flame = animTbl[AnimationName][ANIM_FLAME];
 		ID = start + (int)dir + (inter % flame) * DivCnt.x;
 	}
-	DrawGraph(pos.x + 320 - pos.x, pos.y + 280 - pos.y, ImageID(ImageName)[ID], true);
+	DrawGraph(pos.x + player_cameraPos.x - pos.x, pos.y + player_cameraPos.y - pos.y, ImageID(ImageName)[ID], true);
 }
+
 void Obj::Draw(unsigned int id)
 {
 	if (id < ImageID(ImageName).size())
 	{
-		DrawGraph(pos.x,pos.y, ImageID(ImageName)[id], true);
+		DrawGraph(pos.x, pos.y, ImageID(ImageName)[id], true);
 	}
 }
 

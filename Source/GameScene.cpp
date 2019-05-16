@@ -24,6 +24,8 @@ unique_Base GameScene::Update(unique_Base own, const Controller & Controller)
 	{
 		(*itr)->Update(Controller, objlist);
 	}
+	lpMap.ChangeMapScale(false, Controller);
+
 
 	// ¹Ş°ÑÊß¯ÄŞ‚ÌBack·°‚ğ‰Ÿ‰º ¨ EditScene‚ÉˆÚs
 	if (Pad & PAD_INPUT_11)

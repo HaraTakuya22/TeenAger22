@@ -11,7 +11,7 @@ class EditCursor :
 	public Obj
 {
 public:
-	EditCursor(VECTOR2 pos);
+	EditCursor(VECTOR2 cursorpos);
 	~EditCursor();
 	void Move(const Controller& controll, WeakList objlist);
 

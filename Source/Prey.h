@@ -32,6 +32,10 @@ enum  SIDE_CHECK {
 	SIDE_MAX
 };
 
+
+
+
+
 #define PLAYER_DEF_SPEED 2
 
 // 鬼じゃない側のｻｲｽﾞ(Prey = 追われるもの)
@@ -44,14 +48,14 @@ using DIR_TBL_PTR_ARRAY = std::array<int*[TBL_MAX],
 	DIR_MAX>;		// 直接ポインタに書き込んでる
 using DIR_TBL_DIR = std::array<DIR[DIR_TBL_MAX],
 	DIR_MAX>;
-using ID_TBL = std::array<bool, static_cast<int>(objID::ID_MAX)>;
+using PASSAGE_TBL = std::array<bool, static_cast<int>(objID::ID_MAX)>;
 
 class Prey :
 	public Obj
 {
 public:
 	Prey();
-	Prey(VECTOR2 pos);
+	Prey(VECTOR2 pos, PREY_NUM p_num);
 	~Prey();
 	void Move(const Controller& controll, WeakList objlist);
 	void Draw(void);
@@ -62,15 +66,17 @@ public:
 	}
 
 private:
-	bool Init(void);
+	bool Init(PREY_NUM p_num);
 	bool afterKeyFlag;				// ｷｰ処理用ﾌﾗｸﾞ
-	bool preyflag;
+
+
 
 	
 	DIR_TBL_ARRAY keyIdTbl;
+	DIR_TBL_ARRAY speedTbl;
 	DIR_TBL_PTR_ARRAY posTbl;
 	DIR_TBL_DIR dirTbl;
-	ID_TBL idTbl;		// アタリ判定
+	PASSAGE_TBL PassageTbl;		// アタリ判定
 
 };
 

@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <map>
+#include "Map.h"
 #include "Controller.h"
 #include "AddList.h"
 #include "VECTOR2.h"
@@ -37,6 +38,15 @@ enum OBJ_TYPE
 	TYPE_MAX
 };
 
+// prey‚Ìí—Ş
+enum PREY_NUM
+{
+	PREY_1,
+	PREY_2,
+	PREY_3,
+	PREY_MAX
+};
+
 
 class Obj
 {
@@ -64,10 +74,17 @@ public:
 	{
 		return AnimationName;
 	}
+	
 	//Îß¼Ş¼®İæ“¾
 	const VECTOR2 GetPos(void)
 	{
 		return pos;
+	}
+
+	//Îß¼Ş¼®İ¾¯Ä
+	void SetPos(VECTOR2 pos)
+	{
+		Obj::pos = pos;
 	}
 	// w’è‚ÌµÌŞ¼Şª¸Ä‚ğØ½Ä‚©‚çÁ‚·Ì×¸Ş‚ğ•Ô‚·
 	bool Getdeleteflag(void)
@@ -105,6 +122,12 @@ protected:
 	//Še·¬×‚ÌÎß¼Ş¼®İ‚ÌŠi”[•Ï”
 	VECTOR2 pos;
 
+	// ¶Ò×Îß¼Ş¼®İ(player(‹S‚àŠÜ‚ß‚é))
+	VECTOR2 player_cameraPos;
+
+	// prey‚Ìí—Ş‚ÌŠi”[—Ìˆæ
+	PREY_NUM preyNum;
+
 	//±ÆÒ°¼®İ¶³İÄ
 	unsigned int AniCnt;
 
@@ -113,10 +136,6 @@ protected:
 	// ‘OÌÚ°Ñ‚Ì‰Ÿ‰ºÌ×¸Ş
 	int InputOld[DIR_MAX];
 
-	//Îß¼Ş¼®İ¾¯Ä
-	void SetPos(VECTOR2 pos)
-	{
-		Obj::pos = pos;
-	}
+	
 };
 

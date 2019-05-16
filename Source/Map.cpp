@@ -148,8 +148,8 @@ bool Map::Init(void)
 
 	cameraPos = { 320,320 };
 
-	scaleCnt = { 1,1 };
-	gameWindowScale = { 0,0 };
+	mapScaleCnt = { 1,1 };
+	blockScaleCnt = { 1,1 };
 
 	is_scale = false;
 
@@ -180,9 +180,10 @@ void Map::CreateIndividualsDisplay(void)
 	// ﾏｯﾌﾟ全体の画像を基に各ﾌﾟﾚｲﾔｰのｳｨﾝﾄﾞｳのﾎﾟｼﾞｼｮﾝ毎に描画する画像の生成
 	if (preyWindow >= 0 && !is_preyWindowCreate)
 	{
-		preyWindow = MakeScreen(MAPSIZE_X, MAPSIZE_Y, true);
+		preyWindow = MakeScreen(Scr.x / mapScaleCnt.x, Scr.y / mapScaleCnt.y, true);
 		SetDrawScreen(preyWindow);
-		DrawRectGraph(0,0, individualsMapPos.x, individualsMapPos.y, MAPSIZE_X, MAPSIZE_Y, mapAllwindow, true, false);
+		DrawGraph(0, 0, mapAllwindow, true);
+		DrawRectGraph(0,0, individualsMapPos.x,individualsMapPos.y, Scr.x / mapScaleCnt.x, Scr.y / mapScaleCnt.y, mapAllwindow, true, false);
 		SetDrawScreen(DX_SCREEN_BACK);
 
 		is_preyWindowCreate = true;
@@ -211,9 +212,8 @@ void Map::IndividualsDraw(WeakList weaklist,bool gameF)
 		DrawFormatString(50, 50, 0xffffff, "Player1");
 		DrawFormatString(0, 100, 0xff0000, "ind_map.x:%d\nind_map.y;%d", individualsMapPos.x, individualsMapPos.y);
 		//---------------------------------------------
-		//DrawRectGraph(mapPos.x, mapPos.y,0,0,MAPSIZE_X / scaleCnt,MAPSIZE_Y / scaleCnt, MapImage, true,false);
 
-		DrawExtendGraph(mapPos.x, mapPos.y,(MAPSIZE_X / scaleCnt.x) + mapPos.x,(MAPSIZE_Y / scaleCnt.y) + mapPos.y, preyWindow, true);
+		DrawGraph(mapPos.x, mapPos.y,preyWindow, true);
 		// Preyのｲﾝｽﾀﾝｽ(GameSceneのみ)
 		if (gameF && !is_makePrey)
 		{
@@ -225,16 +225,16 @@ void Map::IndividualsDraw(WeakList weaklist,bool gameF)
 	// player2の画面表示
 	if (player == PLAYER_2)
 	{
-		for (int windowsNum = 0; windowsNum < 2; windowsNum++)
+		for (windowsNum = 1; windowsNum >= 0; windowsNum--)
 		{
-			DrawExtendGraph(mapPos.x + (Scr.x * windowsNum), mapPos.y + (Scr.y * windowsNum), 
-							(MAPSIZE_X / scaleCnt.x) + mapPos.x + (Scr.x * windowsNum), (MAPSIZE_Y / scaleCnt.y) + mapPos.y + (Scr.y * windowsNum),
+			DrawExtendGraph(mapPos.x + ((Scr.x / 2) * windowsNum), mapPos.y, 
+							(MAPSIZE_X / mapScaleCnt.x) + mapPos.x + ((Scr.x / 2) * windowsNum), (MAPSIZE_Y / mapScaleCnt.y) + mapPos.y,
 							preyWindow, true);
 			// Preyのｲﾝｽﾀﾝｽ(GameSceneのみ)
 			if (gameF && !is_makePrey)
 			{
-				AddList()(weaklist, std::make_unique<Prey>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4 - 40), PREY_1));
-				AddList()(weaklist, std::make_unique<Prey>(VECTOR2((GRIDSIZE * 4) + (mapPos.x + (Scr.x * windowsNum)), (GRIDSIZE * 4 - 40) + (mapPos.y + (Scr.y * windowsNum))),PREY_2));
+				AddList()(weaklist, std::make_unique<Prey>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4 - 40), PREY_2));
+				//AddList()(weaklist, std::make_unique<Prey>(VECTOR2((GRIDSIZE * 4) + (mapPos.x + (Scr.x * windowsNum)), (GRIDSIZE * 4 - 40) + (mapPos.y + (Scr.y * windowsNum))),PREY_2));
 
 				is_makePrey = true;
 			}
@@ -258,7 +258,7 @@ void Map::IndividualsDraw(WeakList weaklist,bool gameF)
 
 	if (!gameF)
 	{
-		DrawExtendGraph(mapPos.x, mapPos.y, mapPos.x + (MAPSIZE_X / scaleCnt.x), mapPos.y + (MAPSIZE_Y / scaleCnt.y), MapImage, true);
+		DrawExtendGraph(mapPos.x, mapPos.y, mapPos.x + (MAPSIZE_X / mapScaleCnt.x), mapPos.y + (MAPSIZE_Y / mapScaleCnt.y), MapImage, true);
 	}
 }
 
@@ -399,7 +399,7 @@ bool Map::LoadMap(void)
 	//isCmp == true →　正しくloadされたとき
 	if (isCmp)
 	{
-		SetObj(scaleCnt,false);
+		SetObj(blockScaleCnt,false);
 	}
 
 	return isCmp;
@@ -487,10 +487,25 @@ bool Map::SetObj(VECTOR2 scale,bool is_edit)
 				}
 				else
 				{
-					DrawExtendGraph((x * (ChipSize.x / scale.x)) + mapPos.x, (y * (ChipSize.y / scale.y)) + mapPos.y,
-						((x * (ChipSize.x / scale.x)) + (ChipSize.x / scale.x)) + mapPos.x, (((y * (ChipSize.y / scale.y))) + (ChipSize.y / scale.y)) + mapPos.y,
-						lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
+					if (player == PLAYER_1)
+					{
+						DrawExtendGraph((x * (ChipSize.x / scale.x)) + mapPos.x, (y * (ChipSize.y / scale.y)) + mapPos.y,
+							((x * (ChipSize.x / scale.x)) + (ChipSize.x / scale.x)) + mapPos.x, (((y * (ChipSize.y / scale.y))) + (ChipSize.y / scale.y)) + mapPos.y,
+							lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
+					}
+					else if (player == PLAYER_2)
+					{
+						for (windowsNum = 0; windowsNum < 2; windowsNum++)
+						{
+							DrawExtendGraph((x * (ChipSize.x / scale.x)) + mapPos.x + ((Scr.x / 2) * windowsNum), (y * (ChipSize.y / scale.y)) + mapPos.y + ((Scr.y / 2) * windowsNum),
+								((x * (ChipSize.x / scale.x)) + (ChipSize.x / scale.x)) + mapPos.x + ((Scr.x / 2) * windowsNum), (((y * (ChipSize.y / scale.y))) + (ChipSize.y / scale.y)) + mapPos.y + ((Scr.y / 2) * windowsNum),
+								lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
+						}
+					}
+					else if(player == PLAYER_3)
+					{
 
+					}
 				}
 				break;
 			case objID::BOOKSHELF:
@@ -668,19 +683,19 @@ bool Map::ChangeMapScale(bool editF,Controller ctrl)
 	if (editF)
 	{
 		if (cntNow[KEY_INPUT_COMMA] & ~cntOld[KEY_INPUT_COMMA]
-			&& (scaleCnt.x == 1 && scaleCnt.y == 1))
+			&& (mapScaleCnt.x == 1 && mapScaleCnt.y == 1))
 		{
 			mapPos = { 0,0 };
 
-			scaleCnt.x *= 4;
-			scaleCnt.y *= 4;
+			mapScaleCnt.x *= 4;
+			mapScaleCnt.y *= 4;
 			is_scale = true;
 		}
 		if (cntNow[KEY_INPUT_PERIOD] & ~cntOld[KEY_INPUT_PERIOD]
-			&& (scaleCnt.x == 4 && scaleCnt.y == 4))
+			&& (mapScaleCnt.x == 4 && mapScaleCnt.y == 4))
 		{
-			scaleCnt.x /= 4;
-			scaleCnt.y /= 4;
+			mapScaleCnt.x /= 4;
+			mapScaleCnt.y /= 4;
 			is_scale = false;
 		}
 	}
@@ -689,16 +704,22 @@ bool Map::ChangeMapScale(bool editF,Controller ctrl)
 		switch (player)
 		{
 		case PLAYER_1:
-			scaleCnt.x = 1;
-			scaleCnt.y = 1;
+			blockScaleCnt.x = 1;
+			blockScaleCnt.y = 1;
+			mapScaleCnt.x = 1;
+			mapScaleCnt.y = 1;
 			break;
 		case PLAYER_2:
-			scaleCnt.x = 1;
-			scaleCnt.y = 1;
+			blockScaleCnt.x = 1;
+			blockScaleCnt.y = 1;
+			mapScaleCnt.x = 2;
+			mapScaleCnt.y = 2;
 			break;
 		case PLAYER_3:
-			scaleCnt.x = 2;
-			scaleCnt.y = 2;
+			blockScaleCnt.x =
+			blockScaleCnt.y =
+			mapScaleCnt.x = 2;
+			mapScaleCnt.y = 2;
 			break;
 		default:
 			break;

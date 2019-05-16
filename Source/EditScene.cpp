@@ -83,7 +83,7 @@ void EditScene::EditDraw(void)
 	//lpMap.CreateIndividualsDisplay();
 
 	lpMap.MapDraw(false);
-	lpMap.SetObj(lpMap.scaleCnt,true);
+	lpMap.SetObj(lpMap.blockScaleCnt,true);
 	//	´ÃÞ¨¯Ä¼°ÝŽž‚Ì•`‰æ
 	auto itr = objlist->begin();
 	(*itr)->Draw();

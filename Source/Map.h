@@ -136,9 +136,10 @@ public:
 
 	// Map‚ÌŠg‘åk¬(EditScene‚Ì‚İ)
 	bool ChangeMapScale(bool editF,Controller ctrl);
-	// Map‘S‘Ì‚ÌŠg‘åk¬—¦
-	VECTOR2 scaleCnt;
-	VECTOR2 gameWindowScale;
+	// Map‚ÌŠg‘åk¬—¦
+	VECTOR2 mapScaleCnt;
+	// ‚»‚ê‚¼‚ê‚ÌÁ¯Ìß‚ÌŠg‘åk¬—¦
+	VECTOR2 blockScaleCnt;
 
 	// ÌßÚ²Ô°‚Ìl”‚ÌŠi”[•Ï”
 	PLAYER player;
@@ -175,6 +176,9 @@ private:
 
 	// Ï¯Ìßê—p‚Ì³¨İÄŞ³
 	int MapWindow;
+
+	// ƒQ[ƒ€‰æ–Ê‚ğ•ªŠ„‚µ‚½Û‚Ì•ªŠ„‰ñ”
+	int windowsNum;
 
 	// ½¸Ø°İ‘S‘Ì‚Ì»²½Ş
 	VECTOR2 Scr;

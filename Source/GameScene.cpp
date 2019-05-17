@@ -24,7 +24,7 @@ unique_Base GameScene::Update(unique_Base own, const Controller & Controller)
 	{
 		(*itr)->Update(Controller, objlist);
 	}
-	lpMap.ChangeMapScale(false, Controller);
+	lpMap.ChangeEditMapScale(Controller);
 
 
 	// πﬁ∞— ﬂØƒﬁÇÃBack∑∞Çâüâ∫ Å® EditSceneÇ…à⁄çs
@@ -47,7 +47,7 @@ int GameScene::Init(void)
 	{
 		objlist = std::make_shared<Shared_ObjList>();
 	}
-	lpMap.setUp(VECTOR2(MAPSIZE_X, MAPSIZE_Y), VECTOR2(GRIDSIZE, GRIDSIZE));
+	lpMap.setUp(VECTOR2(MAPSIZE_X, MAPSIZE_Y), VECTOR2(GRIDSIZE, GRIDSIZE), PREY_1);
 	lpMap.GetMapPos() = { 0,0 };
 	return 0;
 }

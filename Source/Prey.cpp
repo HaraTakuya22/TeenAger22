@@ -12,17 +12,17 @@ Prey::Prey()
 
 Prey::Prey(VECTOR2 pos, PREY_NUM p_num)
 {
-	
-	// playerのﾎﾟｼﾞｼｮﾝのｾｯﾄ
-	//SetPos(pos);
 	Prey::Init(p_num);
+
+
+	SetPos(player[0].pos[PREY_1]);
 	for (int i = 0; i < PLAYER_MAX; i++)
 	{
 		player[i].Flag = true;
 		player[i].animation = 0;
 	}
-	player[0].pos[PREY_1].x = GRIDSIZE * 3;
-	player[0].pos[PREY_1].y = GRIDSIZE * 4;
+	//player[0].pos[PREY_1].x = GRIDSIZE * 3;
+	//player[0].pos[PREY_1].y = GRIDSIZE * 4;
 	player[0].dir = DIR_DOWN;
 	player[1].dir = DIR_DOWN;
 }
@@ -41,15 +41,28 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	auto input = controll.GetButtonInfo(KEY_TYPE_NOW);
 	auto inputOld = controll.GetButtonInfo(KEY_TYPE_OLD);
 
+	//int keyList[PLAYER_MAX][DIR_MAX] = {
+	//	{ KEY_INPUT_A,	// 左
+	//	  KEY_INPUT_D,	// 右
+	//	  KEY_INPUT_W,	// 上
+	//	  KEY_INPUT_S	// 下
+	//	},
+	//	{ KEY_INPUT_NUMPAD4,	// 左
+	//	  KEY_INPUT_NUMPAD6,	// 右
+	//	  KEY_INPUT_NUMPAD8,	// 上
+	//	  KEY_INPUT_NUMPAD2		// 下
+	//	},
+	//};
+
 	// 移動処理(Mapの移動 & ﾌﾟﾚｲﾔｰの移動)-----------------------------
 	// 右移動
 	if (input[KEY_INPUT_NUMPAD6] & ~inputOld[KEY_INPUT_NUMPAD6])
 	{
-		if (lpMap.GetMapPos().x > -(mapSize.x - GRIDSIZE * 6))
+		if (lpMap.GetMapPos().x > -(mapSize.x - GRIDSIZE * 5))
 		{
 			player[0].pos[PREY_1].x += SPEED;
 			lpMap.GetMapPos().x -= SPEED;
-			lpMap.individualsMapPos.x += GRIDSIZE;
+			lpMap.individualsMapPos.x += SPEED;
 			player[0].dir = DIR_RIGHT;
 			player[0].animation++;
 		}
@@ -58,11 +71,11 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	// 左移動
 	if (input[KEY_INPUT_NUMPAD4] & ~inputOld[KEY_INPUT_NUMPAD4])
 	{
-		if (lpMap.GetMapPos().x < GRIDSIZE * 3)
+		if (lpMap.GetMapPos().x < GRIDSIZE * 2)
 		{
 			player[0].pos[PREY_1].x -= SPEED;
 			lpMap.GetMapPos().x += SPEED;
-			lpMap.individualsMapPos.x -= GRIDSIZE;
+			lpMap.individualsMapPos.x -= SPEED;
 			player[0].dir = DIR_LEFT;
 			player[0].animation++;
 		}
@@ -92,7 +105,6 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 		}
 	}
 
-
 	//----------------------------------------------------------------------------
 
 	// ＊ﾌﾟﾚｲﾔｰのﾎﾟｼﾞｼｮﾝを足元に設定する。
@@ -105,8 +117,23 @@ void Prey::Draw(void)
 {
 	Obj::Draw();
 
+	//DrawGraph(GRIDSIZE * 3, GRIDSIZE * 4 - 40, charimage[PREY_1].image[0][0], true);
+	//DrawGraph(GRIDSIZE * 3, GRIDSIZE * 4 - 40, charimage[PREY_2].image[0][0], true);
+
+	int animID = (player[0].animation / 1) % ANIMATION_MAX;
+
+	DrawGraph(GRIDSIZE * 3, GRIDSIZE * 4 - 40, charimage[PREY_1].image[player[0].dir][animID], true);
+
+	DrawFormatString(0, 0, 0xffffff, "character.pos:%d,%d\n", player[0].pos[PREY_1].x, player[0].pos[PREY_1].y);
+	DrawFormatString(0, 20, 0xffffff, "map.pos:%d,%d\n", lpMap.GetMapPos().x, lpMap.GetMapPos().y);
+}
+
+bool Prey::Init(PREY_NUM p_num)
+{
+	lpMap.IndividualsMapCalcPos(pos, player_cameraPos);
+
 	const char *imageList[PREY_MAX] = {
-		{"character/character1.png" },
+		{"character/character.png" },
 		{"character/character2.png"},
 	};
 
@@ -114,23 +141,6 @@ void Prey::Draw(void)
 	{
 		LoadDivGraph(imageList[i], DIR_MAX * ANIMATION_MAX, ANIMATION_MAX, DIR_MAX, PREYSIZE_X, PREYSIZE_Y, &charimage[i].image[0][0]);
 	}
-	
-}
-
-bool Prey::Init(PREY_NUM p_num)
-{
-	int animID = (player[0].animation / 1) % ANIMATION_MAX;
-
-	if (p_num == PREY_1)
-	{
-		DrawGraph(GRIDSIZE * 3, GRIDSIZE * 4 - 40, charimage[PREY_1].image[player[0].dir][animID], true);
-	}
-	if (p_num == PREY_2)
-	{
-		Obj::Init("character/character2.png", VECTOR2(4, 4), VECTOR2(320 / 4, 480 / 4));
-	}
-	
-	lpMap.IndividualsMapCalcPos(pos, player_cameraPos);
 
 	return true;
 }

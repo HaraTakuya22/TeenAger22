@@ -38,14 +38,7 @@ enum OBJ_TYPE
 	TYPE_MAX
 };
 
-// prey‚ÌŽí—Þ
-enum PREY_NUM
-{
-	PREY_1,
-	PREY_2,
-	PREY_3,
-	PREY_MAX
-};
+
 
 
 class Obj
@@ -125,8 +118,7 @@ protected:
 	// ¶Ò×Îß¼Þ¼®Ý(player(‹S‚àŠÜ‚ß‚é))
 	VECTOR2 player_cameraPos;
 
-	// prey‚ÌŽí—Þ‚ÌŠi”[—Ìˆæ
-	PREY_NUM preyNum;
+	
 
 	//±ÆÒ°¼®Ý¶³ÝÄ
 	unsigned int AniCnt;

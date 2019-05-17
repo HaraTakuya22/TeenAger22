@@ -37,13 +37,22 @@ enum PASSAGE
 };
 
 
-// 逃げる側の人数
+// 人数に応じてmodeを変更
 enum PLAYER
 {
 	PLAYER_1,		// 1人
 	PLAYER_2,		// 2人
 	PLAYER_3,		// 3人
 	PLAYER_MAX
+};
+
+// preyの種類
+enum PREY_NUM
+{
+	PREY_1,
+	PREY_2,
+	PREY_3,
+	PREY_MAX
 };
 
 class Map
@@ -85,7 +94,7 @@ public:
 	void IndividualsDraw(WeakList weaklist,bool gameF);
 
 	// 画面のｾｯﾄ
-	void setUp(const VECTOR2& size, const VECTOR2& chipSize);
+	void setUp(const VECTOR2& size, const VECTOR2& chipSize, PREY_NUM p_num);
 
 	bool setMapData(const VECTOR2& pos, objID id);
 	objID GetMapData(const VECTOR2& pos);
@@ -135,7 +144,9 @@ public:
 	bool SetObj(VECTOR2 scale,bool is_edit);
 
 	// Mapの拡大縮小(EditSceneのみ)
-	bool ChangeMapScale(bool editF,Controller ctrl);
+	bool ChangeEditMapScale(Controller ctrl);
+	// Mapの拡大縮小率の決定関数(GameSceneのみ)
+	bool ChangePreyMapScale(void);
 	// Mapの拡大縮小率
 	VECTOR2 mapScaleCnt;
 	// それぞれのﾁｯﾌﾟの拡大縮小率
@@ -143,7 +154,8 @@ public:
 
 	// ﾌﾟﾚｲﾔｰの人数の格納変数
 	PLAYER player;
-
+	// preyの種類の格納領域
+	PREY_NUM preyNum;
 private:
 	Map();
 	~Map();
@@ -165,20 +177,20 @@ private:
 
 	// 全体のﾏｯﾌﾟ画像
 	int mapAllwindow;
+
+	int preyWindow;
 	
 	// 各ｳｨﾝﾄﾞｳ、全体ﾏｯﾌﾟの描画制御ﾌﾗｸﾞ
 	bool is_mapCreate;
-
-	// 各ﾌﾟﾚｲﾔｰのｳｨﾝﾄﾞｳ
-	int preyWindow;
-	// 各ﾌﾟﾚｲﾔｰのｳｨﾝﾄﾞｳの描画制御ﾌﾗｸﾞ
 	bool is_preyWindowCreate;
 
 	// ﾏｯﾌﾟ専用のｳｨﾝﾄﾞｳ
 	int MapWindow;
 
-	// ゲーム画面を分割した際の分割回数
-	int windowsNum;
+	// ゲーム画面を分割した際の分割回数X軸
+	int windowsNumX;
+	// ゲーム画面を分割した際の分割回数Y軸
+	int windowsNumY;
 
 	// ｽｸﾘｰﾝ全体のｻｲｽﾞ
 	VECTOR2 Scr;

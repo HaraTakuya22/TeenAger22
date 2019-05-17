@@ -162,11 +162,11 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 			}
 			else
 			{
-				// ï‚ê≥èàóù
-				if ((*posTbl[Prey::dir][TBL_SUB]) % gridSize)
-				{
-					(*posTbl[Prey::dir][TBL_SUB]) = (((*posTbl[Prey::dir][TBL_SUB] + gridSize / 2) / gridSize) * gridSize);
-				}
+				//// ï‚ê≥èàóù
+				//if ((*posTbl[Prey::dir][TBL_SUB]) % gridSize)
+				//{
+				//	(*posTbl[Prey::dir][TBL_SUB]) = (((*posTbl[Prey::dir][TBL_SUB] + gridSize / 2) / gridSize) * gridSize);
+				//}
 			}
 			// à⁄ìÆèàóù
 			if (!(*posTbl[Prey::dir][TBL_SUB] % gridSize))

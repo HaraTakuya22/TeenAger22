@@ -1,7 +1,9 @@
 #include <DxLib.h>
+#include "Obj.h"
 #include "Scene.h"
 #include "GameScene.h"
 #include "EditScene.h"
+
 #include "Map.h"
 
 
@@ -47,7 +49,7 @@ int GameScene::Init(void)
 	{
 		objlist = std::make_shared<Shared_ObjList>();
 	}
-	lpMap.setUp(VECTOR2(MAPSIZE_X, MAPSIZE_Y), VECTOR2(GRIDSIZE, GRIDSIZE), PREY_1);
+	lpMap.setUp(VECTOR2(MAPSIZE_X, MAPSIZE_Y), VECTOR2(GRIDSIZE, GRIDSIZE));
 	lpMap.GetMapPos() = { 0,0 };
 	return 0;
 }

@@ -7,6 +7,8 @@
 #include "VECTOR2.h"
 #include "AddList.h"
 #include "objID.h"
+//#include "Prey.h"
+
 
 
 #define lpMap Map::getIns()
@@ -46,14 +48,7 @@ enum PLAYER
 	PLAYER_MAX
 };
 
-// prey‚Ìí—Ş
-enum PREY_NUM
-{
-	PREY_1,
-	PREY_2,
-	PREY_3,
-	PREY_MAX
-};
+
 
 class Map
 {
@@ -94,10 +89,10 @@ public:
 	void IndividualsDraw(WeakList weaklist,bool gameF);
 
 	// ‰æ–Ê‚Ì¾¯Ä
-	void setUp(const VECTOR2& size, const VECTOR2& chipSize, PREY_NUM p_num);
+	void setUp(const VECTOR2& size, const VECTOR2& chipSize);
 
-	bool setMapData(const VECTOR2& pos, objID id);
-	objID GetMapData(const VECTOR2& pos);
+	bool setMapData(const VECTOR2* pos, objID id);
+	objID GetMapData(const VECTOR2* pos);
 
 	//	ÃŞ°À¾°ÌŞŠÖ”
 	bool SaveMap(void);
@@ -107,7 +102,11 @@ public:
 	// Ï¯Ìß‚ÌÎß¼Ş¼®İæ“¾
 	VECTOR2& GetMapPos(void)
 	{
-		return mapPos;
+		return mapPos[typeNum];
+	}
+	VECTOR2& GetIndividualsmapPos(void)
+	{
+		return individualsMapPos[typeNum];
 	}
 	// Map‚Ì»²½Şæ“¾
 	VECTOR2 GetMapSize(void)
@@ -132,13 +131,12 @@ public:
 	}
 
 	// Ï¯Ìß‚ÌÎß¼Ş¼®İŒvZŠÖ”
-	VECTOR2 MapCalcPos(VECTOR2 c_pos,VECTOR2 scroll);
+	VECTOR2 MapCalcPos(VECTOR2* c_pos,VECTOR2 scroll);
 
 	// ŒÂ•Ê‚ÌÏ¯Ìß³¨İÄŞ³‚ÌÎß¼Ş¼®İŒvZŠÖ”
-	VECTOR2& IndividualsMapCalcPos(VECTOR2 pos,VECTOR2 camera);
+	VECTOR2& IndividualsMapCalcPos(VECTOR2* pos,VECTOR2 camera);
 
-	// ÌßÚ²Ô°–ˆ‚ÌÏ¯Ìß‰æ–Ê‚ÌÎß¼Ş¼®İ
-	VECTOR2 individualsMapPos;
+	
 
 	// ¾¯Ä‚µ‚½µÌŞ¼Şª¸Ä‚Ì•`‰æ
 	bool SetObj(VECTOR2 scale,bool is_edit);
@@ -154,8 +152,7 @@ public:
 
 	// ÌßÚ²Ô°‚Ìl”‚ÌŠi”[•Ï”
 	PLAYER player;
-	// prey‚Ìí—Ş‚ÌŠi”[—Ìˆæ
-	PREY_NUM preyNum;
+	TYPE_NUM typeNum;
 private:
 	Map();
 	~Map();
@@ -163,12 +160,13 @@ private:
 	VECTOR2 setPos;
 
 	// Ï¯Ìß‚Ì¶ã‚ÌÎß¼Ş¼®İ
-	VECTOR2 mapPos;
+	VECTOR2 mapPos[PREY_MAX];
+
+	// ÌßÚ²Ô°–ˆ‚ÌÏ¯Ìß‰æ–Ê‚ÌÎß¼Ş¼®İ
+	VECTOR2 individualsMapPos[PREY_MAX];
+
 	// ¶°¿Ù‚ÌÎß¼Ş¼®İ•â³‚Ì‚½‚ß‚Ì¶Ò×Îß¼Ş¼®İ
 	VECTOR2 cameraPos;
-
-
-
 	// Map‚ğŠg‘åk¬‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ÌÌ×¸Ş
 	bool is_scale;
 
@@ -219,7 +217,7 @@ private:
 	//	ˆø”‚Ì‚Æ‚±‚ë‚Å’u‚«Š·‚¦‚½Œ^‚ÅéŒ¾‚·‚é‚Æ‚¢‚¤‚±‚Æ
 	template<typename MapType, typename IDType>
 	// Map‚ÉÁ¯Ìßî•ñ‚ğ–„‚ß‚ŞŠÖ”
-	bool setData(MapType maptype, const VECTOR2& pos, IDType id);
+	bool setData(MapType maptype, const VECTOR2* pos, IDType id);
 
 	template<typename MapType, typename IDType>
 	IDType GetData(MapType maptype, const VECTOR2& pos, IDType defID);

@@ -8,10 +8,12 @@
 #define EDITCURSOR_DEF_RNG	(30)
 #define EDITCURSOR_MIN_RNG	(5)
 
-EditCursor::EditCursor(VECTOR2 pos)
+EditCursor::EditCursor(VECTOR2* pos,TYPE_NUM num)
 {
-	this->pos.x = pos.x;
-	this->pos.y = pos.y;
+	this->typeNum = num;
+
+ 	this->pos[num].x = pos[num].x;
+	this->pos[num].y = pos[num].y;
 
 	lpMap.GetCamera() = {320,320};
 
@@ -27,11 +29,11 @@ EditCursor::~EditCursor()
 
 void EditCursor::Move(const Controller & controll, WeakList objlist)
 {
-	InputOld[dir] = InputNow[dir];
+	InputOld[dir[typeNum]] = InputNow[typeNum];
 	ChangeInputOld = ChangeInput;
 	ChangeInputBackOld = ChangeInputBack;
 	SetInputOld = SetInput;
-	VECTOR2 tmp(pos);
+	VECTOR2 tmp(pos[typeNum]);
 	VECTOR2 tmpMappos(lpMap.GetMapPos());
 
 	// ¹Þ°ÑÊß¯ÄÞ‚Ì“ü—Í
@@ -50,7 +52,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (Pad & PAD_INPUT_RIGHT)
 	{
 		// ‰Ÿ‚µ‚Ä‚¢‚é
-		dir = DIR_RIGHT;
+		dir[typeNum] = DIR_RIGHT;
 		InputNow[DIR_RIGHT] = PAD_INPUT_NOW;
 	}
 	else
@@ -61,7 +63,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	// ‰EÎÞÀÝ‚ð‰Ÿ‚µ‚Ä‚¢‚éuŠÔ
 	if (InputNow[DIR_RIGHT] & ~InputOld[DIR_RIGHT])
 	{
-		pos.x += GRIDSIZE;
+		pos[typeNum].x += GRIDSIZE;
 		// ¶°¿Ù‚ÌÎß¼Þ¼®Ý§Œä
 		if (tmp.x >= Scr.x - GRIDSIZE)
 		{
@@ -74,7 +76,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (Pad & PAD_INPUT_LEFT)
 	{
 		// ‰Ÿ‚µ‚Ä‚¢‚é
-		dir = DIR_LEFT;
+		dir[typeNum] = DIR_LEFT;
 		InputNow[DIR_LEFT] = PAD_INPUT_NOW;
 	}
 	else
@@ -97,8 +99,8 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (Pad & PAD_INPUT_UP)
 	{
 		// ‰Ÿ‚µ‚Ä‚¢‚é
-		dir = DIR_UP;
-		InputNow[dir] = PAD_INPUT_NOW;
+		dir[typeNum] = DIR_UP;
+		InputNow[dir[typeNum]] = PAD_INPUT_NOW;
 	}
 	else
 	{
@@ -120,8 +122,8 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (Pad & PAD_INPUT_DOWN)
 	{
 		// ‰Ÿ‚µ‚Ä‚¢‚é
-		dir = DIR_DOWN;
-		InputNow[dir] = PAD_INPUT_NOW;
+		dir[typeNum] = DIR_DOWN;
+		InputNow[dir[typeNum]] = PAD_INPUT_NOW;
 	}
 	else
 	{
@@ -184,7 +186,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (SetInput & ~SetInputOld)
 	{
 		setF = true;
-		lpMap.setMapData(pos, id);
+		lpMap.setMapData(&pos[typeNum], id);
 
 	}
 	else
@@ -200,7 +202,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 		{
 			tmp.x = (lpMap.GetMapSize().x - (gridSize.x * 2));
 		}
-		lpMap.GetMapPos().x = lpMap.MapCalcPos(tmp, lpMap.GetCamera()).x;
+		lpMap.GetMapPos().x = lpMap.MapCalcPos(&tmp, lpMap.GetCamera()).x;
 		tmpMappos.y = lpMap.GetMapPos().y;
 	}
 	// ---------------------------------------------------------
@@ -213,7 +215,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 		{
 			tmp.x = 0;
 		}
-		lpMap.GetMapPos().x = lpMap.MapCalcPos(tmp, lpMap.GetCamera()).x;
+		lpMap.GetMapPos().x = lpMap.MapCalcPos(&tmp, lpMap.GetCamera()).x;
 
 		tmpMappos.y = lpMap.GetMapPos().y;
 	}
@@ -228,7 +230,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 			tmp.y = 0;
 		}
 		tmpMappos.x = lpMap.GetMapPos().x;
-		tmpMappos.y = lpMap.MapCalcPos(tmp, lpMap.GetCamera()).y;
+		tmpMappos.y = lpMap.MapCalcPos(&tmp, lpMap.GetCamera()).y;
 	}
 	//----------------------------------------------------
 
@@ -241,20 +243,20 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 			tmp.y = lpMap.GetMapSize().y - gridSize.y;
 		}
 		tmpMappos.x = lpMap.GetMapPos().x;
-		tmpMappos.y = lpMap.MapCalcPos(tmp, lpMap.GetCamera()).y;
+		tmpMappos.y = lpMap.MapCalcPos(&tmp, lpMap.GetCamera()).y;
 		if (tmpMappos.y <= -(lpMap.GetMapSize().y - 500))
 		{
-			tmpMappos.y = -(lpMap.MapCalcPos(tmp, lpMap.GetCamera()).y - 500);
+			tmpMappos.y = -(lpMap.MapCalcPos(&tmp, lpMap.GetCamera()).y - 500);
 		}
 	}
 
 	//¶°¿Ù‚ÌˆÚ“®i™X‚É‘¬‚­‚È‚Á‚Ä‚¢‚­ˆ—j-----------------------------
-	if (tmp != pos)								//·°‚ð‰Ÿ‚µ‚Ä‚¢‚éŠÔ‚Ìˆ—
+	if (tmp != pos[typeNum])								//·°‚ð‰Ÿ‚µ‚Ä‚¢‚éŠÔ‚Ìˆ—
 	{
 		inputFrame++;								//‰ÁŽZ
 		if (inputFrame >= keyDefRng)				//
 		{
-			pos = tmp;
+			pos[typeNum] = tmp;
 			inputFrame = 0;							//ÎÞÀÝ‚©‚çŽè‚ð—£‚µ‚½‚Æ‚«0¸Ø‚·‚é
 			keyDefRng /= 2;							//ÎÞÀÝ‚ð‰Ÿ‚µ‘±‚¯‚Ä‚¢‚é‚Æ‚¾‚ñ‚¾‚ñ‰Á‘¬
 			if (keyDefRng < EDITCURSOR_MIN_RNG)			//‰Á‘¬‚ª5‚É‚È‚Á‚½‚ç‚»‚±‚Å‚¸‚Á‚Æ5‚É‚·‚é
@@ -288,13 +290,13 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (cnt_now[KEY_INPUT_SPACE] & ~cnt_old[KEY_INPUT_SPACE])
 	{
 		setF = true;
-		lpMap.setMapData(tmp, id);
+		lpMap.setMapData(&tmp, id);
 	}
 	else
 	{
 		setF = false;
 	}
-	_RPTN(_CRT_WARN, "ID:[%d:%d]%d\n", pos.x, pos.y, id);
+	_RPTN(_CRT_WARN, "ID:[%d:%d]%d\n", pos[typeNum].x, pos[typeNum].y, id);
 }
 
 void EditCursor::Draw(void)
@@ -358,6 +360,6 @@ void EditCursor::Draw(void)
 	{
 		DrawFormatString(SCREENSIZE_X - 100, SCREENSIZE_Y - 100, 0x00ff00, "id:%d", id);
 	}
-	DrawFormatString(50, 100, 0x00ff00, "pos.x:%d\npos.y:%d", pos.x, pos.y);
+	DrawFormatString(50, 100, 0x00ff00, "pos.x:%d\npos.y:%d", pos[typeNum].x, pos[typeNum].y);
 	DrawFormatString(50, 150, 0x0000ff, "mapPos.x:%d\nmapPos.y:%d", lpMap.GetMapPos().x, lpMap.GetMapPos().y);
 }

@@ -1,10 +1,14 @@
 #pragma once
 #include <string>
 #include <map>
+#include "NUM_TYPE.h"
 #include "Map.h"
 #include "Controller.h"
 #include "AddList.h"
 #include "VECTOR2.h"
+
+
+
 
 // ŠeµÌŞ¼Şª¸Ä‚Ì•ûŒü
 enum DIR
@@ -71,13 +75,13 @@ public:
 	//Îß¼Ş¼®İæ“¾
 	const VECTOR2 GetPos(void)
 	{
-		return pos;
+		return pos[typeNum];
 	}
 
 	//Îß¼Ş¼®İ¾¯Ä
-	void SetPos(VECTOR2 pos)
+	void SetPos(VECTOR2* pos)
 	{
-		Obj::pos = pos;
+		Obj::pos[typeNum] = pos[typeNum];
 	}
 	// w’è‚ÌµÌŞ¼Şª¸Ä‚ğØ½Ä‚©‚çÁ‚·Ì×¸Ş‚ğ•Ô‚·
 	bool Getdeleteflag(void)
@@ -110,18 +114,19 @@ private:
 	VECTOR2 DivCnt;
 
 protected:
+	
 	//·¬×‚ªŒü‚¢‚Ä‚¢‚é•ûŒü
-	DIR dir;
+	DIR dir[PREY_MAX];
 	//Še·¬×‚ÌÎß¼Ş¼®İ‚ÌŠi”[•Ï”
-	VECTOR2 pos;
+	VECTOR2 pos[PREY_MAX];
 
 	// ¶Ò×Îß¼Ş¼®İ(player(‹S‚àŠÜ‚ß‚é))
-	VECTOR2 player_cameraPos;
+	VECTOR2 player_cameraPos[PREY_MAX];
 
-	
-
+	// prey‚Ìí—Ş‚ÌŠi”[—Ìˆæ
+	TYPE_NUM typeNum;
 	//±ÆÒ°¼®İ¶³İÄ
-	unsigned int AniCnt;
+	unsigned int AniCnt[PREY_MAX];
 
 	// ˆÚ“®ÎŞÀİ‚Ì‰Ÿ‰ºÌ×¸Ş
 	int InputNow[DIR_MAX];

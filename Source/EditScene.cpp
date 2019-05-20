@@ -68,9 +68,8 @@ int EditScene::Init(void)
 		objlist = std::make_shared<Shared_ObjList>();
 	}
 	objlist->clear();
-	lpMap.setUp(VECTOR2(MAPSIZE_X, MAPSIZE_Y),
-				VECTOR2(GRIDSIZE, GRIDSIZE),PREY_1);
-	obj = AddList()(objlist, std::make_unique<EditCursor>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4)));
+	lpMap.setUp(VECTOR2(MAPSIZE_X, MAPSIZE_Y),VECTOR2(GRIDSIZE, GRIDSIZE));
+	obj = AddList()(objlist, std::make_unique<EditCursor>(&VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4),TYPE_NUM::NUM_CURSOR));
 
 	return 0;
 }
@@ -80,10 +79,8 @@ void EditScene::EditDraw(void)
 	ClsDrawScreen();
 	lpMap.IndividualsDraw(objlist, false);
 
-	//lpMap.CreateIndividualsDisplay();
-
 	lpMap.MapDraw(false);
-	lpMap.SetObj(lpMap.blockScaleCnt,true);
+	lpMap.SetObj(lpMap.mapScaleCnt,true);
 	//	´ÃÞ¨¯Ä¼°ÝŽž‚Ì•`‰æ
 	auto itr = objlist->begin();
 	(*itr)->Draw();

@@ -10,21 +10,18 @@ Prey::Prey()
 {
 }
 
-Prey::Prey(VECTOR2 pos, PREY_NUM p_num)
+Prey::Prey(VECTOR2* pos, TYPE_NUM pNum)
 {
-	Prey::Init(p_num);
+	this->typeNum = pNum;
 
+	/*this->pos[pNum].x = pos[pNum].x;
+	this->pos[pNum].y = pos[pNum].y;*/
 
-	SetPos(player[0].pos[PREY_1]);
-	for (int i = 0; i < PLAYER_MAX; i++)
-	{
-		player[i].Flag = true;
-		player[i].animation = 0;
-	}
-	//player[0].pos[PREY_1].x = GRIDSIZE * 3;
-	//player[0].pos[PREY_1].y = GRIDSIZE * 4;
-	player[0].dir = DIR_DOWN;
-	player[1].dir = DIR_DOWN;
+	SetPos(&pos[pNum]);
+	Prey::Init(pNum);
+
+	//pos[pNum] = this->player_cameraPos[pNum];
+	dir[pNum] = DIR_DOWN;
 }
 
 
@@ -40,6 +37,8 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 
 	auto input = controll.GetButtonInfo(KEY_TYPE_NOW);
 	auto inputOld = controll.GetButtonInfo(KEY_TYPE_OLD);
+
+
 
 	//int keyList[PLAYER_MAX][DIR_MAX] = {
 	//	{ KEY_INPUT_A,	// ç∂
@@ -60,11 +59,11 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	{
 		if (lpMap.GetMapPos().x > -(mapSize.x - GRIDSIZE * 5))
 		{
-			player[0].pos[PREY_1].x += SPEED;
+			pos[typeNum].x += SPEED;
 			lpMap.GetMapPos().x -= SPEED;
-			lpMap.individualsMapPos.x += SPEED;
-			player[0].dir = DIR_RIGHT;
-			player[0].animation++;
+			lpMap.GetIndividualsmapPos().x += SPEED;
+			dir[typeNum] = DIR_RIGHT;
+			//player[0].animation++;
 		}
 	}
 
@@ -73,11 +72,11 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	{
 		if (lpMap.GetMapPos().x < GRIDSIZE * 2)
 		{
-			player[0].pos[PREY_1].x -= SPEED;
+			pos[typeNum].x -= SPEED;
 			lpMap.GetMapPos().x += SPEED;
-			lpMap.individualsMapPos.x -= SPEED;
-			player[0].dir = DIR_LEFT;
-			player[0].animation++;
+			lpMap.GetIndividualsmapPos().x -= SPEED;
+			dir[typeNum] = DIR_LEFT;
+			//player[0].animation++;
 		}
 	}
 	// è„à⁄ìÆ
@@ -85,11 +84,11 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	{
 		if (lpMap.GetMapPos().y < GRIDSIZE * 3)
 		{
-			player[0].pos[PREY_1].y -= SPEED;
+			pos[typeNum].y -= SPEED;
 			lpMap.GetMapPos().y += SPEED;
-			lpMap.individualsMapPos.y -= GRIDSIZE;
-			player[0].dir = DIR_UP;
-			player[0].animation++;
+			lpMap.GetIndividualsmapPos().y -= GRIDSIZE;
+			dir[typeNum] = DIR_UP;
+			//player[0].animation++;
 		}
 	}
 	// â∫à⁄ìÆ
@@ -97,11 +96,11 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	{
 		if (lpMap.GetMapPos().y > -(mapSize.y - GRIDSIZE * 6))
 		{
-			player[0].pos[PREY_1].y += SPEED;
+			pos[typeNum].y += SPEED;
 			lpMap.GetMapPos().y -= SPEED;
-			lpMap.individualsMapPos.y += GRIDSIZE;
-			player[0].dir = DIR_DOWN;
-			player[0].animation++;
+			lpMap.GetIndividualsmapPos().y += GRIDSIZE;
+			dir[typeNum] = DIR_DOWN;
+			//player[0].animation++;
 		}
 	}
 
@@ -109,7 +108,7 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 
 	// ÅñÃﬂ⁄≤‘∞ÇÃŒﬂºﬁºÆ›Çë´å≥Ç…ê›íËÇ∑ÇÈÅB
 
-	_RPTN(_CRT_WARN, "character.pos:%d,%d\n", player[0].pos[PREY_1].x, player[0].pos[PREY_1].y);
+	_RPTN(_CRT_WARN, "character.pos:%d,%d\n", (&pos[typeNum].x), (&pos[typeNum].y));
 	_RPTN(_CRT_WARN, "map.pos:%d,%d\n", lpMap.GetMapPos().x, lpMap.GetMapPos().y);
 }
 
@@ -120,27 +119,33 @@ void Prey::Draw(void)
 	//DrawGraph(GRIDSIZE * 3, GRIDSIZE * 4 - 40, charimage[PREY_1].image[0][0], true);
 	//DrawGraph(GRIDSIZE * 3, GRIDSIZE * 4 - 40, charimage[PREY_2].image[0][0], true);
 
-	int animID = (player[0].animation / 1) % ANIMATION_MAX;
+	//int animID = (player[0].animation / 1) % ANIMATION_MAX;
 
-	DrawGraph(GRIDSIZE * 3, GRIDSIZE * 4 - 40, charimage[PREY_1].image[player[0].dir][animID], true);
-
-	DrawFormatString(0, 0, 0xffffff, "character.pos:%d,%d\n", player[0].pos[PREY_1].x, player[0].pos[PREY_1].y);
+	if (typeNum == PREY_1)
+	{
+		DrawGraph(player_cameraPos[typeNum].x, player_cameraPos[typeNum].y, lpImage.GetID("character/character.png")[dir[typeNum]], true);
+	}
+	if (typeNum == PREY_2)
+	{
+		DrawGraph(player_cameraPos[typeNum].x, player_cameraPos[typeNum].y, lpImage.GetID("character/character2.png")[dir[typeNum]], true);
+	}
+	DrawFormatString(0, 0, 0xffffff, "character.pos:%d,%d\n", pos[typeNum].x, pos[typeNum].y);
 	DrawFormatString(0, 20, 0xffffff, "map.pos:%d,%d\n", lpMap.GetMapPos().x, lpMap.GetMapPos().y);
 }
 
-bool Prey::Init(PREY_NUM p_num)
+bool Prey::Init(TYPE_NUM p_num)
 {
-	lpMap.IndividualsMapCalcPos(pos, player_cameraPos);
 
-	const char *imageList[PREY_MAX] = {
-		{"character/character.png" },
-		{"character/character2.png"},
-	};
-
-	for (int i = 0; i < PREY_MAX; i++)
+	if (p_num == PREY_1)
 	{
-		LoadDivGraph(imageList[i], DIR_MAX * ANIMATION_MAX, ANIMATION_MAX, DIR_MAX, PREYSIZE_X, PREYSIZE_Y, &charimage[i].image[0][0]);
+		Obj::Init("character/character.png", VECTOR2(4, 4), VECTOR2(80, 120));
 	}
+	if (p_num == PREY_2)
+	{
+		Obj::Init("character/character2.png", VECTOR2(4, 4), VECTOR2(80, 120));
+	}
+	player_cameraPos[typeNum] = { 240,280 };
+	lpMap.IndividualsMapCalcPos(&pos[p_num], player_cameraPos[p_num]);
 
 	return true;
 }

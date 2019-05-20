@@ -42,6 +42,7 @@ enum PASSAGE
 // 人数に応じてmodeを変更
 enum PLAYER
 {
+	PLAYER_IT,		// 鬼モード
 	PLAYER_1,		// 1人
 	PLAYER_2,		// 2人
 	PLAYER_3,		// 3人
@@ -212,7 +213,9 @@ private:
 
 	// ﾌﾟﾚｲﾔｰｲﾝｽﾀﾝｽﾌﾗｸﾞ(繰り返しｲﾝｽﾀﾝｽの防止)
 	bool is_makePrey;
-	
+
+	// 鬼のｲﾝｽﾀﾝｽﾌﾗｸﾞ(繰り返しｲﾝｽﾀﾝｽの防止)
+	bool is_makeIt;
 
 	//	引数のところで置き換えた型で宣言するということ
 	template<typename MapType, typename IDType>

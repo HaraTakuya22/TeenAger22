@@ -10,6 +10,7 @@
 #define ONE_PLAY_POS 20
 #define TWO_PLAY_POS 20+400
 #define THREE_PLAY_POS 20+800
+#define IT_PLAY_POS 20-400
 
 #define CURSOR_POS_SPEED 400
 
@@ -77,6 +78,12 @@ unique_Base SelectScene::Update(unique_Base own, const Controller & controll)
 	else
 	{
 		button3_flag = BUTTON_OFF;
+	}
+
+	if (cursorPos.x == IT_PLAY_POS)
+	{
+		lpMap.player = PLAYER_IT;
+		return std::make_unique<GameScene>();
 	}
 
 	// åªç›âEŒﬁ¿›Çâüâ∫--------------------------------------

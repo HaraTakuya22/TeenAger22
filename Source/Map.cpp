@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "Image.h"
 #include "Prey.h"
+#include "It.h"
 #include "NUM_TYPE.h"
 
 struct DataHeader {
@@ -28,6 +29,21 @@ void Map::MapDraw(bool gameF)
 	// 画面分割(player人数毎に)
 	switch (player)
 	{
+	case PLAYER_IT:
+		for (int y = 0; y <= Scr.y; y += GRIDSIZE)
+		{
+			DrawLine(0, y, Scr.x, y, 0xffffff);
+			for (int x = 0; x <= Scr.x; x += GRIDSIZE)
+			{
+				DrawLine(x, 0, x, Scr.y, 0xffffff);
+			}
+		}
+		if (gameF)
+		{
+			DrawGraph(Scr.x - (GRIDSIZE * 6), 0, MapWindow, false);
+			DrawFormatString(Scr.x / 2 - 150, Scr.y - (Scr.y / 3) + 50, 0xffffff, "Map");
+		}
+		break;
 	case PLAYER_1:
 		
 		// ｸﾞﾘｯﾄﾞの表示
@@ -199,6 +215,8 @@ bool Map::Init(void)
 	
 	MapImage = LoadGraph("MAP/map_new.png");
 
+	//player = PLAYER_IT;
+
 	//----------------------------------
 	return true;
 }
@@ -243,6 +261,18 @@ void Map::IndividualsDraw(WeakList weaklist,bool gameF)
 	}
 	//DrawGraph(0, 0, mapAllwindow, true);
 	// player1の画面表示
+	if (player == PLAYER_IT)
+	{
+		DrawRectGraph(0, 0, individualsMapPos[typeNum].x, individualsMapPos[typeNum].y, Scr.x / mapScaleCnt.x, Scr.y / mapScaleCnt.y, mapAllwindow, true, false);
+		DrawFormatString(0, 100, 0xffffff, "ind_map.x:%d\nind_map.y;%d", GetIndividualsmapPos().x, GetIndividualsmapPos().y);
+
+		if (gameF && !is_makeIt && PLAYER_IT)
+		{
+			AddList()(weaklist, std::make_unique<It>(&VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4 - 40), TYPE_NUM::PREY_1));
+			is_makeIt = true;
+		}
+
+	}
 	if (player == PLAYER_1)
 	{
 		// ﾃﾞﾊﾞｯｸﾞ用-----------------------------------
@@ -272,7 +302,6 @@ void Map::IndividualsDraw(WeakList weaklist,bool gameF)
 			if (gameF && !is_makePrey)
 			{
 				AddList()(weaklist, std::make_unique<Prey>(&VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4 - 40), PREY_1));
-				AddList()(weaklist, std::make_unique<Prey>(&VECTOR2(GRIDSIZE * 5, GRIDSIZE * 4 - 40), PREY_2));
 
 				//AddList()(weaklist, std::make_unique<Prey>(VECTOR2((GRIDSIZE * 4) + (mapPos.x + (Scr.x * windowsNum)), (GRIDSIZE * 4 - 40) + (mapPos.y + (Scr.y * windowsNum))),PREY_2));
 
@@ -747,6 +776,11 @@ bool Map::ChangePreyMapScale(void)
 {
 	switch (player)
 	{
+	case PLAYER_IT:
+		blockScaleCnt.x = 1;
+		blockScaleCnt.y = 1;
+		mapScaleCnt.x = 1;
+		mapScaleCnt.y = 1;
 	case PLAYER_1:
 		blockScaleCnt.x = 1;
 		blockScaleCnt.y = 1;

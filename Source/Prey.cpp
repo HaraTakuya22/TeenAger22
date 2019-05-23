@@ -22,6 +22,7 @@ Prey::Prey(VECTOR2 pos,TYPE_NUM pNum)
 	//lpMap.IndividualsMapCalcPos(pos, cameraPos, individualsMapPos);
 
 	Prey::Init(pNum);
+	AniCnt = 0;
 
 	dir = DIR_DOWN;
 }
@@ -41,20 +42,6 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	auto inputOld = controll.GetButtonInfo(KEY_TYPE_OLD);
 
 
-
-	//int keyList[PLAYER_MAX][DIR_MAX] = {
-	//	{ KEY_INPUT_A,	// ç∂
-	//	  KEY_INPUT_D,	// âE
-	//	  KEY_INPUT_W,	// è„
-	//	  KEY_INPUT_S	// â∫
-	//	},
-	//	{ KEY_INPUT_NUMPAD4,	// ç∂
-	//	  KEY_INPUT_NUMPAD6,	// âE
-	//	  KEY_INPUT_NUMPAD8,	// è„
-	//	  KEY_INPUT_NUMPAD2		// â∫
-	//	},
-	//};
-
 	// à⁄ìÆèàóù(MapÇÃà⁄ìÆ & Ãﬂ⁄≤‘∞ÇÃà⁄ìÆ)-----------------------------
 	// âEà⁄ìÆ
 	
@@ -71,7 +58,7 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 
 					//lpMap.individualsMapPos[typeNum].x += GRIDSIZE;
 					dir = DIR_RIGHT;
-					//player[0].animation++;
+					AniCnt++;
 				}
 			}
 		}
@@ -90,7 +77,7 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 
 				//lpMap.individualsMapPos[typeNum].x -= GRIDSIZE;
 				dir = DIR_LEFT;
-				//player[0].animation++;
+				AniCnt++;
 			}
 		}
 	}
@@ -108,6 +95,7 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 
 				//lpMap.individualsMapPos[typeNum].y -= GRIDSIZE;
 				dir = DIR_UP;
+				AniCnt++;
 			}
 		}
 	}
@@ -125,7 +113,7 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 
 				//lpMap.individualsMapPos[typeNum].y += GRIDSIZE;
 				dir = DIR_DOWN;
-				//player[0].animation++;
+				AniCnt++;
 			}
 		}
 	}
@@ -141,14 +129,16 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 void Prey::Draw(void)
 {
 	auto Scr = lpScene.GetScrSize();
-	//Obj::Draw();
+
+	animID[typeNum] = (AniCnt / 1) % ANIMATION_MAX;
+
 	if (typeNum == PREY_1)
 	{
-		DrawGraph(cameraPos.x, cameraPos.y, lpImage.GetID("character/Prey.png")[0], true);
+		DrawGraph(cameraPos.x, cameraPos.y, player[PREY_1].image[dir][animID[PREY_1]], true);
 	}
 	if (typeNum == PREY_2)
 	{
-		DrawGraph(cameraPos.x + (Scr.x / 2), cameraPos.y, lpImage.GetID("character/Prey.png")[4], true);
+		DrawGraph(cameraPos.x + (Scr.x / 2), cameraPos.y, player[PREY_1].image[dir][animID[PREY_1]], true);
 	}
 	
 
@@ -163,8 +153,15 @@ void Prey::Draw(void)
 bool Prey::Init(TYPE_NUM p_num)
 {
 
-	//lpMap.individualsMapPos[p_num] = { 0,0 };
-	Obj::Init("character/Prey.png", VECTOR2(8, 4), VECTOR2(80, 120));
+	//Obj::Init("character/Prey.png", VECTOR2(8, 4), VECTOR2(80, 120));
+	if (p_num == PREY_1)
+	{
+		LoadDivGraph("character/character.png", DIR_MAX * ANIMATION_MAX, ANIMATION_MAX, DIR_MAX, PREYSIZE_X, PREYSIZE_Y, &player[PREY_1].image[0][0]);
+	}
+	if (p_num == PREY_2)
+	{
+		LoadDivGraph("character/character2.png", DIR_MAX * ANIMATION_MAX, ANIMATION_MAX, DIR_MAX, PREYSIZE_X, PREYSIZE_Y, &player[PREY_2].image[0][0]);
+	}
 
 	return true;
 }

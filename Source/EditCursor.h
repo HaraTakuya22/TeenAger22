@@ -11,13 +11,29 @@ class EditCursor :
 	public Obj
 {
 public:
-	EditCursor(VECTOR2* pos,TYPE_NUM num);
+	EditCursor(VECTOR2 pos,TYPE_NUM num);
 	~EditCursor();
 	void Move(const Controller& controll, WeakList objlist);
 
 	bool GetType(OBJ_TYPE type)
 	{
 		return (type == TYPE_CURSOR);
+	}
+
+	// typeNumæ“¾ŠÖ”
+	TYPE_NUM& GetTypeNum(void)
+	{
+		return typeNum;
+	}
+	// mapPosæ“¾ŠÖ”
+	VECTOR2& GetMapPos(void)
+	{
+		return mapPos;
+	}
+	// individualsMapPosæ“¾ŠÖ”
+	VECTOR2& GetIndividualsMapPos(void)
+	{
+		return individualsMapPos;
 	}
 
 private:

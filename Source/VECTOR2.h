@@ -6,15 +6,17 @@ public:
 	VECTOR2();
 	~VECTOR2();
 
-	VECTOR2(int x, int y);
-	VECTOR2(float dx, float dy);
-
 	int x;
 	int y;
 
+	VECTOR2(int x, int y);
+	//VECTOR2(float dx, float dy);
+
+	
+
 	// VECTOR2Ç≈è¨êîÇ‡égópâ¬î\Ç…
-	float dx;
-	float dy;
+	/*float dx;
+	float dy;*/
 
 	VECTOR2& operator = (const VECTOR2& vec);
 	int& operator[](int i);

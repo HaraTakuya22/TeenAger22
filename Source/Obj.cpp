@@ -3,17 +3,15 @@
 #include "Obj.h"
 #include "Image.h"
 
-
 Obj::Obj()
 {
 	deleteflag = false;
-	
-	pos[typeNum] = player_cameraPos[typeNum];
 }
 
 
 Obj::~Obj()
 {
+
 }
 
 void Obj::Draw(void)
@@ -24,23 +22,23 @@ void Obj::Draw(void)
 	}
 	int ID = 0;
 
-	AniCnt[typeNum]++;
+	AniCnt++;
 	if (animTbl.find(AnimationName) != animTbl.end())
 	{
 		int start = animTbl[AnimationName][ANIM_START];
-		int inter = (AniCnt[typeNum] / animTbl[AnimationName][ANIM_INTERVAL]);
+		int inter = (AniCnt / animTbl[AnimationName][ANIM_INTERVAL]);
 		int flame = animTbl[AnimationName][ANIM_FLAME];
 		ID = start + (int)dir + (inter % flame) * DivCnt.x;
 	}
 
-	DrawGraph(pos[typeNum].x + player_cameraPos[typeNum].x - pos[typeNum].x, pos[typeNum].y + player_cameraPos[typeNum].y - pos[typeNum].y, ImageID(ImageName)[ID], true);
+	DrawGraph(cameraPos.x,cameraPos.y, ImageID(ImageName)[ID], true);
 }
 
 void Obj::Draw(unsigned int id)
 {
 	if (id < ImageID(ImageName).size())
 	{
-		DrawGraph(pos[typeNum].x, pos[typeNum].y, ImageID(ImageName)[id], true);
+		DrawGraph(pos.x, pos.y, ImageID(ImageName)[id], true);
 	}
 }
 
@@ -77,6 +75,6 @@ bool Obj::SetAnim(std::string animationName)
 		return false;
 	}
 	Obj::AnimationName = animationName;
-	Obj::AniCnt[typeNum] = 0;
+	Obj::AniCnt = 0;
 	return true;
 }

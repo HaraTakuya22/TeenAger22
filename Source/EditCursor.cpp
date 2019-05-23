@@ -8,14 +8,16 @@
 #define EDITCURSOR_DEF_RNG	(30)
 #define EDITCURSOR_MIN_RNG	(5)
 
-EditCursor::EditCursor(VECTOR2* pos,TYPE_NUM num)
+EditCursor::EditCursor(VECTOR2 pos,TYPE_NUM num)
 {
-	this->typeNum = num;
+	//this->typeNum = num;
 
- 	this->pos[num].x = pos[num].x;
-	this->pos[num].y = pos[num].y;
+ 	this->pos.x = pos.x;
+	this->pos.y = pos.y;
 
-	lpMap.GetCamera() = {320,320};
+	cameraPos = { 320,320 };
+	mapPos = { 0,0 };
+	individualsMapPos = { 0,0 };
 
 	keyDefRng = EDITCURSOR_DEF_RNG;
 	inputFrame = EDITCURSOR_DEF_RNG;
@@ -29,12 +31,12 @@ EditCursor::~EditCursor()
 
 void EditCursor::Move(const Controller & controll, WeakList objlist)
 {
-	InputOld[dir[typeNum]] = InputNow[typeNum];
+	InputOld[dir] = InputNow[dir];
 	ChangeInputOld = ChangeInput;
 	ChangeInputBackOld = ChangeInputBack;
 	SetInputOld = SetInput;
-	VECTOR2 tmp(pos[typeNum]);
-	VECTOR2 tmpMappos(lpMap.GetMapPos());
+	VECTOR2 tmp(pos);
+	VECTOR2 tmpMappos(mapPos);
 
 	// ¹Þ°ÑÊß¯ÄÞ‚Ì“ü—Í
 	auto Pad = GetJoypadInputState(DX_INPUT_PAD1);
@@ -52,7 +54,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (Pad & PAD_INPUT_RIGHT)
 	{
 		// ‰Ÿ‚µ‚Ä‚¢‚é
-		dir[typeNum] = DIR_RIGHT;
+		dir = DIR_RIGHT;
 		InputNow[DIR_RIGHT] = PAD_INPUT_NOW;
 	}
 	else
@@ -63,7 +65,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	// ‰EÎÞÀÝ‚ð‰Ÿ‚µ‚Ä‚¢‚éuŠÔ
 	if (InputNow[DIR_RIGHT] & ~InputOld[DIR_RIGHT])
 	{
-		pos[typeNum].x += GRIDSIZE;
+		pos.x += GRIDSIZE;
 		// ¶°¿Ù‚ÌÎß¼Þ¼®Ý§Œä
 		if (tmp.x >= Scr.x - GRIDSIZE)
 		{
@@ -76,7 +78,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (Pad & PAD_INPUT_LEFT)
 	{
 		// ‰Ÿ‚µ‚Ä‚¢‚é
-		dir[typeNum] = DIR_LEFT;
+		dir = DIR_LEFT;
 		InputNow[DIR_LEFT] = PAD_INPUT_NOW;
 	}
 	else
@@ -99,8 +101,8 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (Pad & PAD_INPUT_UP)
 	{
 		// ‰Ÿ‚µ‚Ä‚¢‚é
-		dir[typeNum] = DIR_UP;
-		InputNow[dir[typeNum]] = PAD_INPUT_NOW;
+		dir = DIR_UP;
+		InputNow[dir] = PAD_INPUT_NOW;
 	}
 	else
 	{
@@ -122,8 +124,8 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (Pad & PAD_INPUT_DOWN)
 	{
 		// ‰Ÿ‚µ‚Ä‚¢‚é
-		dir[typeNum] = DIR_DOWN;
-		InputNow[dir[typeNum]] = PAD_INPUT_NOW;
+		dir = DIR_DOWN;
+		InputNow[dir] = PAD_INPUT_NOW;
 	}
 	else
 	{
@@ -186,7 +188,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (SetInput & ~SetInputOld)
 	{
 		setF = true;
-		lpMap.setMapData(&pos[typeNum], id);
+		lpMap.setMapData(pos, id);
 
 	}
 	else
@@ -202,8 +204,8 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 		{
 			tmp.x = (lpMap.GetMapSize().x - (gridSize.x * 2));
 		}
-		lpMap.GetMapPos().x = lpMap.MapCalcPos(&tmp, lpMap.GetCamera()).x;
-		tmpMappos.y = lpMap.GetMapPos().y;
+		mapPos.x = lpMap.MapCalcPos(tmp,cameraPos,mapPos).x;
+		tmpMappos.y = mapPos.y;
 	}
 	// ---------------------------------------------------------
 
@@ -215,9 +217,9 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 		{
 			tmp.x = 0;
 		}
-		lpMap.GetMapPos().x = lpMap.MapCalcPos(&tmp, lpMap.GetCamera()).x;
+		mapPos.x = lpMap.MapCalcPos(tmp, cameraPos,mapPos).x;
 
-		tmpMappos.y = lpMap.GetMapPos().y;
+		tmpMappos.y = mapPos.y;
 	}
 	//--------------------------------------------------------
 
@@ -229,8 +231,8 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 		{
 			tmp.y = 0;
 		}
-		tmpMappos.x = lpMap.GetMapPos().x;
-		tmpMappos.y = lpMap.MapCalcPos(&tmp, lpMap.GetCamera()).y;
+		tmpMappos.x = mapPos.x;
+		mapPos.y = lpMap.MapCalcPos(tmp, cameraPos,mapPos).y;
 	}
 	//----------------------------------------------------
 
@@ -242,21 +244,21 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 		{
 			tmp.y = lpMap.GetMapSize().y - gridSize.y;
 		}
-		tmpMappos.x = lpMap.GetMapPos().x;
-		tmpMappos.y = lpMap.MapCalcPos(&tmp, lpMap.GetCamera()).y;
+		tmpMappos.x = mapPos.x;
+		mapPos.y = lpMap.MapCalcPos(tmp, cameraPos,mapPos).y;
 		if (tmpMappos.y <= -(lpMap.GetMapSize().y - 500))
 		{
-			tmpMappos.y = -(lpMap.MapCalcPos(&tmp, lpMap.GetCamera()).y - 500);
+			mapPos.y = -(lpMap.MapCalcPos(tmp, cameraPos,mapPos).y - 500);
 		}
 	}
 
 	//¶°¿Ù‚ÌˆÚ“®i™X‚É‘¬‚­‚È‚Á‚Ä‚¢‚­ˆ—j-----------------------------
-	if (tmp != pos[typeNum])								//·°‚ð‰Ÿ‚µ‚Ä‚¢‚éŠÔ‚Ìˆ—
+	if (tmp != pos)								//·°‚ð‰Ÿ‚µ‚Ä‚¢‚éŠÔ‚Ìˆ—
 	{
 		inputFrame++;								//‰ÁŽZ
 		if (inputFrame >= keyDefRng)				//
 		{
-			pos[typeNum] = tmp;
+			pos = tmp;
 			inputFrame = 0;							//ÎÞÀÝ‚©‚çŽè‚ð—£‚µ‚½‚Æ‚«0¸Ø‚·‚é
 			keyDefRng /= 2;							//ÎÞÀÝ‚ð‰Ÿ‚µ‘±‚¯‚Ä‚¢‚é‚Æ‚¾‚ñ‚¾‚ñ‰Á‘¬
 			if (keyDefRng < EDITCURSOR_MIN_RNG)			//‰Á‘¬‚ª5‚É‚È‚Á‚½‚ç‚»‚±‚Å‚¸‚Á‚Æ5‚É‚·‚é
@@ -290,21 +292,23 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	if (cnt_now[KEY_INPUT_SPACE] & ~cnt_old[KEY_INPUT_SPACE])
 	{
 		setF = true;
-		lpMap.setMapData(&tmp, id);
+		lpMap.setMapData(tmp, id);
 	}
 	else
 	{
 		setF = false;
 	}
-	_RPTN(_CRT_WARN, "ID:[%d:%d]%d\n", pos[typeNum].x, pos[typeNum].y, id);
+	_RPTN(_CRT_WARN, "ID:[%d:%d]%d\n", pos.x, pos.y, id);
 }
 
 void EditCursor::Draw(void)
 {
+	
 	// ¶°¿Ù‚ðŒõ‚ç‚¹‚éˆ—
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	//DrawBox(pos.x, pos.y, pos.x + 80, pos.y + 80, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA,flickCnt);
+	
 	switch (id)
 	{
 	case objID::FLOOR:
@@ -313,36 +317,36 @@ void EditCursor::Draw(void)
 	case objID::CHAIR_2:
 	case objID::CHAIR_3:
 	case objID::CHAIR_4:
-		DrawGraph(lpMap.GetCamera().x, lpMap.GetCamera().y, lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
+		DrawGraph(cameraPos.x, cameraPos.y, lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
 		break;
 	case objID::BOOKSHELF:
 	case objID::DRAWER:
 	case objID::LOCKER:
 	case objID::VASE_1:
 	case objID::VASE_2:
-		DrawGraph(lpMap.GetCamera().x + GRIDSIZE, lpMap.GetCamera().y - GRIDSIZE, lpImage.GetID("image/map2.png")[static_cast<int>(id - 6)], true);
+		DrawGraph(cameraPos.x + GRIDSIZE, cameraPos.y - GRIDSIZE, lpImage.GetID("image/map2.png")[static_cast<int>(id - 6)], true);
 		break;
 	case objID::MIRRORTABLE:
 	case objID::FACE:
 	case objID::KITCHIN_1:
 	case objID::KITCHIN_2:
 	case objID::S_MONITOR:
-		DrawGraph(lpMap.GetCamera().x + GRIDSIZE, lpMap.GetCamera().y - (GRIDSIZE * 2), lpImage.GetID("image/map3.png")[static_cast<int>(id - 11)], true);
+		DrawGraph(cameraPos.x + GRIDSIZE, cameraPos.y - (GRIDSIZE * 2), lpImage.GetID("image/map3.png")[static_cast<int>(id - 11)], true);
 		break;
 	case objID::BED:
-		DrawGraph(lpMap.GetCamera().x + GRIDSIZE, lpMap.GetCamera().y + GRIDSIZE, lpImage.GetID("image/map4.png")[0], true);
+		DrawGraph(cameraPos.x + GRIDSIZE, cameraPos.y + GRIDSIZE, lpImage.GetID("image/map4.png")[0], true);
 		break;
 	case objID::DESK:
-		DrawGraph(lpMap.GetCamera().x, lpMap.GetCamera().y, lpImage.GetID("image/map5.png")[0], true);
+		DrawGraph(cameraPos.x, cameraPos.y, lpImage.GetID("image/map5.png")[0], true);
 		break;
 	case objID::MONITOR:
-		DrawGraph(lpMap.GetCamera().x + GRIDSIZE, lpMap.GetCamera().y - (GRIDSIZE * 2), lpImage.GetID("image/map6.png")[0], true);
+		DrawGraph(cameraPos.x + GRIDSIZE, cameraPos.y - (GRIDSIZE * 2), lpImage.GetID("image/map6.png")[0], true);
 		break;
 	case objID::S_TABLE:
-		DrawGraph(lpMap.GetCamera().x, lpMap.GetCamera().y, lpImage.GetID("image/map7.png")[0], true);
+		DrawGraph(cameraPos.x, cameraPos.y, lpImage.GetID("image/map7.png")[0], true);
 		break;
 	case objID::TABLE:
-		DrawGraph(lpMap.GetCamera().x, lpMap.GetCamera().y, lpImage.GetID("image/map8.png")[0], true);
+		DrawGraph(cameraPos.x, cameraPos.y, lpImage.GetID("image/map8.png")[0], true);
 		break;
 	default:
 		break;
@@ -360,6 +364,6 @@ void EditCursor::Draw(void)
 	{
 		DrawFormatString(SCREENSIZE_X - 100, SCREENSIZE_Y - 100, 0x00ff00, "id:%d", id);
 	}
-	DrawFormatString(50, 100, 0x00ff00, "pos.x:%d\npos.y:%d", pos[typeNum].x, pos[typeNum].y);
-	DrawFormatString(50, 150, 0x0000ff, "mapPos.x:%d\nmapPos.y:%d", lpMap.GetMapPos().x, lpMap.GetMapPos().y);
+	DrawFormatString(50, 100, 0x00ff00, "pos.x:%d\npos.y:%d", pos.x, pos.y);
+	DrawFormatString(50, 150, 0x0000ff, "mapPos.x:%d\nmapPos.y:%d", mapPos.x, mapPos.y);
 }

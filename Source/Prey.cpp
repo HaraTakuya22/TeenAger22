@@ -10,16 +10,20 @@ Prey::Prey()
 {
 }
 
-Prey::Prey(VECTOR2* pos, TYPE_NUM pNum)
+Prey::Prey(VECTOR2 pos,TYPE_NUM pNum)
 {
+	this->typeNum = pNum;
+
+	cameraPos = pos;
+	/*mapPos = { 0,0 };
+	individualsMapPos = { 0,0 };*/
+
+	this->pos = pos;
+	//lpMap.IndividualsMapCalcPos(pos, cameraPos, individualsMapPos);
 
 	Prey::Init(pNum);
 
-	SetPos(&pos[pNum]);
-	AniCnt[pNum] = 0;
-
-	dir[PREY_1] = DIR_DOWN;
-	dir[PREY_2] = DIR_DOWN;
+	dir = DIR_DOWN;
 }
 
 
@@ -37,147 +41,130 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	auto inputOld = controll.GetButtonInfo(KEY_TYPE_OLD);
 
 
+
+	//int keyList[PLAYER_MAX][DIR_MAX] = {
+	//	{ KEY_INPUT_A,	// 左
+	//	  KEY_INPUT_D,	// 右
+	//	  KEY_INPUT_W,	// 上
+	//	  KEY_INPUT_S	// 下
+	//	},
+	//	{ KEY_INPUT_NUMPAD4,	// 左
+	//	  KEY_INPUT_NUMPAD6,	// 右
+	//	  KEY_INPUT_NUMPAD8,	// 上
+	//	  KEY_INPUT_NUMPAD2		// 下
+	//	},
+	//};
+
 	// 移動処理(Mapの移動 & ﾌﾟﾚｲﾔｰの移動)-----------------------------
 	// 右移動
-	if (input[KEY_INPUT_NUMPAD6] & ~inputOld[KEY_INPUT_NUMPAD6])
-	{
-		if (lpMap.GetMapPos().x > -(mapSize.x - GRIDSIZE * 5))
+	
+		if (input[KEY_INPUT_NUMPAD6] & ~inputOld[KEY_INPUT_NUMPAD6])
 		{
-			pos[PREY_1].x += SPEED;
-			lpMap.GetMapPos().x -= SPEED;
-			lpMap.GetIndividualsmapPos().x += SPEED;
-			dir[PREY_1] = DIR_RIGHT;
-			AniCnt[PREY_1]++;
+			if (mapPos.x > -(mapSize.x - GRIDSIZE * 5))
+			{
+				if (typeNum == PREY_1)
+				{
+					pos.x += SPEED;
+					mapPos.x -= SPEED;
+					individualsMapPos.x += GRIDSIZE;
+					//lpMap.IndividualsMapCalcPos(pos, cameraPos, individualsMapPos).x;
+
+					//lpMap.individualsMapPos[typeNum].x += GRIDSIZE;
+					dir = DIR_RIGHT;
+					//player[0].animation++;
+				}
+			}
 		}
-	}
+
 	// 左移動
 	if (input[KEY_INPUT_NUMPAD4] & ~inputOld[KEY_INPUT_NUMPAD4])
 	{
-		if (lpMap.GetMapPos().x < GRIDSIZE * 2)
+		if (mapPos.x < GRIDSIZE * 2)
 		{
-			pos[PREY_1].x -= SPEED;
-			lpMap.GetMapPos().x += SPEED;
-			lpMap.GetIndividualsmapPos().x -= SPEED;
-			dir[PREY_1] = DIR_LEFT;
-			AniCnt[PREY_1]++;
+			if (typeNum == PREY_1)
+			{
+				pos.x -= SPEED;
+				mapPos.x += SPEED;
+				individualsMapPos.x -= GRIDSIZE;
+				//lpMap.IndividualsMapCalcPos(pos, cameraPos,individualsMapPos).x;
+
+				//lpMap.individualsMapPos[typeNum].x -= GRIDSIZE;
+				dir = DIR_LEFT;
+				//player[0].animation++;
+			}
 		}
 	}
 	// 上移動
 	if (input[KEY_INPUT_NUMPAD8] & ~inputOld[KEY_INPUT_NUMPAD8])
 	{
-		if (lpMap.GetMapPos().y < GRIDSIZE * 3)
+		if (mapPos.y < GRIDSIZE * 3)
 		{
-			pos[PREY_1].y -= SPEED;
-			lpMap.GetMapPos().y += SPEED;
-			lpMap.GetIndividualsmapPos().y -= GRIDSIZE;
-			dir[PREY_1] = DIR_UP;
-			AniCnt[PREY_1]++;
+			if (typeNum == PREY_1)
+			{
+				pos.y -= SPEED;
+				mapPos.y += SPEED;
+				individualsMapPos.y -= GRIDSIZE;
+				//lpMap.IndividualsMapCalcPos(pos, cameraPos,individualsMapPos).y;
+
+				//lpMap.individualsMapPos[typeNum].y -= GRIDSIZE;
+				dir = DIR_UP;
+			}
 		}
 	}
 	// 下移動
 	if (input[KEY_INPUT_NUMPAD2] & ~inputOld[KEY_INPUT_NUMPAD2])
 	{
-		if (lpMap.GetMapPos().y > -(mapSize.y - GRIDSIZE * 6))
+		if (mapPos.y > -(mapSize.y - GRIDSIZE * 6))
 		{
-			pos[PREY_1].y += SPEED;
-			lpMap.GetMapPos().y -= SPEED;
-			lpMap.GetIndividualsmapPos().y += GRIDSIZE;
-			dir[PREY_1] = DIR_DOWN;
-			AniCnt[PREY_1]++;
+			if (typeNum == PREY_1)
+			{
+				pos.y += SPEED;
+				mapPos.y -= SPEED;
+				individualsMapPos.y += GRIDSIZE;
+				//lpMap.IndividualsMapCalcPos(pos, cameraPos,individualsMapPos).y;
+
+				//lpMap.individualsMapPos[typeNum].y += GRIDSIZE;
+				dir = DIR_DOWN;
+				//player[0].animation++;
+			}
 		}
 	}
-
-	//// 右移動
-	//if (input[KEY_INPUT_D] & ~inputOld[KEY_INPUT_D])
-	//{
-	//	if (lpMap.GetMapPos().x > -(mapSize.x - GRIDSIZE * 5))
-	//	{
-	//		pos[PREY_2].x += SPEED;
-	//		lpMap.GetMapPos().x -= SPEED;
-	//		lpMap.GetIndividualsmapPos().x += SPEED;
-	//		dir[PREY_2] = DIR_RIGHT;
-	//		AniCnt[PREY_2]++;
-	//	}
-	//}
-	//// 左移動
-	//if (input[KEY_INPUT_A] & ~inputOld[KEY_INPUT_A])
-	//{
-	//	if (lpMap.GetMapPos().x < GRIDSIZE * 2)
-	//	{
-	//		pos[PREY_2].x -= SPEED;
-	//		lpMap.GetMapPos().x += SPEED;
-	//		lpMap.GetIndividualsmapPos().x -= SPEED;
-	//		dir[PREY_2] = DIR_LEFT;
-	//		AniCnt[PREY_2]++;
-	//	}
-	//}
-	//// 上移動
-	//if (input[KEY_INPUT_W] & ~inputOld[KEY_INPUT_W])
-	//{
-	//	if (lpMap.GetMapPos().y < GRIDSIZE * 3)
-	//	{
-	//		pos[PREY_2].y -= SPEED;
-	//		lpMap.GetMapPos().y += SPEED;
-	//		lpMap.GetIndividualsmapPos().y -= GRIDSIZE;
-	//		dir[PREY_2] = DIR_UP;
-	//		AniCnt[PREY_2]++;
-	//	}
-	//}
-	//// 下移動
-	//if (input[KEY_INPUT_S] & ~inputOld[KEY_INPUT_S])
-	//{
-	//	if (lpMap.GetMapPos().y > -(mapSize.y - GRIDSIZE * 6))
-	//	{
-	//		pos[PREY_2].y += SPEED;
-	//		lpMap.GetMapPos().y -= SPEED;
-	//		lpMap.GetIndividualsmapPos().y += GRIDSIZE;
-	//		dir[PREY_2] = DIR_DOWN;
-	//		AniCnt[PREY_2]++;
-	//	}
-	//}
 
 	//----------------------------------------------------------------------------
 
 	// ＊ﾌﾟﾚｲﾔｰのﾎﾟｼﾞｼｮﾝを足元に設定する。
 
-
-	_RPTN(_CRT_WARN, "character.pos:%d,%d\n", pos[PREY_1].x, pos[PREY_1].y);
-	_RPTN(_CRT_WARN, "map.pos:%d,%d\n", lpMap.GetMapPos().x, lpMap.GetMapPos().y);
+	_RPTN(_CRT_WARN, "character.pos:%d,%d\n", pos.x, pos.y);
+	_RPTN(_CRT_WARN, "map.pos:%d,%d\n", mapPos.x,mapPos.y);
 }
 
 void Prey::Draw(void)
 {
-	Obj::Draw();
-
-	animID[PREY_1] = (AniCnt[PREY_1] / 1) % ANIMATION_MAX;
-	animID[PREY_2] = (AniCnt[PREY_2] / 1) % ANIMATION_MAX;
-	player_cameraPos[PREY_1] = { 240,280 };
-	player_cameraPos[PREY_2] = { 880,280 };
-
-	//if (typeNum == PREY_1)
+	auto Scr = lpScene.GetScrSize();
+	//Obj::Draw();
+	if (typeNum == PREY_1)
 	{
-		DrawGraph(player_cameraPos[PREY_1].x, player_cameraPos[PREY_1].y, player[PREY_1].image[dir[PREY_1]][animID[PREY_1]], true);
+		DrawGraph(cameraPos.x, cameraPos.y, lpImage.GetID("character/Prey.png")[0], true);
 	}
 	if (typeNum == PREY_2)
 	{
-		DrawGraph(player_cameraPos[PREY_2].x, player_cameraPos[PREY_2].y, player[PREY_2].image[dir[PREY_2]][animID[PREY_2]], true);
+		DrawGraph(cameraPos.x + (Scr.x / 2), cameraPos.y, lpImage.GetID("character/Prey.png")[4], true);
 	}
-	DrawFormatString(0, 0, 0xffffff, "character.pos:%d,%d\n", pos[PREY_1].x, pos[PREY_1].y);
-	DrawFormatString(0, 20, 0xffffff, "map.pos:%d,%d\n", lpMap.GetMapPos().x, lpMap.GetMapPos().y);
+	
+
+	DrawFormatString(130, 50 * typeNum, 0xffffff, "pos%d:%d,%d\n",typeNum, pos.x, pos.y);
+	
+	
+	DrawFormatString(0, 50 * typeNum, 0xffffff, "map.pos%d:%d,%d\n",typeNum,mapPos.x, mapPos.y);
+	DrawFormatString(240, 50 * typeNum, 0xffffff, "ind_map%d.x:%d\nind_map%d.y;%d",typeNum,individualsMapPos.x,typeNum, individualsMapPos.y);
+
 }
 
-bool Prey::Init(TYPE_NUM pNum)
+bool Prey::Init(TYPE_NUM p_num)
 {
-	lpMap.IndividualsMapCalcPos(&pos[pNum], player_cameraPos[pNum]);
 
-	if (pNum == PREY_1)
-	{
-		LoadDivGraph("character/character.png", DIR_MAX * ANIMATION_MAX, ANIMATION_MAX, DIR_MAX, PREYSIZE_X, PREYSIZE_Y, &player[PREY_1].image[0][0]);
-	}
-	if (pNum == PREY_2)
-	{
-		LoadDivGraph("character/character2.png", DIR_MAX * ANIMATION_MAX, ANIMATION_MAX, DIR_MAX, PREYSIZE_X, PREYSIZE_Y, &player[PREY_2].image[0][0]);
-	}
+	//lpMap.individualsMapPos[p_num] = { 0,0 };
+	Obj::Init("character/Prey.png", VECTOR2(8, 4), VECTOR2(80, 120));
 
 	return true;
 }

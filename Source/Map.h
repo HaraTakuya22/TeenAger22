@@ -3,6 +3,7 @@
 
 #include "Obj.h"
 
+#include "NUM_TYPE.h"
 #include "Controller.h"
 #include "VECTOR2.h"
 #include "AddList.h"
@@ -42,7 +43,6 @@ enum PASSAGE
 // l”‚É‰‚¶‚Ämode‚ğ•ÏX
 enum PLAYER
 {
-	PLAYER_IT,		// ‹Sƒ‚[ƒh
 	PLAYER_1,		// 1l
 	PLAYER_2,		// 2l
 	PLAYER_3,		// 3l
@@ -84,31 +84,27 @@ public:
 	bool Init(void);
 
 	// ŠeÌßÚ²Ô°‚ÌÃŞ¨½ÌßÚ²¶¬ŠÖ”
-	void CreateIndividualsDisplay(void);
+	void CreateIndividualsDisplay(VECTOR2 ind_pos);
+
+	void CreateMap(void);
 
 	// ŠeÌßÚ²Ô°‚ÌÃŞ¨½ÌßÚ²‚Ì•`‰æŠÖ”
-	void IndividualsDraw(WeakList weaklist,bool gameF);
+	void IndividualsDraw(bool gameF,VECTOR2 mPos,VECTOR2 ind_pos);
 
 	// ‰æ–Ê‚Ì¾¯Ä
 	void setUp(const VECTOR2& size, const VECTOR2& chipSize);
 
-	bool setMapData(const VECTOR2* pos, objID id);
-	objID GetMapData(const VECTOR2* pos);
+	bool setMapData(const VECTOR2 pos, objID id);
+	objID GetMapData(const VECTOR2 pos);
+
+	void _PreyInstance(WeakList weaklist,TYPE_NUM tNum,VECTOR2 pos);
 
 	//	ÃŞ°À¾°ÌŞŠÖ”
 	bool SaveMap(void);
 	//	ÃŞ°ÀÛ°ÄŞŠÖ”
-	bool LoadMap(void);
+	bool LoadMap(VECTOR2 mPos);
 
-	// Ï¯Ìß‚ÌÎß¼Ş¼®İæ“¾
-	VECTOR2& GetMapPos(void)
-	{
-		return mapPos[typeNum];
-	}
-	VECTOR2& GetIndividualsmapPos(void)
-	{
-		return individualsMapPos[typeNum];
-	}
+	
 	// Map‚Ì»²½Şæ“¾
 	VECTOR2 GetMapSize(void)
 	{
@@ -125,25 +121,17 @@ public:
 		return is_scale;
 	}
 
-	// ¶°¿Ù‚ÌcameraÎß¼Ş¼®İ‚Ìæ“¾
-	VECTOR2 GetCamera(void)
-	{
-		return cameraPos;
-	}
-
 	// Ï¯Ìß‚ÌÎß¼Ş¼®İŒvZŠÖ”
-	VECTOR2 MapCalcPos(VECTOR2* c_pos,VECTOR2 scroll);
+	VECTOR2 MapCalcPos(VECTOR2 c_pos,VECTOR2 scroll,VECTOR2 mPos);
 
 	// ŒÂ•Ê‚ÌÏ¯Ìß³¨İÄŞ³‚ÌÎß¼Ş¼®İŒvZŠÖ”
-	VECTOR2& IndividualsMapCalcPos(VECTOR2* pos,VECTOR2 camera);
-
-	
+	VECTOR2 IndividualsMapCalcPos(VECTOR2 pos,VECTOR2 camera,VECTOR2 ind_pos);
 
 	// ¾¯Ä‚µ‚½µÌŞ¼Şª¸Ä‚Ì•`‰æ
-	bool SetObj(VECTOR2 scale,bool is_edit);
+	bool SetObj(VECTOR2 scale,bool is_edit,VECTOR2 mPos);
 
 	// Map‚ÌŠg‘åk¬(EditScene‚Ì‚İ)
-	bool ChangeEditMapScale(Controller ctrl);
+	bool ChangeEditMapScale(Controller ctrl,VECTOR2 mPos);
 	// Map‚ÌŠg‘åk¬—¦‚ÌŒˆ’èŠÖ”(GameScene‚Ì‚İ)
 	bool ChangePreyMapScale(void);
 	// Map‚ÌŠg‘åk¬—¦
@@ -153,21 +141,16 @@ public:
 
 	// ÌßÚ²Ô°‚Ìl”‚ÌŠi”[•Ï”
 	PLAYER player;
-	TYPE_NUM typeNum;
+	
 private:
 	Map();
 	~Map();
 
 	VECTOR2 setPos;
 
-	// Ï¯Ìß‚Ì¶ã‚ÌÎß¼Ş¼®İ
-	VECTOR2 mapPos[PREY_MAX];
-
-	// ÌßÚ²Ô°–ˆ‚ÌÏ¯Ìß‰æ–Ê‚ÌÎß¼Ş¼®İ
-	VECTOR2 individualsMapPos[PREY_MAX];
-
 	// ¶°¿Ù‚ÌÎß¼Ş¼®İ•â³‚Ì‚½‚ß‚Ì¶Ò×Îß¼Ş¼®İ
-	VECTOR2 cameraPos;
+	//VECTOR2 cameraPos[PREY_MAX];
+
 	// Map‚ğŠg‘åk¬‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ÌÌ×¸Ş
 	bool is_scale;
 
@@ -211,19 +194,16 @@ private:
 	PASSAGE passageF[GRIDCNT_X * GRIDCNT_Y];
 
 
-	// ÌßÚ²Ô°²İ½Àİ½Ì×¸Ş(ŒJ‚è•Ô‚µ²İ½Àİ½‚Ì–h~)
-	bool is_makePrey;
-
-	// ‹S‚Ì²İ½Àİ½Ì×¸Ş(ŒJ‚è•Ô‚µ²İ½Àİ½‚Ì–h~)
-	bool is_makeIt;
+	
+	
 
 	//	ˆø”‚Ì‚Æ‚±‚ë‚Å’u‚«Š·‚¦‚½Œ^‚ÅéŒ¾‚·‚é‚Æ‚¢‚¤‚±‚Æ
 	template<typename MapType, typename IDType>
 	// Map‚ÉÁ¯Ìßî•ñ‚ğ–„‚ß‚ŞŠÖ”
-	bool setData(MapType maptype, const VECTOR2* pos, IDType id);
+	bool setData(MapType maptype, const VECTOR2 pos, IDType id);
 
 	template<typename MapType, typename IDType>
-	IDType GetData(MapType maptype, const VECTOR2& pos, IDType defID);
+	IDType GetData(MapType maptype, const VECTOR2 pos, IDType defID);
 };
 
 

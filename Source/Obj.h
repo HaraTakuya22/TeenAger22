@@ -73,16 +73,15 @@ public:
 	}
 	
 	//ﾎﾟｼﾞｼｮﾝ取得
-	const VECTOR2 GetPos(void)
+	const VECTOR2& GetPos(void)
 	{
-		return pos[typeNum];
+		return pos;
 	}
-
 	//ﾎﾟｼﾞｼｮﾝｾｯﾄ
-	void SetPos(VECTOR2* pos)
+	/*void SetPos(VECTOR2* pos)
 	{
 		Obj::pos[typeNum] = pos[typeNum];
-	}
+	}*/
 	// 指定のｵﾌﾞｼﾞｪｸﾄをﾘｽﾄから消すﾌﾗｸﾞを返す
 	bool Getdeleteflag(void)
 	{
@@ -97,6 +96,12 @@ public:
 
 	// ｵﾌﾞｼﾞｪｸﾄのﾀｲﾌﾟ取得関数
 	virtual bool GetType(OBJ_TYPE type) = 0;
+	virtual TYPE_NUM& GetTypeNum(void) = 0;
+
+	// mapPosの取得(typeNumによって値が違うので、純粋仮想関数に)
+	virtual VECTOR2& GetMapPos(void) = 0;
+	// individualsMapPosの取得(typeNumによって値が違うので、純粋仮想関数に)
+	virtual VECTOR2& GetIndividualsMapPos(void) = 0;
 
 private:
 	//画像の名前
@@ -116,17 +121,22 @@ private:
 protected:
 	
 	//ｷｬﾗが向いている方向
-	DIR dir[PREY_MAX];
+	DIR dir;
 	//各ｷｬﾗのﾎﾟｼﾞｼｮﾝの格納変数
-	VECTOR2 pos[PREY_MAX];
+	VECTOR2 pos;
+
+	// ｽｸﾘｰﾝ上にMapを表示させるために用いるﾏｯﾌﾟのﾎﾟｼﾞｼｮﾝ
+	VECTOR2 mapPos;
+	// ﾏｯﾌﾟ全体(12000 x 8640)を基にしたｽｸﾘｰﾝ単位でのﾎﾟｼﾞｼｮﾝ
+	VECTOR2 individualsMapPos;
+
+	TYPE_NUM typeNum;
 
 	// ｶﾒﾗﾎﾟｼﾞｼｮﾝ(player(鬼も含める))
-	VECTOR2 player_cameraPos[PREY_MAX];
+	VECTOR2 cameraPos;
 
-	// preyの種類の格納領域
-	TYPE_NUM typeNum;
 	//ｱﾆﾒｰｼｮﾝｶｳﾝﾄ
-	unsigned int AniCnt[PREY_MAX];
+	unsigned int AniCnt;
 
 	// 移動ﾎﾞﾀﾝの押下ﾌﾗｸﾞ
 	int InputNow[DIR_MAX];

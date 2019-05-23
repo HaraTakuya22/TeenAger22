@@ -26,26 +26,34 @@ unique_Base EditScene::Update(unique_Base own, const Controller & Controller)
 	{
 		(*itr)->Update(Controller, objlist);
 	}
-	lpMap.ChangeEditMapScale(Controller);
-	//	Sを押したとき、ﾃﾞｰﾀをｾｰﾌﾞする
-	if (input[KEY_INPUT_S])
-	{
-		// save処理(Message表示処理)
-		if (MessageBox(NULL, "Do you want to save now??", "Check Dialog.", MB_OKCANCEL) == IDOK)
-		{
-			lpMap.SaveMap();
-		}
-	}
-	//	Lを押したとき、ﾃﾞｰﾀをﾛｰﾄﾞする
-	if (input[KEY_INPUT_L])
-	{
-		// load処理(Message表示処理)
-		if (MessageBox(NULL, "Do you want to load now??", "Check Dialog.", MB_OKCANCEL) == IDOK)
-		{
-			lpMap.LoadMap();
-		}
-	}
+	Shared_ObjList tmplist(objlist->size());
 
+	auto cursortypeItr = std::remove_copy_if(objlist->begin(), objlist->end(), tmplist.begin(), [](Objshared& obj) {return !(obj->GetType(TYPE_CURSOR)); });
+	for_each(tmplist.begin(), cursortypeItr, [&](auto &cursorType)
+	{
+		auto mapPos = cursorType->GetMapPos();
+		lpMap.ChangeEditMapScale(Controller, mapPos);
+
+		//	Sを押したとき、ﾃﾞｰﾀをｾｰﾌﾞする
+		if (input[KEY_INPUT_S])
+		{
+			// save処理(Message表示処理)
+			if (MessageBox(NULL, "Do you want to save now??", "Check Dialog.", MB_OKCANCEL) == IDOK)
+			{
+				lpMap.SaveMap();
+			}
+		}
+	
+		//	Lを押したとき、ﾃﾞｰﾀをﾛｰﾄﾞする
+		if (input[KEY_INPUT_L])
+		{
+			// load処理(Message表示処理)
+			if (MessageBox(NULL, "Do you want to load now??", "Check Dialog.", MB_OKCANCEL) == IDOK)
+			{
+				lpMap.LoadMap(mapPos);
+			}
+		}
+	});
 	// ｹﾞｰﾑﾊﾟｯﾄﾞのStartｷｰを押下 → GameSceneに移行
 	if (Pad & PAD_INPUT_12)
 	{
@@ -68,8 +76,9 @@ int EditScene::Init(void)
 		objlist = std::make_shared<Shared_ObjList>();
 	}
 	objlist->clear();
+	lpMap.player = PLAYER_MAX;
 	lpMap.setUp(VECTOR2(MAPSIZE_X, MAPSIZE_Y),VECTOR2(GRIDSIZE, GRIDSIZE));
-	obj = AddList()(objlist, std::make_unique<EditCursor>(&VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4),TYPE_NUM::NUM_CURSOR));
+	obj = AddList()(objlist, std::make_unique<EditCursor>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4),TYPE_NUM::NUM_CURSOR));
 
 	return 0;
 }
@@ -77,10 +86,20 @@ int EditScene::Init(void)
 void EditScene::EditDraw(void)
 {
 	ClsDrawScreen();
-	lpMap.IndividualsDraw(objlist, false);
 
-	lpMap.MapDraw(false);
-	lpMap.SetObj(lpMap.mapScaleCnt,true);
+	Shared_ObjList tmplist(objlist->size());
+
+	auto cursorTypeItr = std::remove_copy_if(objlist->begin(), objlist->end(), tmplist.begin(), [](Objshared& obj) {return !(obj->GetType(TYPE_CURSOR)); });
+	for_each(tmplist.begin(), cursorTypeItr, [&](auto &cursorType)
+	{
+		auto cursorTypeNum = cursorType->GetTypeNum();
+		auto MapPos = cursorType->GetMapPos();
+		auto IndPos = cursorType->GetIndividualsMapPos();
+		lpMap.IndividualsDraw(false, MapPos,IndPos);
+		lpMap.MapDraw(false);
+
+		lpMap.SetObj(lpMap.mapScaleCnt, true, MapPos);
+	});
 	//	ｴﾃﾞｨｯﾄｼｰﾝ時の描画
 	auto itr = objlist->begin();
 	(*itr)->Draw();

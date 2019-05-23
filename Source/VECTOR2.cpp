@@ -17,11 +17,11 @@ VECTOR2::VECTOR2(int x, int y)
 	this->y = y;
 }
 
-VECTOR2::VECTOR2(float dx, float dy)
-{
-	this->dx = dx;
-	this->dy = dy;
-}
+//VECTOR2::VECTOR2(float dx, float dy)
+//{
+//	this->dx = dx;
+//	this->dy = dy;
+//}
 
 VECTOR2 & VECTOR2::operator=(const VECTOR2 & vec)
 {

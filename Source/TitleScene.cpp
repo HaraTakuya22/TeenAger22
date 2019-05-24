@@ -6,7 +6,7 @@
 #include "EditScene.h"
 #include "GameScene.h"
 
-// startButton‚ÌŠg‘å”’l
+// startButton‚Ìk¬”’l
 #define START_BUTTON_DON 2
 
 TitleScene::TitleScene()

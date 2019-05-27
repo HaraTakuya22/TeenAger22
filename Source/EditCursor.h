@@ -19,17 +19,7 @@ public:
 	{
 		return (type == TYPE_CURSOR);
 	}
-
-	// typeNumæ“¾ŠÖ”
-	TYPE_NUM& GetTypeNum(void)
-	{
-		return typeNum;
-	}
-	// mapPosæ“¾ŠÖ”
-	VECTOR2& GetMapPos(void)
-	{
-		return mapPos;
-	}
+	
 	// individualsMapPosæ“¾ŠÖ”
 	VECTOR2& GetIndividualsMapPos(void)
 	{

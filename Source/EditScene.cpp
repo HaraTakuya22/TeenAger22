@@ -31,8 +31,8 @@ unique_Base EditScene::Update(unique_Base own, const Controller & Controller)
 	auto cursortypeItr = std::remove_copy_if(objlist->begin(), objlist->end(), tmplist.begin(), [](Objshared& obj) {return !(obj->GetType(TYPE_CURSOR)); });
 	for_each(tmplist.begin(), cursortypeItr, [&](auto &cursorType)
 	{
-		auto mapPos = cursorType->GetMapPos();
-		lpMap.ChangeEditMapScale(Controller, mapPos);
+		auto IndPos = cursorType->GetIndividualsMapPos();
+		lpMap.ChangeEditMapScale(Controller, IndPos);
 
 		//	S‚ð‰Ÿ‚µ‚½‚Æ‚«AÃÞ°À‚ð¾°ÌÞ‚·‚é
 		if (input[KEY_INPUT_S])
@@ -50,7 +50,7 @@ unique_Base EditScene::Update(unique_Base own, const Controller & Controller)
 			// loadˆ—(Message•\Ž¦ˆ—)
 			if (MessageBox(NULL, "Do you want to load now??", "Check Dialog.", MB_OKCANCEL) == IDOK)
 			{
-				lpMap.LoadMap(mapPos);
+				lpMap.LoadMap(IndPos,typeCursor);
 			}
 		}
 	});
@@ -78,8 +78,9 @@ int EditScene::Init(void)
 	objlist->clear();
 	lpMap.player = PLAYER_MAX;
 	lpMap.setUp(VECTOR2(MAPSIZE_X, MAPSIZE_Y),VECTOR2(GRIDSIZE, GRIDSIZE));
-	obj = AddList()(objlist, std::make_unique<EditCursor>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4),TYPE_NUM::NUM_CURSOR));
+	lpMap.CreateMap();
 
+	obj = AddList()(objlist, std::make_unique<EditCursor>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4),TYPE_NUM::NUM_CURSOR));
 	return 0;
 }
 
@@ -87,18 +88,20 @@ void EditScene::EditDraw(void)
 {
 	ClsDrawScreen();
 
+	
 	Shared_ObjList tmplist(objlist->size());
 
 	auto cursorTypeItr = std::remove_copy_if(objlist->begin(), objlist->end(), tmplist.begin(), [](Objshared& obj) {return !(obj->GetType(TYPE_CURSOR)); });
 	for_each(tmplist.begin(), cursorTypeItr, [&](auto &cursorType)
 	{
-		auto cursorTypeNum = cursorType->GetTypeNum();
-		auto MapPos = cursorType->GetMapPos();
 		auto IndPos = cursorType->GetIndividualsMapPos();
-		lpMap.IndividualsDraw(false, MapPos,IndPos);
+
+		lpMap.IndividualsDraw(false,IndPos,typeCursor);
 		lpMap.MapDraw(false);
 
-		lpMap.SetObj(lpMap.mapScaleCnt, true, MapPos);
+		lpMap.SetObj(lpMap.mapScaleCnt, true, IndPos,typeCursor);
+
+		DrawFormatString(200, 200, 0xffffff, "IndPos.x:%d\nIndPos.y:%d", IndPos.x, IndPos.y);
 	});
 	//	´ÃÞ¨¯Ä¼°ÝŽž‚Ì•`‰æ
 	auto itr = objlist->begin();

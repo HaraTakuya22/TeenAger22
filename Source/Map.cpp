@@ -184,14 +184,14 @@ bool Map::Init(void)
 	preyWindow = 0;
 	MapWindow = 0;
 
-	//cameraPos[typeNum] = { 320,320 };
-
 	mapScaleCnt = { 1,1 };
 	blockScaleCnt = { 1,1 };
 
 	is_scale = false;
+	is_makePrey[PREY_3] = false;
 
 	is_mapCreate = false;
+	is_mapSet = false;
 	is_preyWindowCreate = false;
 	
 	MapImage = LoadGraph("MAP/map_new.png");
@@ -218,29 +218,29 @@ void Map::CreateIndividualsDisplay(VECTOR2 ind_pos)
 void Map::CreateMap(void)
 {
 	// œØÃﬂëSëÃÇÃâÊëúÇÃê∂ê¨
-	if (mapAllwindow >= 0 && !is_mapCreate)
+	if (mapAllwindow <= 0 && !is_mapCreate)
 	{
 		mapAllwindow = MakeScreen(MAPSIZE_X, MAPSIZE_Y, true);
 		SetDrawScreen(mapAllwindow);
 		DrawGraph(0, 0, MapImage, true);
 		SetDrawScreen(DX_SCREEN_BACK);
-
 		is_mapCreate = true;
-	}
-	// MapâÊñ ï\é¶
-	//if (player == PLAYER_1 || player == PLAYER_2 || player == PLAYER_3)
-	//{
-	//	if (MapWindow >= 0)
-	//	{
-	//		MapWindow = MakeScreen(MAPWINDOW_SIZE_X, MAPWINDOW_SIZE_Y, true);
-	//		SetDrawScreen(MapWindow);
-	//		DrawBox(0, 0, MAPWINDOW_SIZE_X, MAPWINDOW_SIZE_Y, 0x0000ff, false);
-	//		SetDrawScreen(DX_SCREEN_BACK);
-	//	}
-	//}
+	}	
 }
+			// MapâÊñ ï\é¶
+			//if (player == PLAYER_1 || player == PLAYER_2 || player == PLAYER_3)
+			//{
+			//	if (MapWindow >= 0)
+			//	{
+			//		MapWindow = MakeScreen(MAPWINDOW_SIZE_X, MAPWINDOW_SIZE_Y, true);
+			//		SetDrawScreen(MapWindow);
+			//		DrawBox(0, 0, MAPWINDOW_SIZE_X, MAPWINDOW_SIZE_Y, 0x0000ff, false);
+			//		SetDrawScreen(DX_SCREEN_BACK);
+			//	}
+			//}
+	
 
-void Map::IndividualsDraw(bool gameF,VECTOR2 mPos,VECTOR2 ind_pos)
+void Map::IndividualsDraw(bool gameF,VECTOR2 ind_pos,int num)
 {
 	//DrawGraph(0, 0, mapAllwindow, true);
 	// player1ÇÃâÊñ ï\é¶
@@ -250,20 +250,14 @@ void Map::IndividualsDraw(bool gameF,VECTOR2 mPos,VECTOR2 ind_pos)
 		DrawFormatString(50, 50, 0xffffff, "Player1");
 		//---------------------------------------------
 		DrawRectGraph(0, 0, ind_pos.x, ind_pos.y, Scr.x / mapScaleCnt.x, Scr.y / mapScaleCnt.y, mapAllwindow, true, false);
-		//DrawGraph(mapPos.x,mapPos.y, preyWindow, true);
-
-		//DrawGraph(mapPos.x, mapPos.y,preyWindow, true);
 	}
 
 	// player2ÇÃâÊñ ï\é¶
 	if (player == PLAYER_2)
 	{
-		for (windowsNumX = 0; windowsNumX <= 1; windowsNumX++)
-		{
-			DrawRectGraph((Scr.x / 2) * windowsNumX, 0, ind_pos.x, ind_pos.y, Scr.x / mapScaleCnt.x, Scr.y, mapAllwindow, true, false);
-		}
+		DrawRectGraph((Scr.x / 2) * (num - 1), 0, ind_pos.x, ind_pos.y, Scr.x / mapScaleCnt.x, Scr.y, mapAllwindow, true, false);
 	}
-
+	DrawCircle(0,0, 5, 0x00ff00, true);
 	// player3ÇÃâÊñ ï\é¶
 	if (player == PLAYER_3)
 	{
@@ -283,7 +277,11 @@ void Map::IndividualsDraw(bool gameF,VECTOR2 mPos,VECTOR2 ind_pos)
 
 	if (!gameF)
 	{
-		DrawExtendGraph(mPos.x, mPos.y, mPos.x + (MAPSIZE_X / mapScaleCnt.x), mPos.y + (MAPSIZE_Y / mapScaleCnt.y), MapImage, true);
+		DrawRectGraph(0, 0, ind_pos.x, ind_pos.y, Scr.x / mapScaleCnt.x, Scr.y / mapScaleCnt.y, mapAllwindow, true, false);
+		if (is_scale)
+		{
+			DrawRectExtendGraph(0,0,MAPSIZE_X / mapScaleCnt.x,MAPSIZE_Y / mapScaleCnt.y, ind_pos.x, ind_pos.y, MAPSIZE_X, MAPSIZE_Y, mapAllwindow, true);
+		}
 	}
 }
 
@@ -310,6 +308,8 @@ void Map::setUp(const VECTOR2& size, const VECTOR2& chipSize)
 	lpImage.GetID("image/map6.png", VECTOR2(1, 1), VECTOR2(GRIDSIZE * 3, GRIDSIZE * 3));
 	lpImage.GetID("image/map7.png", VECTOR2(1, 1), VECTOR2(GRIDSIZE, GRIDSIZE * 4));
 	lpImage.GetID("image/map8.png", VECTOR2(1, 1), VECTOR2(GRIDSIZE * 2, GRIDSIZE * 4));
+
+	//lpImage.GetID("image/Prey.png",VECTOR2(8,))
 	// ----------------------------------------------------------------------------------
 	ChangePreyMapScale();
 
@@ -344,14 +344,108 @@ bool Map::setMapData(const VECTOR2 pos, objID id)
 // Mapè„ÇÃIDèÓïÒÇëºÇ…ìnÇµÇƒÇ†Ç∞ÇÈ
 objID Map::GetMapData(const VECTOR2 pos)
 {
-	return GetData(MapData, pos, objID::FLOOR);
+	return GetData(MapData, pos, objID::WALL);
 }
 
 
-void Map::_PreyInstance(WeakList weaklist,TYPE_NUM tNum, VECTOR2 pos)
+void Map::_PreyInstance(WeakList weaklist,VECTOR2 pos,bool is_edit,int num)
 {
-	// PreyÇÃ≤›Ω¿›Ω(GameSceneÇÃÇ›)
-	AddList()(weaklist, std::make_unique<Prey>(VECTOR2(pos.x, pos.y),tNum));
+	// Ãﬂ⁄≤‘∞ÇÃ≤›Ω¿›ΩêîÇÃêßå¿ÇïœçX
+	ChangeInstanceCnt();
+
+	// PreyÇÃ≤›Ω¿›Ω(GameSceneÇÃÇ›)for (int y = 0; y < MapSize.y; y++)
+	for (int y = 0; y < MapSize.y; y++)
+	{
+		for (int x = 0; x < MapSize.x; x++)
+		{
+			objID id = MapData[y][x];
+			switch (id)
+			{
+			case objID::PLAYER1:
+				if (/*!is_makePrey[typeNum1] && */instanceCnt >= 1)
+				{
+					if (!is_edit)
+					{
+						AddList()(weaklist, std::make_unique<Prey>(VECTOR2(x * pos.x, y * pos.y - 40),typeNum1,num));
+					}
+					instanceCnt--;
+					is_makePrey[typeNum1] = true;
+				}
+			case objID::PLAYER2:
+				if (/*!is_makePrey[typeNum2] && */instanceCnt >= 1)
+				{
+					if (!is_edit)
+					{
+						AddList()(weaklist, std::make_unique<Prey>(VECTOR2(x * pos.x, y * pos.y - 40), typeNum2,num));
+					}
+					instanceCnt--;
+					is_makePrey[typeNum2] = true;
+				}
+			case objID::PLAYER3:
+				if (!is_makePrey[typeNum3] && instanceCnt >= 1)
+				{
+					if (!is_edit)
+					{
+						AddList()(weaklist, std::make_unique<Prey>(VECTOR2(x * pos.x, y * pos.y - 40), typeNum3,num));
+					}
+					instanceCnt--;
+					is_makePrey[typeNum3] = true;
+				}
+				/*if (is_CreateEachOther)
+				{
+					DrawGraph(x * ChipSize.x, y * ChipSize.y, lpImage.GetID("character/Prey.png")[0], true);
+				}
+				if (!is_makePrey[PREY_2] && instanceCnt >= 1)
+				{
+					if (!is_edit)
+					{
+						AddList()(weaklist, std::make_unique<Prey>(VECTOR2(x * pos.x, y * pos.y - 40),PREY_2,num));
+					}
+					instanceCnt--;
+					is_makePrey[PREY_2] = true;
+				}
+				if (is_CreateEachOther)
+				{
+					DrawGraph(x * ChipSize.x, y * ChipSize.y, lpImage.GetID("character/Prey.png")[4], true);
+				}
+				if (!is_makePrey[PREY_3] && instanceCnt >= 1)
+				{
+					if (!is_edit)
+					{
+						AddList()(weaklist, std::make_unique<Prey>(VECTOR2(x * pos.x, y * pos.y),PREY_3,num));
+					}
+					instanceCnt--;
+					is_makePrey[PREY_3] = true;
+				}*/
+				break;
+			case objID::WALL:
+			case objID::CHAIR_1:
+			case objID::CHAIR_2:
+			case objID::CHAIR_3:
+			case objID::CHAIR_4:
+			case objID::BOOKSHELF:
+			case objID::DRAWER:
+			case objID::LOCKER:
+			case objID::VASE_1:
+			case objID::VASE_2:
+			case objID::MIRRORTABLE:
+			case objID::FACE:
+			case objID::KITCHIN_1:
+			case objID::KITCHIN_2:
+			case objID::S_MONITOR:
+			case objID::BED:
+			case objID::DESK:
+			case objID::MONITOR:
+			case objID::S_TABLE:
+			case objID::NON:
+				break;
+			default:
+				break;
+			}
+		
+		}
+	}
+	
 }
 
 
@@ -381,7 +475,7 @@ bool Map::SaveMap(void)
 	return false;
 }
 
-bool Map::LoadMap(VECTOR2 mPos)
+bool Map::LoadMap(VECTOR2 indPos,int num)
 {
 	FILE* file;
 	DataHeader expData;
@@ -394,6 +488,7 @@ bool Map::LoadMap(VECTOR2 mPos)
 
 	// isCmp : î‰ärÇ∑ÇÈÃ◊∏ﬁ
 	bool isCmp = true;
+
 	if ((std::string)expData.fileID != SAVE_FILE_ID)
 	{
 		isCmp = false;
@@ -433,7 +528,7 @@ bool Map::LoadMap(VECTOR2 mPos)
 	//isCmp == true Å®Å@ê≥ÇµÇ≠loadÇ≥ÇÍÇΩÇ∆Ç´
 	if (isCmp)
 	{
-		SetObj(blockScaleCnt,false,mPos);
+		SetObj(mapScaleCnt, false, indPos, num);
 	}
 
 	return isCmp;
@@ -448,16 +543,6 @@ bool Map::setData(MapType maptype, const VECTOR2 pos, IDType id)
 
 		maptype[tmp.y][tmp.x] = id;
 		_RPTN(_CRT_WARN, "ID:[%d:%d]%d\n", pos.x, pos.y, id);
-		// ÅñæØƒÇµÇΩ¡ØÃﬂÇÃŒﬂºﬁºÆ›èÓïÒÇÇªÇÃÇ‹Ç‹ëSëÃÇÃœØÃﬂÇ…äiî[
-		// œØÃﬂÇÃà⁄ìÆÇ∆ã§Ç…¡ØÃﬂÇ‡ìÆÇ©Ç≥Ç»Ç¢Ç∆Ç¢ÇØÇ»Ç¢ÇÃÇ≈
-		//setPos = tmp;
-		// Mapì‡Ç≈Ç»Ç¢èÍçáÇÕï`âÊÇµÇ»Ç¢
-		/*if (!SetCheck()(tmp, MapSize));
-		{
-			return false;
-		}*/
-		// Mapì‡ÇÃèÍçáÇÕï`âÊOK
-		//maptype[setPos.y][setPos.x] = maptype[tmp.y][tmp.x];
 
 	}
 	return true;
@@ -477,11 +562,6 @@ IDType Map::GetData(MapType maptype, const VECTOR2 pos, IDType defID)
 	return maptype[tmp.y][tmp.x];
 }
 
-VECTOR2 Map::MapCalcPos(VECTOR2 c_pos,VECTOR2 scroll,VECTOR2 mPos)
-{
-	mPos = scroll - c_pos;
-	return mPos;
-}
 
 VECTOR2 Map::IndividualsMapCalcPos(VECTOR2 pos,VECTOR2 camera,VECTOR2 ind_pos)
 {
@@ -489,16 +569,36 @@ VECTOR2 Map::IndividualsMapCalcPos(VECTOR2 pos,VECTOR2 camera,VECTOR2 ind_pos)
 	return ind_pos;
 }
 
-bool Map::SetObj(VECTOR2 scale,bool is_edit,VECTOR2 mPos)
+bool Map::SetObj(VECTOR2 scale,bool is_edit,VECTOR2 indPos,int num)
 {
+
+
 	for (int y = 0; y < MapSize.y; y++)
 	{
 		for (int x = 0; x < MapSize.x; x++)
 		{
 			objID id = MapData[y][x];
+			VECTOR2 objPos = VECTOR2((Scr.x / 2 * (num - 1)) + (x * ChipSize.x) - indPos.x, (y * ChipSize.y) - indPos.y);
+
 			switch (id)
 			{
-			case objID::FLOOR:
+			case objID::PLAYER1:
+			case objID::PLAYER2:
+			case objID::PLAYER3:
+				if (is_edit)
+				{
+					if (is_scale)
+					{
+						DrawExtendGraph((x * (ChipSize.x / scale.x)) - (indPos.x / scale.x), (y * (ChipSize.y / scale.y)) - (indPos.y / scale.y),
+							((x * (ChipSize.x / scale.x)) + (ChipSize.x / scale.x)) - (indPos.x / scale.x), (((y * (ChipSize.y / scale.y))) + (ChipSize.y / scale.y)) - (indPos.y / scale.y),
+							lpImage.GetID("image/map1.png")[static_cast<int>(0)], true);
+					}
+					else
+					{
+						DrawGraph((x * (ChipSize.x * scale.x)) - indPos.x, (y * (ChipSize.y * scale.y)) - indPos.y, lpImage.GetID("image/map1.png")[static_cast<int>(0)], true);
+					}
+				}
+				break;
 			case objID::WALL:
 			case objID::CHAIR_1:
 			case objID::CHAIR_2:
@@ -508,35 +608,23 @@ bool Map::SetObj(VECTOR2 scale,bool is_edit,VECTOR2 mPos)
 				{
 					if (is_scale)
 					{
-						DrawExtendGraph((x * (ChipSize.x / scale.x)) + mPos.x, (y * (ChipSize.y / scale.y)) + mPos.y,
-							((x * (ChipSize.x / scale.x)) + (ChipSize.x / scale.x)) + mPos.x, (((y * (ChipSize.y / scale.y))) + (ChipSize.y / scale.y)) + mPos.y,
+						DrawExtendGraph((x * (ChipSize.x / scale.x)) - (indPos.x / scale.x), (y * (ChipSize.y / scale.y)) - (indPos.y / scale.y),
+							((x * (ChipSize.x / scale.x)) + (ChipSize.x / scale.x)) - (indPos.x / scale.x), (((y * (ChipSize.y / scale.y))) + (ChipSize.y / scale.y)) - (indPos.y / scale.y),
 							lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
 					}
 					else
 					{
-						DrawGraph((x * (ChipSize.x * scale.x)) + mPos.x, (y * (ChipSize.y * scale.y)) + mPos.y, lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
+						DrawGraph((x * (ChipSize.x * scale.x)) - indPos.x, (y * (ChipSize.y * scale.y)) - indPos.y, lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
 					}
 				}
 				else
 				{
-					if (player == PLAYER_1)
+					if (player == PLAYER_1 || player == PLAYER_2)
 					{
-						DrawExtendGraph((x * (ChipSize.x / scale.x)) + mPos.x, (y * (ChipSize.y / scale.y)) + mPos.y,
-							((x * (ChipSize.x / scale.x)) + (ChipSize.x / scale.x)) + mPos.x, (((y * (ChipSize.y / scale.y))) + (ChipSize.y / scale.y)) + mPos.y,
-							lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
-					}
-					else if (player == PLAYER_2)
-					{
-						for (windowsNumX = 0; windowsNumX < 2; windowsNumX++)
+						if ((num == 1 && objPos.x <= Scr.x / scale.x) || (num == 2 && objPos.x >= Scr.x / scale.x))
 						{
-							DrawExtendGraph((x * (ChipSize.x / scale.x)) + mPos.x + ((Scr.x / 2) * windowsNumX), (y * (ChipSize.y / scale.y)) + mPos.y + ((Scr.y / 2) * windowsNumX),
-								((x * (ChipSize.x / scale.x)) + (ChipSize.x / scale.x)) + mPos.x + ((Scr.x / 2) * windowsNumX), (((y * (ChipSize.y / scale.y))) + (ChipSize.y / scale.y)) + mPos.y + ((Scr.y / 2) * windowsNumX),
-								lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
+							DrawGraph(objPos.x, objPos.y, lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
 						}
-					}
-					else if (player == PLAYER_3)
-					{
-
 					}
 				}
 				break;
@@ -549,20 +637,20 @@ bool Map::SetObj(VECTOR2 scale,bool is_edit,VECTOR2 mPos)
 				{
 					if (is_scale)
 					{
-						DrawExtendGraph((x * (ChipSize.x / scale.x)) + mPos.x, (y * (ChipSize.y / scale.y)) + mPos.y,
-							((x * (ChipSize.x / scale.x)) + (ChipSize.x / scale.x)) + mPos.x, (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 2) / scale.y)) + mPos.y,
-							lpImage.GetID("image/map2.png")[static_cast<int>(id) - 6], true);
+						DrawExtendGraph((x * (ChipSize.x / scale.x)) - (indPos.x / scale.x), (y * (ChipSize.y / scale.y)) - (indPos.y / scale.y),
+							((x * (ChipSize.x / scale.x)) + (ChipSize.x / scale.x)) - (indPos.x / scale.x), (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 2) / scale.y)) - (indPos.y / scale.y),
+							lpImage.GetID("image/map2.png")[static_cast<int>(id) - 8], true);
 					}
 					else
 					{
-						DrawGraph((x * ChipSize.x) + mPos.x, (y * ChipSize.y) + mPos.y, lpImage.GetID("image/map2.png")[static_cast<int>(id) - 6], true);
+						DrawGraph((x * ChipSize.x) - indPos.x, (y * ChipSize.y) - indPos.y, lpImage.GetID("image/map2.png")[static_cast<int>(id) - 8], true);
 					}
 				}
 				else
 				{
-					DrawExtendGraph((x * (ChipSize.x / scale.x)) + mPos.x, (y * (ChipSize.y / scale.y)) + mPos.y,
-						((x * (ChipSize.x / scale.x)) + (ChipSize.x / scale.x)) + mPos.x, (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 2) / scale.y)) + mPos.y,
-						lpImage.GetID("image/map2.png")[static_cast<int>(id) - 6], true);
+					DrawExtendGraph((x * (ChipSize.x / scale.x)) - (indPos.x / scale.x), (y * (ChipSize.y / scale.y)) - (indPos.y / scale.y),
+						((x * (ChipSize.x / scale.x)) + (ChipSize.x / scale.x)) - (indPos.x / scale.x), (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 2) / scale.y)) - (indPos.y / scale.y),
+						lpImage.GetID("image/map2.png")[static_cast<int>(id) - 8], true);
 				}
 				break;
 			case objID::MIRRORTABLE:
@@ -574,20 +662,20 @@ bool Map::SetObj(VECTOR2 scale,bool is_edit,VECTOR2 mPos)
 				{
 					if (is_scale)
 					{
-						DrawExtendGraph((x * (ChipSize.x / scale.x)) + mPos.x, (y * (ChipSize.y / scale.y)) + mPos.y,
-							((x * (ChipSize.x / scale.x)) + (ChipSize.x / scale.x)) + mPos.x, (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 3) / scale.y)) + mPos.y,
-							lpImage.GetID("image/map3.png")[static_cast<int>(id) - 11], true);
+						DrawExtendGraph((x * (ChipSize.x / scale.x)) - (indPos.x / scale.x), (y * (ChipSize.y / scale.y)) - (indPos.y / scale.y),
+							((x * (ChipSize.x / scale.x)) + (ChipSize.x / scale.x)) - (indPos.x / scale.x), (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 3) / scale.y)) - (indPos.y / scale.y),
+							lpImage.GetID("image/map3.png")[static_cast<int>(id) - 13], true);
 					}
 					else
 					{
-						DrawGraph((x * (ChipSize.x * scale.x)) + mPos.x, (y * (ChipSize.y * scale.y)) + mPos.y, lpImage.GetID("image/map3.png")[static_cast<int>(id) - 11], true);
+						DrawGraph((x * (ChipSize.x * scale.x)) - indPos.x, (y * (ChipSize.y * scale.y)) - indPos.y, lpImage.GetID("image/map3.png")[static_cast<int>(id) - 13], true);
 					}
 				}
 				else
 				{
-					DrawExtendGraph((x * (ChipSize.x / scale.x)) + mPos.x, (y * (ChipSize.y / scale.y)) + mPos.y,
-						((x * (ChipSize.x / scale.x)) + (ChipSize.x / scale.x)) + mPos.x, (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 3) / scale.y)) + mPos.y,
-						lpImage.GetID("image/map3.png")[static_cast<int>(id) - 11], true);
+					DrawExtendGraph((x * (ChipSize.x / scale.x)) - (indPos.x / scale.x), (y * (ChipSize.y / scale.y)) - (indPos.y / scale.y),
+						((x * (ChipSize.x / scale.x)) + (ChipSize.x / scale.x)) - (indPos.x / scale.x), (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 3) / scale.y)) - (indPos.y / scale.y),
+						lpImage.GetID("image/map3.png")[static_cast<int>(id) - 13], true);
 				}
 				break;
 			case objID::BED:
@@ -595,19 +683,19 @@ bool Map::SetObj(VECTOR2 scale,bool is_edit,VECTOR2 mPos)
 				{
 					if (is_scale)
 					{
-						DrawExtendGraph((x * (ChipSize.x / scale.x)) + mPos.x, (y * (ChipSize.y / scale.y)) + mPos.y,
-							((x * (ChipSize.x / scale.x)) + ((ChipSize.x * 2) / scale.x)) + mPos.x, (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 3) / scale.y)) + mPos.y,
+						DrawExtendGraph((x * (ChipSize.x / scale.x)) - (indPos.x / scale.x), (y * (ChipSize.y / scale.y)) - (indPos.y / scale.y),
+							((x * (ChipSize.x / scale.x)) + ((ChipSize.x * 2) / scale.x)) - (indPos.x / scale.x), (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 3) / scale.y)) - (indPos.y / scale.y),
 							lpImage.GetID("image/map4.png")[0], true);
 					}
 					else
 					{
-						DrawGraph((x * (ChipSize.x * scale.x)) + mPos.x, (y * (ChipSize.y * scale.y)) + mPos.y, lpImage.GetID("image/map4.png")[0], true);
+						DrawGraph((x * (ChipSize.x * scale.x)) - indPos.x, (y * (ChipSize.y * scale.y)) - indPos.y, lpImage.GetID("image/map4.png")[0], true);
 					}
 				}
 				else
 				{
-					DrawExtendGraph((x * (ChipSize.x / scale.x)) + mPos.x, (y * (ChipSize.y / scale.y)) + mPos.y,
-						((x * (ChipSize.x / scale.x)) + ((ChipSize.x * 2) / scale.x)) + mPos.x, (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 3) / scale.y)) + mPos.y,
+					DrawExtendGraph((x * (ChipSize.x / scale.x)) - (indPos.x / scale.x), (y * (ChipSize.y / scale.y)) - (indPos.y / scale.y),
+						((x * (ChipSize.x / scale.x)) + ((ChipSize.x * 2) / scale.x)) - (indPos.x / scale.x), (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 3) / scale.y)) - (indPos.y / scale.y),
 						lpImage.GetID("image/map4.png")[0], true);
 				}
 				break;
@@ -616,19 +704,19 @@ bool Map::SetObj(VECTOR2 scale,bool is_edit,VECTOR2 mPos)
 				{
 					if (is_scale)
 					{
-						DrawExtendGraph((x * (ChipSize.x / scale.x)) + mPos.x, (y * (ChipSize.y / scale.y)) + mPos.y,
-							((x * (ChipSize.x / scale.x)) + ((ChipSize.x * 3) / scale.x)) + mPos.x, (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 2) / scale.y)) + mPos.y,
+						DrawExtendGraph((x * (ChipSize.x / scale.x)) - (indPos.x / scale.x), (y * (ChipSize.y / scale.y)) - (indPos.y / scale.y),
+							((x * (ChipSize.x / scale.x)) + ((ChipSize.x * 3) / scale.x)) - (indPos.x / scale.x), (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 2) / scale.y)) - (indPos.y / scale.y),
 							lpImage.GetID("image/map5.png")[0], true);
 					}
 					else
 					{
-						DrawGraph((x * (ChipSize.x * scale.x)) + mPos.x, (y * (ChipSize.y * scale.y)) + mPos.y, lpImage.GetID("image/map5.png")[0], true);
+						DrawGraph((x * (ChipSize.x * scale.x)) - indPos.x, (y * (ChipSize.y * scale.y)) - indPos.y, lpImage.GetID("image/map5.png")[0], true);
 					}
 				}
 				else
 				{
-					DrawExtendGraph((x * (ChipSize.x / scale.x)) + mPos.x, (y * (ChipSize.y / scale.y)) + mPos.y,
-						((x * (ChipSize.x / scale.x)) + ((ChipSize.x * 3) / scale.x)) + mPos.x, (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 2) / scale.y)) + mPos.y,
+					DrawExtendGraph((x * (ChipSize.x / scale.x)) - (indPos.x / scale.x), (y * (ChipSize.y / scale.y)) - (indPos.y / scale.y),
+						((x * (ChipSize.x / scale.x)) + ((ChipSize.x * 3) / scale.x)) - (indPos.x / scale.x), (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 2) / scale.y)) - (indPos.y / scale.y),
 						lpImage.GetID("image/map5.png")[0], true);
 				}
 				break;
@@ -638,19 +726,19 @@ bool Map::SetObj(VECTOR2 scale,bool is_edit,VECTOR2 mPos)
 				{
 					if (is_scale)
 					{
-						DrawExtendGraph((x * (ChipSize.x / scale.x)) + mPos.x, (y * (ChipSize.y / scale.y)) + mPos.y,
-							((x * (ChipSize.x / scale.x)) + ((ChipSize.x * 3) / scale.x)) + mPos.x, (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 3) / scale.y)) + mPos.y,
+						DrawExtendGraph((x * (ChipSize.x / scale.x)) - (indPos.x / scale.x), (y * (ChipSize.y / scale.y)) - (indPos.y / scale.y),
+							((x * (ChipSize.x / scale.x)) + ((ChipSize.x * 3) / scale.x)) - (indPos.x / scale.x), (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 3) / scale.y)) - (indPos.y / scale.y),
 							lpImage.GetID("image/map6.png")[0], true);
 					}
 					else
 					{
-						DrawGraph((x * (ChipSize.x * scale.x)) + mPos.x, (y * (ChipSize.y * scale.y)) + mPos.y, lpImage.GetID("image/map6.png")[0], true);
+						DrawGraph((x * (ChipSize.x * scale.x)) - indPos.x, (y * (ChipSize.y * scale.y)) - indPos.y, lpImage.GetID("image/map6.png")[0], true);
 					}
 				}
 				else
 				{
-					DrawExtendGraph((x * (ChipSize.x / scale.x)) + mPos.x, (y * (ChipSize.y / scale.y)) + mPos.y,
-						((x * (ChipSize.x / scale.x)) + ((ChipSize.x * 3) / scale.x)) + mPos.x, (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 3) / scale.y)) + mPos.y,
+					DrawExtendGraph((x * (ChipSize.x / scale.x)) - (indPos.x / scale.x), (y * (ChipSize.y / scale.y)) - (indPos.y / scale.y),
+						((x * (ChipSize.x / scale.x)) + ((ChipSize.x * 3) / scale.x)) - (indPos.x / scale.x), (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 3) / scale.y)) - (indPos.y / scale.y),
 						lpImage.GetID("image/map6.png")[0], true);
 				}
 				break;
@@ -659,19 +747,19 @@ bool Map::SetObj(VECTOR2 scale,bool is_edit,VECTOR2 mPos)
 				{
 					if (is_scale)
 					{
-						DrawExtendGraph((x * (ChipSize.x / scale.x)) + mPos.x, (y * (ChipSize.y / scale.y)) + mPos.y,
-							((x * (ChipSize.x / scale.x)) + (ChipSize.x / scale.x)) + mPos.x, (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 4) / scale.y)) + mPos.y,
+						DrawExtendGraph((x * (ChipSize.x / scale.x)) - (indPos.x / scale.x), (y * (ChipSize.y / scale.y)) - (indPos.y / scale.y),
+							((x * (ChipSize.x / scale.x)) + (ChipSize.x / scale.x)) - (indPos.x / scale.x), (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 4) / scale.y)) - (indPos.y / scale.y),
 							lpImage.GetID("image/map7.png")[0], true);
 					}
 					else
 					{
-						DrawGraph((x * (ChipSize.x * scale.x)) + mPos.x, (y * (ChipSize.y * scale.y)) + mPos.y, lpImage.GetID("image/map7.png")[0], true);
+						DrawGraph((x * (ChipSize.x * scale.x)) - indPos.x, (y * (ChipSize.y * scale.y)) - indPos.y, lpImage.GetID("image/map7.png")[0], true);
 					}
 				}
 				else
 				{
-					DrawExtendGraph((x * (ChipSize.x / scale.x)) + mPos.x, (y * (ChipSize.y / scale.y)) + mPos.y,
-						((x * (ChipSize.x / scale.x)) + (ChipSize.x / scale.x)) + mPos.x, (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 4) / scale.y)) + mPos.y,
+					DrawExtendGraph((x * (ChipSize.x / scale.x)) - (indPos.x / scale.x), (y * (ChipSize.y / scale.y)) - (indPos.y / scale.y),
+						((x * (ChipSize.x / scale.x)) + (ChipSize.x / scale.x)) - (indPos.x / scale.x), (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 4) / scale.y)) - (indPos.y / scale.y),
 						lpImage.GetID("image/map7.png")[0], true);
 				}
 				break;
@@ -680,35 +768,39 @@ bool Map::SetObj(VECTOR2 scale,bool is_edit,VECTOR2 mPos)
 				{
 					if (is_scale)
 					{
-						DrawExtendGraph((x * (ChipSize.x / scale.x)) + mPos.x, (y * (ChipSize.y / scale.y)) + mPos.y,
-							((x * (ChipSize.x / scale.x)) + ((ChipSize.x * 2) / scale.x)) + mPos.x, (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 4) / scale.y)) + mPos.y,
+						DrawExtendGraph((x * (ChipSize.x / scale.x)) - (indPos.x / scale.x), (y * (ChipSize.y / scale.y)) - (indPos.y / scale.y),
+							((x * (ChipSize.x / scale.x)) + ((ChipSize.x * 2) / scale.x)) - (indPos.x / scale.x), (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 4) / scale.y)) - (indPos.y / scale.y),
 							lpImage.GetID("image/map8.png")[0], true);
 					}
 					else
 					{
-						DrawGraph((x * (ChipSize.x * scale.x)) + mPos.x, (y * (ChipSize.y * scale.y)) + mPos.y, lpImage.GetID("image/map8.png")[0], true);
+						DrawGraph((x * (ChipSize.x * scale.x)) - indPos.x, (y * (ChipSize.y * scale.y)) - indPos.y, lpImage.GetID("image/map8.png")[0], true);
 					}
 				}
 				else
 				{
-					DrawExtendGraph((x * (ChipSize.x / scale.x)) + mPos.x, (y * (ChipSize.y / scale.y)) + mPos.y,
-						((x * (ChipSize.x / scale.x)) + ((ChipSize.x * 2) / scale.x)) + mPos.x, (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 4) / scale.y)) + mPos.y,
+					DrawExtendGraph((x * (ChipSize.x / scale.x)) - (indPos.x / scale.x), (y * (ChipSize.y / scale.y)) - (indPos.y / scale.y),
+						((x * (ChipSize.x / scale.x)) + ((ChipSize.x * 2) / scale.x)) - (indPos.x / scale.x), (((y * (ChipSize.y / scale.y))) + ((ChipSize.y * 4) / scale.y)) - (indPos.y / scale.y),
 						lpImage.GetID("image/map8.png")[0], true);
 				}
 				break;
 			default:
 				break;
 			}
-			if (!is_scale)
+			if (!is_scale && !is_edit)
 			{
-				DrawFormatString((x * (ChipSize.x / blockScaleCnt.x)) + mPos.x, (y * (ChipSize.y / blockScaleCnt.y)) + mPos.y, 0xff0000, "x:%d\ny:%d\n%d", x, y, id);
+				DrawFormatString((Scr.x / 2) * (num - 1) + (x * (ChipSize.x / blockScaleCnt.x)) - indPos.x, (y * (ChipSize.y / blockScaleCnt.y)) - indPos.y, 0x000000, "x:%d\ny:%d\n%d", x, y, id);
+			}
+			if(is_edit)
+			{
+				DrawFormatString(((Scr.x / 2) * num) + (x * (ChipSize.x / mapScaleCnt.x) - indPos.x), (y * (ChipSize.y / mapScaleCnt.y)) - indPos.y, 0x000000, "x:%d\ny:%d\n%d", x, y, id);
 			}
 		}
 	}
 	return true;
 }
 
-bool Map::ChangeEditMapScale(Controller ctrl,VECTOR2 mPos)
+bool Map::ChangeEditMapScale(Controller ctrl,VECTOR2 indPos)
 {
 	auto cntNow = ctrl.GetButtonInfo(KEY_TYPE_NOW);
 	auto cntOld = ctrl.GetButtonInfo(KEY_TYPE_OLD);
@@ -716,7 +808,7 @@ bool Map::ChangeEditMapScale(Controller ctrl,VECTOR2 mPos)
 	if (cntNow[KEY_INPUT_COMMA] & ~cntOld[KEY_INPUT_COMMA]
 		&& (mapScaleCnt.x == 1 && mapScaleCnt.y == 1))
 	{
-		mPos = { 0,0 };
+		indPos = { 0,0 };
 
 		mapScaleCnt.x *= 4;
 		mapScaleCnt.y *= 4;
@@ -737,23 +829,48 @@ bool Map::ChangePreyMapScale(void)
 	switch (player)
 	{
 	case PLAYER_1:
+
 		blockScaleCnt.x = 1;
 		blockScaleCnt.y = 1;
 		mapScaleCnt.x = 1;
 		mapScaleCnt.y = 1;
 		break;
 	case PLAYER_2:
+
 		blockScaleCnt.x = 1;
 		blockScaleCnt.y = 1;
 		mapScaleCnt.x = 2;
-		mapScaleCnt.y = 2;
+		mapScaleCnt.y = 1;
 		break;
 	case PLAYER_3:
+
 		blockScaleCnt.x = 2;
 		blockScaleCnt.y = 2;
 		mapScaleCnt.x = 2;
 		mapScaleCnt.y = 2;
 		break;
+	default:
+		break;
+	}
+	return true;
+}
+
+bool Map::ChangeInstanceCnt(void)
+{
+	switch (player)
+	{
+	case PLAYER_1:
+		instanceCnt = 1;
+		break;
+
+	case PLAYER_2:
+		instanceCnt = 2;
+		break;
+
+	case PLAYER_3:
+		instanceCnt = 3;
+		break;
+
 	default:
 		break;
 	}

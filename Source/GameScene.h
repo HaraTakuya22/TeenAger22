@@ -18,7 +18,6 @@ private:
 
 	void Draw(void);
 
-	// ÌßÚ²Ô°²Ý½ÀÝ½Ì×¸Þ(ŒJ‚è•Ô‚µ²Ý½ÀÝ½‚Ì–hŽ~)
-	bool is_makePrey;
+
 };
 

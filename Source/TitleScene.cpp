@@ -6,7 +6,7 @@
 #include "EditScene.h"
 #include "GameScene.h"
 
-// startButtonの縮小数値
+// startButtonの拡大数値
 #define START_BUTTON_DON 2
 
 TitleScene::TitleScene()
@@ -71,20 +71,6 @@ unique_Base TitleScene::Update(unique_Base own, const Controller & controll)
 		startPos4 = { buttonLeftX += START_BUTTON_DON,buttonRightY -= START_BUTTON_DON };
 
 	}
-
-	virusCount++;
-	if (virusCount >= 200)
-	{
-		virusCount = 0;
-	}
-	for (int i = 0; i < VIRUS_MAX; i++)
-	{
-		if (GetRand(50) == 0)
-		{
-			virusRandCount[i]++;
-			virusRandPos[i] = { GetRand(1200),GetRand(660) };
-		}
-	}
 	ClsDrawScreen();
 
 	Draw();
@@ -101,9 +87,6 @@ int TitleScene::Init(void)
 
 	titleMapImage = LoadGraph("MAP/map(old).png");
 	startButtonImage = LoadGraph("image/TitleStart.png");
-	LoadDivGraph("image/Virus2.png", 200, 4, 50, 700, 200, virusImage);
-	LoadDivGraph("image/Virus.png", 200, 4, 50, 400, 400, virusImage);
-
 	titleLeftPos = { 0 , 0 };
 	titleRightPos.x = 2400;
 	titleRightPos.y = 1440;
@@ -117,8 +100,6 @@ int TitleScene::Init(void)
 	startPos3 = { buttonRightX,buttonRightY };
 	startPos4 = { buttonLeftX,buttonRightY };
 	startButtonCnt = 0;
-	virusCount = 0;
-
 	return 0;
 }
 
@@ -134,6 +115,7 @@ void TitleScene::Draw(void)
 
 	// Titleﾛｺﾞの配置位置(仮)
 	DrawGraph(0, 0, titleImage, true);
+
 	// ｹﾞｰﾑ選択文字の配置位置(仮)
 	//for (int i = 20; i <= 80; i *= 4)
 	//{
@@ -146,8 +128,4 @@ void TitleScene::Draw(void)
 		startPos3.x, startPos3.y,
 		startPos4.x, startPos4.y,
 				startButtonImage, true);
-	DrawGraph(250, 430, virusImage[virusCount], true);
-
-	//DrawGraph(virusRandPos[], 430, virusImage[virusCount], true);
-
 }

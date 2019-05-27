@@ -1,7 +1,9 @@
 #pragma once
 
 enum class objID{
-	FLOOR,			// è∞
+	PLAYER1,			// prey
+	PLAYER2,
+	PLAYER3,
 	WALL,			// ï«
 	CHAIR_1,		// à÷éq1
 	CHAIR_2,		// à÷éq2

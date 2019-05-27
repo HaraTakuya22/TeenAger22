@@ -77,11 +77,7 @@ public:
 	{
 		return pos;
 	}
-	//ﾎﾟｼﾞｼｮﾝｾｯﾄ
-	/*void SetPos(VECTOR2* pos)
-	{
-		Obj::pos[typeNum] = pos[typeNum];
-	}*/
+	
 	// 指定のｵﾌﾞｼﾞｪｸﾄをﾘｽﾄから消すﾌﾗｸﾞを返す
 	bool Getdeleteflag(void)
 	{
@@ -93,13 +89,17 @@ public:
 	{
 		deleteflag = true;
 	}
+	virtual int GetPlayerCnt(void)
+	{
+		return playerCnt;
+	}
 
 	// ｵﾌﾞｼﾞｪｸﾄのﾀｲﾌﾟ取得関数
 	virtual bool GetType(OBJ_TYPE type) = 0;
-	virtual TYPE_NUM& GetTypeNum(void) = 0;
 
-	// mapPosの取得(typeNumによって値が違うので、純粋仮想関数に)
-	virtual VECTOR2& GetMapPos(void) = 0;
+	// ｵﾌﾞｼﾞｪｸﾄ化したｷｬﾗｸﾀｰの取得
+	virtual TYPE_NUM GetTypeNum(void) { return typeObjNum; };
+
 	// individualsMapPosの取得(typeNumによって値が違うので、純粋仮想関数に)
 	virtual VECTOR2& GetIndividualsMapPos(void) = 0;
 
@@ -125,12 +125,13 @@ protected:
 	//各ｷｬﾗのﾎﾟｼﾞｼｮﾝの格納変数
 	VECTOR2 pos;
 
-	// ｽｸﾘｰﾝ上にMapを表示させるために用いるﾏｯﾌﾟのﾎﾟｼﾞｼｮﾝ
-	VECTOR2 mapPos;
+	// ｷｬﾗｸﾀｰ選択時に選択したｷｬﾗをｵﾌﾞｼﾞｪｸﾄするための変数
+	TYPE_NUM typeObjNum;
+	// ｷｬﾗｸﾀｰを生成した順番(1=1P 2 =2P 3 =3P)
+	int playerCnt;
+
 	// ﾏｯﾌﾟ全体(12000 x 8640)を基にしたｽｸﾘｰﾝ単位でのﾎﾟｼﾞｼｮﾝ
 	VECTOR2 individualsMapPos;
-
-	TYPE_NUM typeNum;
 
 	// ｶﾒﾗﾎﾟｼﾞｼｮﾝ(player(鬼も含める))
 	VECTOR2 cameraPos;

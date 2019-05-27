@@ -1,5 +1,6 @@
 #include <DxLib.h>
 
+#include "SelectScene.h"
 #include "Obj.h"
 #include "Image.h"
 

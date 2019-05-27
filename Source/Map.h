@@ -89,7 +89,7 @@ public:
 	void CreateMap(void);
 
 	// ŠeÌßÚ²Ô°‚ÌÃŞ¨½ÌßÚ²‚Ì•`‰æŠÖ”
-	void IndividualsDraw(bool gameF,VECTOR2 mPos,VECTOR2 ind_pos);
+	void IndividualsDraw(bool gameF,VECTOR2 ind_pos,int num);
 
 	// ‰æ–Ê‚Ì¾¯Ä
 	void setUp(const VECTOR2& size, const VECTOR2& chipSize);
@@ -97,12 +97,12 @@ public:
 	bool setMapData(const VECTOR2 pos, objID id);
 	objID GetMapData(const VECTOR2 pos);
 
-	void _PreyInstance(WeakList weaklist,TYPE_NUM tNum,VECTOR2 pos);
+	void _PreyInstance(WeakList weaklist,VECTOR2 pos,bool is_edit,int num);
 
 	//	ÃŞ°À¾°ÌŞŠÖ”
 	bool SaveMap(void);
 	//	ÃŞ°ÀÛ°ÄŞŠÖ”
-	bool LoadMap(VECTOR2 mPos);
+	bool LoadMap(VECTOR2 indPos,int num);
 
 	
 	// Map‚Ì»²½Şæ“¾
@@ -121,19 +121,20 @@ public:
 		return is_scale;
 	}
 
-	// Ï¯Ìß‚ÌÎß¼Ş¼®İŒvZŠÖ”
-	VECTOR2 MapCalcPos(VECTOR2 c_pos,VECTOR2 scroll,VECTOR2 mPos);
 
 	// ŒÂ•Ê‚ÌÏ¯Ìß³¨İÄŞ³‚ÌÎß¼Ş¼®İŒvZŠÖ”
 	VECTOR2 IndividualsMapCalcPos(VECTOR2 pos,VECTOR2 camera,VECTOR2 ind_pos);
 
 	// ¾¯Ä‚µ‚½µÌŞ¼Şª¸Ä‚Ì•`‰æ
-	bool SetObj(VECTOR2 scale,bool is_edit,VECTOR2 mPos);
+	bool SetObj(VECTOR2 scale,bool is_edit,VECTOR2 indPos,int num);
 
 	// Map‚ÌŠg‘åk¬(EditScene‚Ì‚İ)
-	bool ChangeEditMapScale(Controller ctrl,VECTOR2 mPos);
+	bool ChangeEditMapScale(Controller ctrl,VECTOR2 indPos);
 	// Map‚ÌŠg‘åk¬—¦‚ÌŒˆ’èŠÖ”(GameScene‚Ì‚İ)
 	bool ChangePreyMapScale(void);
+
+	// ÌßÚ²l”‚É‚æ‚Á‚ÄÌßÚ²Ô°‚Ì²İ½Àİ½”‚ğ§ŒÀ
+	bool ChangeInstanceCnt(void);
 	// Map‚ÌŠg‘åk¬—¦
 	VECTOR2 mapScaleCnt;
 	// ‚»‚ê‚¼‚ê‚ÌÁ¯Ìß‚ÌŠg‘åk¬—¦
@@ -164,6 +165,9 @@ private:
 	
 	// Še³¨İÄŞ³A‘S‘ÌÏ¯Ìß‚Ì•`‰æ§ŒäÌ×¸Ş
 	bool is_mapCreate;
+
+	bool is_mapSet;
+
 	bool is_preyWindowCreate;
 
 	// Ï¯Ìßê—p‚Ì³¨İÄŞ³
@@ -176,7 +180,11 @@ private:
 
 	// ½¸Ø°İ‘S‘Ì‚Ì»²½Ş
 	VECTOR2 Scr;
+	// ÌßÚ²Ô°²İ½Àİ½Ì×¸Ş(ŒJ‚è•Ô‚µ²İ½Àİ½‚Ì–h~)
+	bool is_makePrey[PREY_3];
 
+	// ÌßÚ²Ô°‚Ì²İ½Àİ½”‚Ì§ŒÀ¶³İÄ
+	int instanceCnt;
 
 
 	// Ï¯Ìß‚Ì1Ï½1Ï½‚ÌÃŞ°À

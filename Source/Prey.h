@@ -24,10 +24,12 @@ public:
 	{
 		return (type == TYPE_PREY);
 	}
+	// ·¬×¶¬‚ÌÛ‚Ì·¬×‚ÌÀ²Ìß‚Ìæ“¾
 	TYPE_NUM GetTypeNum(void) 
 	{
 		return typeObjNum;
 	}
+	// 1P 2P 3P ‚Ìî•ñæ“¾
 	int GetPlayerCnt(void)
 	{
 		return playerCnt;
@@ -40,5 +42,8 @@ public:
 
 private:
 	bool Init(TYPE_NUM p_num);
+
+	// Še·¬×‚Ì±ÆÒ°¼®İ‚Ì‰Šú‰»
+	bool AnimInit(void);
 };
 

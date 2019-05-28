@@ -63,7 +63,7 @@ public:
 	bool Init(std::string filename, VECTOR2 divcnt, VECTOR2 divsize);
 
 	//±ÆÒ°¼®Ý‚Ì’Ç‰Á
-	bool AddAnim(std::string animationName, int x, int y, int flame, int val);
+	bool AddAnim(std::string animationName,int flame, int val);
 	//±ÆÒ°¼®Ý‚Ì¾¯Ä
 	bool SetAnim(std::string animationName);
 	//±ÆÒ°¼®Ý‚Ì–¼‘OŽæ“¾

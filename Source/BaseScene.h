@@ -18,6 +18,8 @@ extern TYPE_NUM typeNum1;
 extern TYPE_NUM typeNum2;
 // 3Pの選択人物
 extern TYPE_NUM typeNum3;
+// 鬼の選択人物
+extern TYPE_NUM typeNumIt;
 
 class BaseScene
 {

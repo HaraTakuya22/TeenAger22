@@ -4,6 +4,7 @@ enum class objID{
 	PLAYER1,			// prey
 	PLAYER2,
 	PLAYER3,
+	PLAYER_IT,			// it
 	WALL,			// •Ç
 	CHAIR_1,		// ˆÖŽq1
 	CHAIR_2,		// ˆÖŽq2

@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "Image.h"
 #include "Prey.h"
+#include "It.h"
 #include "NUM_TYPE.h"
 
 struct DataHeader {
@@ -391,6 +392,16 @@ void Map::_PreyInstance(WeakList weaklist,VECTOR2 pos,bool is_edit,int num)
 					instanceCnt--;
 					is_makePrey[typeNum3] = true;
 				}
+			case objID::PLAYER_IT:				if (/*!is_makePrey[typeNum2] && */instanceCnt >= 1)
+			{
+				if (!is_edit)
+				{
+					AddList()(weaklist, std::make_unique<It>(VECTOR2(x * pos.x, y * pos.y - 40), typeNum2, num));
+				}
+				instanceCnt--;
+				is_makePrey[typeNumIt] = true;
+			}
+
 				/*if (is_CreateEachOther)
 				{
 					DrawGraph(x * ChipSize.x, y * ChipSize.y, lpImage.GetID("character/Prey.png")[0], true);
@@ -446,6 +457,10 @@ void Map::_PreyInstance(WeakList weaklist,VECTOR2 pos,bool is_edit,int num)
 		}
 	}
 	
+}
+
+void Map::_ItInstance(WeakList weaklist, VECTOR2 pos, bool is_edit, int num)
+{
 }
 
 
@@ -623,7 +638,7 @@ bool Map::SetObj(VECTOR2 scale,bool is_edit,VECTOR2 indPos,int num)
 					{
 						if ((num == 1 && objPos.x <= Scr.x / scale.x) || (num == 2 && objPos.x >= Scr.x / scale.x))
 						{
-							DrawGraph(objPos.x, objPos.y, lpImage.GetID("image/map1.png")[static_cast<int>(id)], true);
+							DrawGraph(objPos.x, objPos.y, lpImage.GetID("image/map1.png")[static_cast<int>(id - 2 )], true);
 						}
 					}
 				}

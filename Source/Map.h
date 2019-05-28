@@ -98,6 +98,7 @@ public:
 	objID GetMapData(const VECTOR2 pos);
 
 	void _PreyInstance(WeakList weaklist,VECTOR2 pos,bool is_edit,int num);
+	void _ItInstance(WeakList weaklist, VECTOR2 pos, bool is_edit, int num);
 
 	//	√ﬁ∞¿æ∞Ãﬁä÷êî
 	bool SaveMap(void);

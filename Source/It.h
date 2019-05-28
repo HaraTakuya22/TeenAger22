@@ -5,7 +5,7 @@ class It :
 {
 public:
 	It();
-	It(VECTOR2 pos[PREY_MAX],TYPE_NUM i_num);
+	It(VECTOR2 pos, TYPE_NUM pNum, int num);
 	~It();
 	void Draw(void);
 	void Move(const Controller& controll, WeakList objlist);

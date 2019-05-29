@@ -60,7 +60,7 @@ public:
 		return mapins;
 	}
 	// Map‚ÌµÌŞ¼Şª¸Ä‚Ì•`‰æ
-	void Draw(void);
+	void Draw(bool is_edit, VECTOR2 scale, VECTOR2 indPos, int pCnt);
 
 	// Map‚ÌGrid‚Ì•\¦(Ï½Šm”F—p) gameF:¹Ş°Ñ¼°İ‚ÉˆÚs‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚© true:GameScene false:EditScene
 	void MapDraw(bool gameF);
@@ -79,6 +79,7 @@ public:
 	}
 
 	//bool CheckPassage(VECTOR2 pos, PASSAGE passage,DIR dir);
+	bool _MakingPrey(WeakList weaklist);
 
 	// Še•Ï”‚Ì‰Šú‰»ŠÖ”
 	bool Init(void);
@@ -89,7 +90,7 @@ public:
 	void CreateMap(void);
 
 	// ŠeÌßÚ²Ô°‚ÌÃŞ¨½ÌßÚ²‚Ì•`‰æŠÖ”
-	void IndividualsDraw(bool gameF,VECTOR2 ind_pos,int num);
+	void IndividualsDraw(bool gameF,VECTOR2 indPos,int pCnt);
 
 	// ‰æ–Ê‚Ì¾¯Ä
 	void setUp(const VECTOR2& size, const VECTOR2& chipSize);
@@ -97,13 +98,12 @@ public:
 	bool setMapData(const VECTOR2 pos, objID id);
 	objID GetMapData(const VECTOR2 pos);
 
-	void _PreyInstance(WeakList weaklist,VECTOR2 pos,bool is_edit,int num);
-	void _ItInstance(WeakList weaklist, VECTOR2 pos, bool is_edit, int num);
+
 
 	//	ÃŞ°À¾°ÌŞŠÖ”
 	bool SaveMap(void);
 	//	ÃŞ°ÀÛ°ÄŞŠÖ”
-	bool LoadMap(VECTOR2 indPos,int num);
+	bool LoadMap(WeakList weaklist,bool loadF);
 
 	
 	// Map‚Ì»²½Şæ“¾
@@ -124,10 +124,10 @@ public:
 
 
 	// ŒÂ•Ê‚ÌÏ¯Ìß³¨İÄŞ³‚ÌÎß¼Ş¼®İŒvZŠÖ”
-	VECTOR2 IndividualsMapCalcPos(VECTOR2 pos,VECTOR2 camera,VECTOR2 ind_pos);
+	VECTOR2 IndividualsMapCalcPos(VECTOR2 pos,VECTOR2 camera,VECTOR2 indPos);
 
-	// ¾¯Ä‚µ‚½µÌŞ¼Şª¸Ä‚Ì•`‰æ
-	bool SetObj(VECTOR2 scale,bool is_edit,VECTOR2 indPos,int num);
+	// ¾¯Ä‚µ‚½µÌŞ¼Şª¸Ä‚Ì•`‰æ(num:1P 2P or 3P is_edit:´ÃŞ¨¯ÄÓ°ÄŞ‚©‚Ç‚¤‚©‚ÌÌ×¸Ş scale:Ï¯Ìß‚ÌŠg‘åk¬—¦)
+	bool SetObj(VECTOR2 scale,bool is_edit,WeakList weaklist);
 
 	// Map‚ÌŠg‘åk¬(EditScene‚Ì‚İ)
 	bool ChangeEditMapScale(Controller ctrl,VECTOR2 indPos);
@@ -148,7 +148,6 @@ private:
 	Map();
 	~Map();
 
-	VECTOR2 setPos;
 
 	// ¶°¿Ù‚ÌÎß¼Ş¼®İ•â³‚Ì‚½‚ß‚Ì¶Ò×Îß¼Ş¼®İ
 	//VECTOR2 cameraPos[PREY_MAX];
@@ -162,13 +161,13 @@ private:
 	// ‘S‘Ì‚ÌÏ¯Ìß‰æ‘œ
 	int mapAllwindow;
 
+	// ¦”p~—\’è
 	int preyWindow;
 	
 	// Še³¨İÄŞ³A‘S‘ÌÏ¯Ìß‚Ì•`‰æ§ŒäÌ×¸Ş
 	bool is_mapCreate;
 
-	bool is_mapSet;
-
+	// ¦”p~—\’è
 	bool is_preyWindowCreate;
 
 	// Ï¯Ìßê—p‚Ì³¨İÄŞ³
@@ -194,7 +193,7 @@ private:
 	std::vector<objID>BaseMap;
 	
 
-	// 
+	// Ï¯Ìß‚ğÁ¯Ìß’PˆÊ‚Å•\‚µ‚½»²½Ş
 	VECTOR2 MapSize;
 	// 1Á¯Ìß‚Ì»²½Ş
 	VECTOR2 ChipSize;
@@ -202,7 +201,10 @@ private:
 	// “¹‚©•Ç‚©‚ÌÌ×¸Ş
 	PASSAGE passageF[GRIDCNT_X * GRIDCNT_Y];
 
+	// Ï¯Ìß’PˆÊ‚Ìprey‚Ì²İ½Àİ½Ì×¸Ş
+	// “¯‚¶‚Æ‚±‚ë‚É‚Í²İ½Àİ½‚µ‚½‚­‚È‚¢‚½‚ß
 
+	bool makingPreyFlag[MAPSIZE_X / GRIDSIZE][MAPSIZE_Y / GRIDSIZE];
 	
 	
 
@@ -211,6 +213,7 @@ private:
 	// Map‚ÉÁ¯Ìßî•ñ‚ğ–„‚ß‚ŞŠÖ”
 	bool setData(MapType maptype, const VECTOR2 pos, IDType id);
 
+	// Ï¯Ìß‚Ìî•ñ‚ğæ“¾
 	template<typename MapType, typename IDType>
 	IDType GetData(MapType maptype, const VECTOR2 pos, IDType defID);
 };

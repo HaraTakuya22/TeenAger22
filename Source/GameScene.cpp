@@ -1,4 +1,5 @@
 #include <DxLib.h>
+#include "Prey.h"
 #include "Obj.h"
 #include "Scene.h"
 #include "GameScene.h"
@@ -39,7 +40,6 @@ unique_Base GameScene::Update(unique_Base own, const Controller & Controller)
 		return std::make_unique<EditScene>();
 	}
 	
-	
 	ClsDrawScreen();
 	Draw();
 	ScreenFlip();
@@ -54,23 +54,19 @@ int GameScene::Init(void)
 	{
 		objlist = std::make_shared<Shared_ObjList>();
 	}
-
+	for (int p = PREY_1; p <= PREY_3; p++)
+	{
+		preyInstancePos[p] = VECTOR2(GetRand(MAPSIZE_X / GRIDSIZE) * GRIDSIZE, 
+									(GetRand(MAPSIZE_Y / GRIDSIZE) * GRIDSIZE) - 40);
+		is_Instance[p] = false;
+	}
 	VECTOR2 gridSize = lpMap.GetGridSize();
 	VECTOR2 mapSize = VECTOR2(MAPSIZE_X / gridSize.x, MAPSIZE_Y / gridSize.y);
-	// prey‚Ì²Ý½ÀÝ½??
-	if (lpMap.player == PLAYER_1)
-	{
-		lpMap._PreyInstance(objlist, VECTOR2(gridSize.x, gridSize.y),false,1);
-	}
-	if (lpMap.player == PLAYER_2)
-	{
-		for (int i = 1; i < 3; i++)
-		{
-			lpMap._PreyInstance(objlist, VECTOR2(gridSize.x, gridSize.y), false,i);
-		}
-	}
+	
 
 	lpMap.setUp(VECTOR2(MAPSIZE_X, MAPSIZE_Y), VECTOR2(GRIDSIZE, GRIDSIZE));
+	lpMap.ChangeInstanceCnt();
+	lpMap.LoadMap(objlist, true);
 	return 0;
 }
 
@@ -90,8 +86,8 @@ void GameScene::Draw(void)
 		VECTOR2 IndPos = preyType->GetIndividualsMapPos();
 		int count = preyType->GetPlayerCnt();
 	
-		lpMap.IndividualsDraw(true, IndPos, count);
-		lpMap.LoadMap(IndPos, count);
+	lpMap.IndividualsDraw(true,IndPos,count);
+	lpMap.Draw(false,lpMap.mapScaleCnt, IndPos, count);
 	});
 	
 	lpMap.MapDraw(true);

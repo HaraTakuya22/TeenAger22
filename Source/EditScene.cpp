@@ -32,8 +32,8 @@ unique_Base EditScene::Update(unique_Base own, const Controller & Controller)
 	for_each(tmplist.begin(), cursortypeItr, [&](auto &cursorType)
 	{
 		auto IndPos = cursorType->GetIndividualsMapPos();
-		lpMap.ChangeEditMapScale(Controller, IndPos);
-
+		lpMap.ChangeEditMapScale(Controller,IndPos);
+	});
 		//	S‚ğ‰Ÿ‚µ‚½‚Æ‚«AÃŞ°À‚ğ¾°ÌŞ‚·‚é
 		if (input[KEY_INPUT_S])
 		{
@@ -50,10 +50,9 @@ unique_Base EditScene::Update(unique_Base own, const Controller & Controller)
 			// loadˆ—(Message•\¦ˆ—)
 			if (MessageBox(NULL, "Do you want to load now??", "Check Dialog.", MB_OKCANCEL) == IDOK)
 			{
-				lpMap.LoadMap(IndPos,typeCursor);
+				lpMap.LoadMap(objlist,false);
 			}
 		}
-	});
 	// ¹Ş°ÑÊß¯ÄŞ‚ÌStart·°‚ğ‰Ÿ‰º ¨ GameScene‚ÉˆÚs
 	if (Pad & PAD_INPUT_12)
 	{
@@ -80,7 +79,7 @@ int EditScene::Init(void)
 	lpMap.setUp(VECTOR2(MAPSIZE_X, MAPSIZE_Y),VECTOR2(GRIDSIZE, GRIDSIZE));
 	lpMap.CreateMap();
 
-	obj = AddList()(objlist, std::make_unique<EditCursor>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4),TYPE_NUM::NUM_CURSOR));
+	obj = AddList()(objlist, std::make_unique<EditCursor>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4),NUM_CURSOR));
 	return 0;
 }
 
@@ -88,21 +87,23 @@ void EditScene::EditDraw(void)
 {
 	ClsDrawScreen();
 
-	
+
 	Shared_ObjList tmplist(objlist->size());
 
 	auto cursorTypeItr = std::remove_copy_if(objlist->begin(), objlist->end(), tmplist.begin(), [](Objshared& obj) {return !(obj->GetType(TYPE_CURSOR)); });
 	for_each(tmplist.begin(), cursorTypeItr, [&](auto &cursorType)
 	{
-		auto IndPos = cursorType->GetIndividualsMapPos();
+	auto IndPos = cursorType->GetIndividualsMapPos();
+	auto count = cursorType->GetPlayerCnt();
 
-		lpMap.IndividualsDraw(false,IndPos,typeCursor);
-		lpMap.MapDraw(false);
-
-		lpMap.SetObj(lpMap.mapScaleCnt, true, IndPos,typeCursor);
-
-		DrawFormatString(200, 200, 0xffffff, "IndPos.x:%d\nIndPos.y:%d", IndPos.x, IndPos.y);
+	lpMap.IndividualsDraw(false,IndPos, count);
+	lpMap.Draw(true, lpMap.mapScaleCnt, IndPos, count);
 	});
+	lpMap.MapDraw(false);
+
+	lpMap.SetObj(lpMap.mapScaleCnt, true,objlist);
+	
+		//DrawFormatString(200, 200, 0xffffff, "IndPos.x:%d\nIndPos.y:%d", IndPos.x, IndPos.y);
 	//	´ÃŞ¨¯Ä¼°İ‚Ì•`‰æ
 	auto itr = objlist->begin();
 	(*itr)->Draw();

@@ -16,6 +16,9 @@ private:
 	// object's list
 	Shared_ObjListptr objlist;
 
+	VECTOR2 preyInstancePos[PREY_3];
+	bool is_Instance[PREY_3];
+
 	void Draw(void);
 
 

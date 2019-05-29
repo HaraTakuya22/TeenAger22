@@ -1,11 +1,6 @@
 #pragma once
 #include "Obj.h"
 
-struct SETID
-{
-	VECTOR2 set_pos;
-	objID set_id;
-};
 
 class EditCursor :
 	public Obj
@@ -24,6 +19,11 @@ public:
 	VECTOR2& GetIndividualsMapPos(void)
 	{
 		return individualsMapPos;
+	}
+
+	int GetPlayerCnt(void)
+	{
+		return playerCnt;
 	}
 
 private:
@@ -53,6 +53,5 @@ private:
 
 	// ID
 	objID id;
-	SETID setId;
 };
 

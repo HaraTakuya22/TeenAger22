@@ -14,7 +14,7 @@ Prey::Prey(VECTOR2 pos,TYPE_NUM pNum,int num)
 {
 	
 	this->typeObjNum = pNum;
-	this->playerCnt = num;
+	playerCnt = num;
 
 	this->pos = pos;
 	
@@ -59,7 +59,7 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 			// posの値のみの変化
 			pos.x += SPEED;
 			// ﾏｯﾌﾟ全体に対するｽｸﾘｰﾝのﾎﾟｼﾞｼｮﾝの変化
-			individualsMapPos.x = lpMap.IndividualsMapCalcPos(pos, cameraPos, individualsMapPos).x;
+			individualsMapPos.x = lpMap.IndividualsMapCalcPos(pos, cameraPos,individualsMapPos).x;
 			// ﾏｯﾌﾟの右端に到達したら
 			if (pos.x >= MAPSIZE_X - GRIDSIZE)
 			{
@@ -85,7 +85,7 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 			dir = DIR_RIGHT;
 			SetAnim("move");
 			pos.x += SPEED;
-			individualsMapPos.x = lpMap.IndividualsMapCalcPos(pos, cameraPos, individualsMapPos).x;
+			individualsMapPos.x = lpMap.IndividualsMapCalcPos(pos, cameraPos,individualsMapPos).x;
 			if (pos.x >= MAPSIZE_X - GRIDSIZE)
 			{
 				pos.x = MAPSIZE_X - GRIDSIZE;
@@ -246,7 +246,7 @@ void Prey::Draw(void)
 	DrawFormatString(130, 50 * playerCnt, 0xffffff, "pos%d:%d,%d\n",playerCnt, pos.x, pos.y);
 	
 	// 1P 2P のindividualsMapPosの表示(ﾃﾞﾊﾞｯｸﾞ用)
-	DrawFormatString(240, 50 * playerCnt, 0xffffff, "ind_map%d.x:%d\nind_map%d.y;%d", playerCnt,individualsMapPos.x,typeNum1, individualsMapPos.y);
+	DrawFormatString(240, 50 * playerCnt, 0xffffff, "ind_map%d.x:%d\nind_map%d.y;%d", playerCnt,individualsMapPos.x, playerCnt, individualsMapPos.y);
 
 	// 1P 2P のtypeNumの表示(ﾃﾞﾊﾞｯｸﾞ用)
 	DrawFormatString(400, 50 * playerCnt, 0xffffff, "typeNum:%d\n",typeObjNum);

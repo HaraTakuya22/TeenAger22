@@ -1,0 +1,9 @@
+sample1:https://maoudamashii.jokersounds.com/list/bgm7.html  ヒーリング11
+sample2:http://amachamusic.chagasi.com/image_bukimi.html 　　雨に捨てられた人形
+sample3:http://amachamusic.chagasi.com/image_bukimi.html     呪われたピアノ
+sample4:http://amachamusic.chagasi.com/image_bukimi.html     真夜中の音楽室
+sample5:http://music-note.jp/bgm/horror.html                 忍び寄る影
+効果音1:https://maoudamashii.jokersounds.com/                鼓動1
+効果音2:https://maoudamashii.jokersounds.com/                ノイズ1
+効果音3:https://maoudamashii.jokersounds.com/		     システム22
+

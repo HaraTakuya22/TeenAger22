@@ -46,6 +46,7 @@ enum PLAYER
 	PLAYER_1,		// 1êl
 	PLAYER_2,		// 2êl
 	PLAYER_3,		// 3êl
+	PLAYER_IT,
 	PLAYER_MAX
 };
 

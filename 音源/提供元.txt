@@ -6,4 +6,10 @@ sample5:http://music-note.jp/bgm/horror.html                 忍び寄る影
 効果音1:https://maoudamashii.jokersounds.com/                鼓動1
 効果音2:https://maoudamashii.jokersounds.com/                ノイズ1
 効果音3:https://maoudamashii.jokersounds.com/		     システム22
+効果音4:https://soundeffect-lab.info/sound/battle/	     ワープ
+効果音5:https://taira-komori.jpn.org/horror01.html	     重い空気
+sample6:https://taira-komori.jpn.org/horror01.html	     迫ってくる感じ
+効果音6:https://taira-komori.jpn.org/horror01.html	     誘い3
+効果音7:https://sounddictionary.info/anime-1/                恐怖2
+
 

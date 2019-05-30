@@ -86,6 +86,7 @@ unique_Base SelectScene::Update(unique_Base own, const Controller & controll)
 	if (cnt_now[KEY_INPUT_I])
 	{
 		lpMap.player = PLAYER_IT;
+		return std::make_unique<GameScene>();
 	}
 	// ‘€ìŠÖŒW------------------------------------------
 	// 1P‚Ì‘I‘ğ‘€ì

@@ -157,7 +157,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 
 	if (ChangeInput & ~ChangeInputOld)
 	{
-		id = (objID)((id >= objID::NON) ? objID::PLAYER : id + 1);	//id+1 = Cursor‚Ì±²ºÝ‚ÌŽŸ
+		id = (objID)((id >= objID::NON) ? objID::PLAYER1 : id + 1);	//id+1 = Cursor‚Ì±²ºÝ‚ÌŽŸ
 	}
 	//------------------------------------------------------------
 
@@ -173,7 +173,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 
 	if (ChangeInputBack & ~ChangeInputBackOld)
 	{
-		id = (objID)((id <= objID::PLAYER) ? objID::NON : id - 1);	//id+1 = Cursor‚Ì±²ºÝ‚ÌŽŸ
+		id = (objID)((id <= objID::PLAYER1) ? objID::NON : id - 1);	//id+1 = Cursor‚Ì±²ºÝ‚ÌŽŸ
 	}
 	//------------------------------------------------------------
 
@@ -278,13 +278,13 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 
 	if (cnt_now[KEY_INPUT_RCONTROL] & ~cnt_old[KEY_INPUT_RCONTROL])
 	{
-		id = (objID)((id >= objID::NON) ? objID::PLAYER : id + 1);	//id+1 = Cursor‚Ì±²ºÝ‚ÌŽŸ
+		id = (objID)((id >= objID::NON) ? objID::PLAYER1 : id + 1);	//id+1 = Cursor‚Ì±²ºÝ‚ÌŽŸ
 	}
 	//------------------------------------------------------------
 
 	if (cnt_now[KEY_INPUT_LCONTROL] & ~cnt_old[KEY_INPUT_LCONTROL])
 	{
-		id = (objID)((id <= objID::PLAYER) ? objID::NON : id - 1);	//id+1 = Cursor‚Ì±²ºÝ‚ÌŽŸ
+		id = (objID)((id <= objID::PLAYER1) ? objID::NON : id - 1);	//id+1 = Cursor‚Ì±²ºÝ‚ÌŽŸ
 	}
 	//-----------------------------------------------------------
 
@@ -313,8 +313,9 @@ void EditCursor::Draw(void)
 	
 	switch (id)
 	{
-	case objID::PLAYER:
-
+	case objID::PLAYER1:
+	case objID::PLAYER2:
+	case objID::PLAYER3:
 		DrawGraph(cameraPos.x, cameraPos.y, lpImage.GetID("image/map1.png")[static_cast<int>(0)], true);
 		break;
 	case objID::WALL:

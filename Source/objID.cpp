@@ -4,7 +4,7 @@
 //objID‚Ìæ“ª‚Ì—v‘f‚ð•Ô‚µ‚Ä‚ ‚°‚é
 objID begin(objID)
 {
-	return objID::PLAYER;
+	return objID::PLAYER1;
 }
 
 //objID‚Ì––’[‚ª•Ô‚Á‚Ä‚­‚é

@@ -1,7 +1,10 @@
 #pragma once
 
 enum class objID{
-	PLAYER,			// prey
+	PLAYER1,		// prey
+	PLAYER2,
+	PLAYER3,
+	IT,				// it
 	WALL,			// •Ç
 	CHAIR_1,		// ˆÖŽq1
 	CHAIR_2,		// ˆÖŽq2

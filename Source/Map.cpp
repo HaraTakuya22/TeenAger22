@@ -31,8 +31,9 @@ void Map::Draw(bool is_edit,VECTOR2 scale,VECTOR2 indPos,int pCnt)
 
 			switch (id)
 			{
-			case objID::PLAYER:
-
+			case objID::PLAYER1:
+			case objID::PLAYER2:
+			case objID::PLAYER3:
 				if (is_edit)
 				{
 					if (is_scale)
@@ -410,61 +411,61 @@ void Map::MapDraw(bool gameF)
 //	return true;
 //}
 
-bool Map::_MakingPrey(WeakList weaklist)
-{
-	for (int y = 0; y < MapSize.y; y++)
-	{
-		for (int x = 0; x < MapSize.x; x++)
-		{
-			objID id = MapData[y][x];
-			switch (id)
-			{
-			case objID::PLAYER:
-				if (!is_makePrey[typeNum1])
-				{
-					AddList()(weaklist, std::make_unique<Prey>(VECTOR2(x * ChipSize.x, y * ChipSize.y - 40), typeNum1, 1));
-					is_makePrey[typeNum1] = true;
-				}
-				if (!is_makePrey[typeNum2])
-				{
-					AddList()(weaklist, std::make_unique<Prey>(VECTOR2(x * ChipSize.x, y * ChipSize.y - 40), typeNum2, 2));
-					is_makePrey[typeNum2] = true;
-				}
-				break;
-			case objID::WALL:
-			case objID::CHAIR_1:
-			case objID::CHAIR_2:
-			case objID::CHAIR_3:
-			case objID::CHAIR_4:
-
-			case objID::BOOKSHELF:
-			case objID::DRAWER:
-			case objID::LOCKER:
-			case objID::VASE_1:
-			case objID::VASE_2:
-
-			case objID::MIRRORTABLE:
-			case objID::FACE:
-			case objID::KITCHIN_1:
-			case objID::KITCHIN_2:
-			case objID::S_MONITOR:
-
-			case objID::BED:
-
-			case objID::DESK:
-
-			case objID::MONITOR:
-
-			case objID::S_TABLE:
-			case objID::TABLE:
-				break;
-			default:
-				break;
-			}
-		}
-	}
-	return true;
-}
+//bool Map::_MakingPrey(WeakList weaklist)
+//{
+//	for (int y = 0; y < MapSize.y; y++)
+//	{
+//		for (int x = 0; x < MapSize.x; x++)
+//		{
+//			objID id = MapData[y][x];
+//			switch (id)
+//			{
+//			case objID::PLAYER:
+//				if (!is_makePrey[typeNum1])
+//				{
+//					AddList()(weaklist, std::make_unique<Prey>(VECTOR2(x * ChipSize.x, y * ChipSize.y - 40), typeNum1, 1));
+//					is_makePrey[typeNum1] = true;
+//				}
+//				if (!is_makePrey[typeNum2])
+//				{
+//					AddList()(weaklist, std::make_unique<Prey>(VECTOR2(x * ChipSize.x, y * ChipSize.y - 40), typeNum2, 2));
+//					is_makePrey[typeNum2] = true;
+//				}
+//				break;
+//			case objID::WALL:
+//			case objID::CHAIR_1:
+//			case objID::CHAIR_2:
+//			case objID::CHAIR_3:
+//			case objID::CHAIR_4:
+//
+//			case objID::BOOKSHELF:
+//			case objID::DRAWER:
+//			case objID::LOCKER:
+//			case objID::VASE_1:
+//			case objID::VASE_2:
+//
+//			case objID::MIRRORTABLE:
+//			case objID::FACE:
+//			case objID::KITCHIN_1:
+//			case objID::KITCHIN_2:
+//			case objID::S_MONITOR:
+//
+//			case objID::BED:
+//
+//			case objID::DESK:
+//
+//			case objID::MONITOR:
+//
+//			case objID::S_TABLE:
+//			case objID::TABLE:
+//				break;
+//			default:
+//				break;
+//			}
+//		}
+//	}
+//	return true;
+//}
 
 bool Map::Init(void)
 {
@@ -785,7 +786,7 @@ bool Map::SetObj(VECTOR2 scale,bool is_edit,WeakList weaklist)
 			
 			switch (id)
 			{
-			case objID::PLAYER:
+			case objID::PLAYER1:
 				if (is_edit)
 				{
 					break;
@@ -798,12 +799,30 @@ bool Map::SetObj(VECTOR2 scale,bool is_edit,WeakList weaklist)
 						makingPreyFlag[y][x] = true;
 						instanceCnt--;
 					}
+				}
+				break;
+			case objID::PLAYER2:
+				if (is_edit)
+				{
+					break;
+				}
+				else
+				{
 					if (!makingPreyFlag[y][x] && instanceCnt >= 1)
 					{
 						AddList()(weaklist, std::make_unique<Prey>(VECTOR2(x * ChipSize.x, y * ChipSize.y - 40), typeNum2, 2));
 						makingPreyFlag[y][x] = true;
 						instanceCnt--;
 					}
+				}
+				break;
+			case objID::PLAYER3:
+				if (is_edit)
+				{
+					break;
+				}
+				else
+				{
 					if (!makingPreyFlag[y][x] && instanceCnt >= 1)
 					{
 						AddList()(weaklist, std::make_unique<Prey>(VECTOR2(x * ChipSize.x, y * ChipSize.y - 40), typeNum3, 3));

@@ -80,7 +80,7 @@ public:
 	}
 
 	//bool CheckPassage(VECTOR2 pos, PASSAGE passage,DIR dir);
-	bool _MakingPrey(WeakList weaklist);
+	//bool _MakingPrey(WeakList weaklist);
 
 	// Še•Ï”‚Ì‰Šú‰»ŠÖ”
 	bool Init(void);

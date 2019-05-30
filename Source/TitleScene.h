@@ -2,6 +2,8 @@
 #include "BaseScene.h"
 #include "AddList.h"
 
+#define VIRUS_MAX 100
+
 class TitleScene :
 	public BaseScene
 {
@@ -41,5 +43,15 @@ private:
 
 	// Title‰æ‘œ‚ÌŠi”[—Ìˆæ
 	int titleImage;
+	// ³²Ù½‰æ‘œ‚ÌŠi”[—Ìˆæ
+	int virusImage[200];
+	int virusRandImage[200];
+	int virusCount;
+	int virusRandCount[VIRUS_MAX];
+
+	VECTOR2 virusRandPos[VIRUS_MAX];
+
+	bool virusRandCountUpFlag[VIRUS_MAX];
+	VECTOR2 virusRandSetPos[VIRUS_MAX];
 
 };

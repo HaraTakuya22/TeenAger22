@@ -6,7 +6,7 @@
 #include "EditScene.h"
 #include "GameScene.h"
 
-// startButton‚ÌŠg‘å”’l
+// startButton‚Ìk¬”’l
 #define START_BUTTON_DON 2
 
 TitleScene::TitleScene()
@@ -71,6 +71,35 @@ unique_Base TitleScene::Update(unique_Base own, const Controller & controll)
 		startPos4 = { buttonLeftX += START_BUTTON_DON,buttonRightY -= START_BUTTON_DON };
 
 	}
+
+	virusCount++;
+	if (virusCount >= 200)
+	{
+		virusCount = 0;
+	}
+	for (int i = 0; i < VIRUS_MAX; i++)
+	{
+		if (virusRandCountUpFlag[i] == false)
+		{
+			virusRandPos[i] = { GetRand(2400),GetRand(1320) };
+		}
+		if (GetRand(500) == 0)
+		{
+			virusRandCountUpFlag[i] = true;
+		}
+		if (virusRandCountUpFlag[i] == true)
+		{
+			virusRandCount[i]++;
+		}
+		if (virusRandCount[i] >= 200)
+		{
+			virusRandCount[i] = 0;
+			virusRandCountUpFlag[i] = false;
+		}
+
+	}
+
+
 	ClsDrawScreen();
 
 	Draw();
@@ -87,6 +116,10 @@ int TitleScene::Init(void)
 
 	titleMapImage = LoadGraph("MAP/map(old).png");
 	startButtonImage = LoadGraph("image/TitleStart.png");
+
+	LoadDivGraph("image/Virus2.png", 200, 4, 50, 700, 200, virusImage);
+	LoadDivGraph("image/Virus.png", 200, 4, 50, 400, 400, virusRandImage);
+
 	titleLeftPos = { 0 , 0 };
 	titleRightPos.x = 2400;
 	titleRightPos.y = 1440;
@@ -100,6 +133,11 @@ int TitleScene::Init(void)
 	startPos3 = { buttonRightX,buttonRightY };
 	startPos4 = { buttonLeftX,buttonRightY };
 	startButtonCnt = 0;
+	virusCount = 0;
+	for (int i = 0; i < VIRUS_MAX; i++)
+	{
+		virusRandCountUpFlag[i] = false;
+	}
 	return 0;
 }
 
@@ -128,4 +166,11 @@ void TitleScene::Draw(void)
 		startPos3.x, startPos3.y,
 		startPos4.x, startPos4.y,
 				startButtonImage, true);
+	DrawGraph(250, 430, virusImage[virusCount], true);
+	for (int i = 0; i < VIRUS_MAX; i++)
+	{
+		DrawGraph(virusRandPos[i].x + titleLeftPos.x, virusRandPos[i].y + titleLeftPos.y, virusRandImage[virusRandCount[i]], true);
+	}
+
+
 }

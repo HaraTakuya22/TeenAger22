@@ -7,9 +7,9 @@
 #include "GameScene.h"
 #include "Controller.h"
 
-#define ONE_PLAY_POS 20
-#define TWO_PLAY_POS 20+400
-#define THREE_PLAY_POS 20+800
+#define ONE_PLAY_POS 20+(360/2)-100
+#define TWO_PLAY_POS 20+400+(360/2)-100
+#define THREE_PLAY_POS 20+800+(360/2)-100
 
 #define CURSOR_POS_SPEED 400
 
@@ -33,6 +33,15 @@ unique_Base SelectScene::Update(unique_Base own, const Controller & controll)
 
 	auto cnt_now = controll.GetButtonInfo(KEY_TYPE_NOW);
 	auto cnt_old = controll.GetButtonInfo(KEY_TYPE_OLD);
+
+	if (cursorPos.x < ONE_PLAY_POS)
+	{
+		cursorPos.x = THREE_PLAY_POS;
+	}
+	if (cursorPos.x > THREE_PLAY_POS)
+	{
+		cursorPos.x = ONE_PLAY_POS;
+	}
 
 	if (cursorPos.x == ONE_PLAY_POS)
 	{
@@ -294,6 +303,8 @@ int SelectScene::Init(void)
 	LoadDivGraph("image/button_red_hakkou_one.png", 2, 1, 2, 360, 240, button1);
 	LoadDivGraph("image/button_red_hakkou_two.png", 2, 1, 2, 360, 240, button2);
 	LoadDivGraph("image/button_red_hakkou_three.png", 2, 1, 2, 360, 240, button3);
+	cursorImage = LoadGraph("image/select_cursor.png");
+
 	button1_flag = BUTTON_OFF;
 	button2_flag = BUTTON_OFF;
 	button3_flag = BUTTON_OFF;
@@ -301,7 +312,7 @@ int SelectScene::Init(void)
 	two_pos = { 0,0 };
 	three_pos = { 0,0 };
 
-	cursorPos = { ONE_PLAY_POS,220 };
+	cursorPos = { ONE_PLAY_POS,150 };
 
 	titleMapImage = LoadGraph("MAP/map(old).png");
 
@@ -318,6 +329,7 @@ void SelectScene::Draw(void)
 	DrawGraph(20, 220, button1[button1_flag], true);
 	DrawGraph(20 + 400, 220, button2[button2_flag], true);
 	DrawGraph(20 + 800, 220, button3[button3_flag], true);
+	DrawGraph(cursorPos.x, cursorPos.y, cursorImage, true);
 
 
 

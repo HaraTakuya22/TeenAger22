@@ -28,6 +28,8 @@ private:
 	int button2_flag;
 	int button3[BUTTON_MAX];
 	int button3_flag;
+	int cursorImage;
+
 	VECTOR2 one_pos;
 	VECTOR2 two_pos;
 	VECTOR2 three_pos;

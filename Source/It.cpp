@@ -29,7 +29,7 @@ void It::Move(const Controller & controll, WeakList objlist)
 
 }
 
-bool It::Init(void)
+bool It::Init(TYPE_NUM i_num)
 {
 	return true;
 }

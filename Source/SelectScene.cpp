@@ -83,7 +83,10 @@ unique_Base SelectScene::Update(unique_Base own, const Controller & controll)
 	{
 		button3_flag = BUTTON_OFF;
 	}
-
+	if (cnt_now[KEY_INPUT_I])
+	{
+		lpMap.player = PLAYER_IT;
+	}
 	// ‘€ìŠÖŒW------------------------------------------
 	// 1P‚Ì‘I‘ğ‘€ì
 	switch (lpMap.player)

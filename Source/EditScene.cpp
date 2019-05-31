@@ -76,8 +76,8 @@ int EditScene::Init(void)
 		objlist = std::make_shared<Shared_ObjList>();
 	}
 	objlist->clear();
-	obj = AddList()(objlist, std::make_unique<EditCursor>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4), NUM_CURSOR));
 	lpMap.camera.push_back(Camera(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4), VECTOR2(320, 320), VECTOR2(GRIDSIZE, GRIDSIZE), PLAYER::CURSOR));
+	obj = AddList()(objlist, std::make_unique<EditCursor>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4), NUM_CURSOR,lpMap.camera[static_cast<int>(PLAYER::CURSOR)].GetCamera()));
 
 	
 	lpMap.setUp(VECTOR2(MAPSIZE_X, MAPSIZE_Y),VECTOR2(GRIDSIZE, GRIDSIZE));

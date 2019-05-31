@@ -8,7 +8,7 @@
 #define EDITCURSOR_DEF_RNG	(30)
 #define EDITCURSOR_MIN_RNG	(5)
 
-EditCursor::EditCursor(VECTOR2 pos,TYPE_NUM num)
+EditCursor::EditCursor(VECTOR2 pos,TYPE_NUM num,VECTOR2 camera)
 {
 	//playerCnt = 0;
 	typeCursor = num;
@@ -16,7 +16,7 @@ EditCursor::EditCursor(VECTOR2 pos,TYPE_NUM num)
  	this->pos.x = pos.x;
 	this->pos.y = pos.y;
 	
-	//this->cameraPosition = camera;
+	this->cameraPosition = camera;
 
 	fixedPos = { 320,320 };
 	cursorPos = fixedPos;
@@ -202,6 +202,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	// 尰嵼塃无垒傪墴壓--------------------------------------
 	if (cnt_now[KEY_INPUT_RIGHT] & ~cnt_old[KEY_INPUT_RIGHT])
 	{
+		cameraPosition.x += GRIDSIZE;
 		cursorPos.x += GRIDSIZE;
 		//lpCamera.CameraCalc(VECTOR2(cursorPos.x, cursorPos.y), VECTOR2(objCameraPos.x, objCameraPos.y), VECTOR2(lpCamera.GetCamera().x, lpCamera.GetCamera().y));
 
@@ -216,6 +217,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	// 尰嵼嵍无垒傪墴壓-----------------------------------------
 	if (cnt_now[KEY_INPUT_LEFT] & ~cnt_old[KEY_INPUT_LEFT])
 	{
+		cameraPosition.x -= GRIDSIZE;
 		cursorPos.x -= GRIDSIZE;
 		//lpCamera.CameraCalc(VECTOR2(cursorPos.x, cursorPos.y), VECTOR2(objCameraPos.x, objCameraPos.y), VECTOR2(lpCamera.GetCamera().x, lpCamera.GetCamera().y));
 
@@ -230,6 +232,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	// 尰嵼忋无垒傪墴壓---------------------------------------
 	if (cnt_now[KEY_INPUT_UP] & ~cnt_old[KEY_INPUT_UP])
 	{
+		cameraPosition.y -= GRIDSIZE;
 		cursorPos.y -= GRIDSIZE;
 		//lpCamera.CameraCalc(VECTOR2(cursorPos.x, cursorPos.y), VECTOR2(objCameraPos.x, objCameraPos.y), VECTOR2(lpCamera.GetCamera().x, lpCamera.GetCamera().y));
 
@@ -246,6 +249,7 @@ void EditCursor::Move(const Controller & controll, WeakList objlist)
 	// 尰嵼壓无垒傪墴壓-----------------------------------
 	if (cnt_now[KEY_INPUT_DOWN] & ~cnt_old[KEY_INPUT_DOWN])
 	{
+		cameraPosition.y += GRIDSIZE;
 		cursorPos.y += GRIDSIZE;
 		//lpCamera.CameraCalc(VECTOR2(cursorPos.x, cursorPos.y), VECTOR2(objCameraPos.x, objCameraPos.y), VECTOR2(lpCamera.GetCamera().x, lpCamera.GetCamera().y));
 

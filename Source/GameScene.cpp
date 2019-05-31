@@ -13,10 +13,6 @@
 GameScene::GameScene()
 {
 	Init();
-	SetCreateSoundTimeStretchRate(1.0f);
-	int sound = LoadSoundMem("‰¹Œ¹/sample3.mp3");
-	ChangeVolumeSoundMem(100, sound);
-	PlaySoundMem(sound, DX_PLAYTYPE_LOOP);
 }
 
 

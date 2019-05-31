@@ -29,8 +29,6 @@ private:
 	int button3[BUTTON_MAX];
 	int button3_flag;
 	int cursorImage;
-	float buttonRota[3];
-	int buttonRotaCount;
 
 	VECTOR2 one_pos;
 	VECTOR2 two_pos;
@@ -40,10 +38,6 @@ private:
 
 	// 表示するマップ
 	int titleMapImage;
-	// ﾏｯﾌﾟの回転
-	float titleRota;
-	int rotaCount;
-
 	// PADの押下情報格納領域
 	int inputRightNow;
 	int inputRightOld;

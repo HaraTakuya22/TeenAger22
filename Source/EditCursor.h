@@ -6,7 +6,7 @@ class EditCursor :
 	public Obj
 {
 public:
-	EditCursor(VECTOR2 pos,TYPE_NUM num);
+	EditCursor(VECTOR2 pos,TYPE_NUM num,VECTOR2 camera);
 	~EditCursor();
 	void Move(const Controller& controll, WeakList objlist);
 
@@ -24,6 +24,11 @@ public:
 	PLAYER& GetPlayerNum(void)
 	{
 		return player;
+	}
+
+	VECTOR2 GetCameraPosition(void)
+	{
+		return cameraPosition;
 	}
 
 private:

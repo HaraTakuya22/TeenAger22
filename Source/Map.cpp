@@ -250,11 +250,12 @@ void Map::Draw(bool is_edit,VECTOR2 scale,int pCnt,PLAYER tNum,VECTOR2 c_pos)
 			}
 				if (!is_scale && !is_edit)
 				{
-					DrawFormatString((Scr.x / 2) * (pCnt - 1) + (x * (ChipSize.x / blockScaleCnt.x)) - c_pos.x, (y * (ChipSize.y / blockScaleCnt.y)) - c_pos.y, 0x000000, "x:%d\ny:%d\n%d", x, y, id);
+					//if(objPos.x <= )
+					DrawFormatString(((Scr.x / 2) * ((int)tNum - 1)) + (x * (ChipSize.x / blockScaleCnt.x) - c_pos.x), (y * (ChipSize.y / blockScaleCnt.y)) - c_pos.y, 0x000000, "x:%d\ny:%d\n%d", x, y, id);
 				}
 				if (is_edit)
 				{
-					DrawFormatString(((Scr.x / 2) * pCnt) + (x * (ChipSize.x / mapScaleCnt.x) - c_pos.x), (y * (ChipSize.y / mapScaleCnt.y)) - c_pos.y, 0x000000, "x:%d\ny:%d\n%d", x, y, id);
+					DrawFormatString((Scr.x / 2) * ((int)tNum - 1) + (x * (ChipSize.x / mapScaleCnt.x) - c_pos.x), (y * (ChipSize.y / mapScaleCnt.y)) - c_pos.y, 0x000000, "x:%d\ny:%d\n%d", x, y, id);
 				}
 			
 		}
@@ -363,6 +364,108 @@ void Map::MapDraw(bool gameF)
 
 }
 
+//bool Map::CheckPassage(VECTOR2 pos, PASSAGE passage,DIR dir)
+//{
+//	// Îß¼Þ¼®Ý‚ðÏ½–Ú‚Å•\Œ»
+//	auto tmp = VECTOR2(pos.x / GRIDSIZE, pos.y / GRIDSIZE);
+//	// ÌßÚ²Ô°‚Ì—×‚ðŒ©‚é
+//	auto NextPos = [&](DIR dir) {
+//		VECTOR2 nextpos;
+//		switch (dir)
+//		{
+//			// ¶‚Ìê‡
+//		case DIR_LEFT:
+//			nextpos = { pos.x + PREYSIZE_X,0 };
+//			break;
+//
+//			// ‰E‚Ìê‡
+//		case DIR_RIGHT:
+//			nextpos = { pos.x + PREYSIZE_X,0 };
+//			break;
+//
+//			// ã‚Ìê‡
+//		case DIR_UP:
+//			nextpos = { 0,pos.y + PREYSIZE_Y };
+//			break;
+//
+//			// ‰º‚Ìê‡
+//		case DIR_DOWN:
+//			nextpos = { 0,pos.y + PREYSIZE_Y };
+//			break;
+//
+//		default:
+//			break;
+//		};
+//		return pos + nextpos;
+//	};
+//	// æ‚ª•Ç‚¾‚Á‚½‚ç
+//	if (NextPos(dir) == passage)
+//	{
+//		return false;
+//	}
+//	return true;
+//}
+
+//bool Map::_MakingPrey(WeakList weaklist)
+//{
+//	for (int y = 0; y < MapSize.y; y++)
+//	{
+//		for (int x = 0; x < MapSize.x; x++)
+//		{
+//			objID id = MapData[y][x];
+//			switch (id)
+//			{
+//			case objID::PLAYER1:
+//				if (!is_makePrey[typeNum1])
+//				{
+//					AddList()(weaklist, std::make_unique<Prey>(VECTOR2(x * ChipSize.x, y * ChipSize.y - 40), typeNum1, 1));
+//					is_makePrey[typeNum1] = true;
+//				}
+//				break;
+//			case objID::PLAYER2:
+//				if (!is_makePrey[typeNum2])
+//				{
+//					AddList()(weaklist, std::make_unique<Prey>(VECTOR2(x * ChipSize.x, y * ChipSize.y - 40), typeNum2, 2));
+//					is_makePrey[typeNum2] = true;
+//				}
+//				break;
+//			case objID::PLAYER3:
+//
+//			case objID::WALL:
+//			case objID::CHAIR_1:
+//			case objID::CHAIR_2:
+//			case objID::CHAIR_3:
+//			case objID::CHAIR_4:
+//
+//			case objID::BOOKSHELF:
+//			case objID::DRAWER:
+//			case objID::LOCKER:
+//			case objID::VASE_1:
+//			case objID::VASE_2:
+//
+//			case objID::MIRRORTABLE:
+//			case objID::FACE:
+//			case objID::KITCHIN_1:
+//			case objID::KITCHIN_2:
+//			case objID::S_MONITOR:
+//
+//			case objID::BED:
+//
+//			case objID::DESK:
+//
+//			case objID::MONITOR:
+//
+//			case objID::S_TABLE:
+//			case objID::TABLE:
+//				break;
+//			default:
+//				break;
+//			}
+//		}
+//	}
+//	return true;
+//}
+
 bool Map::Init(void)
 {
 	Scr = lpScene.GetScrSize();
@@ -424,6 +527,18 @@ void Map::CreateMap(void)
 		is_mapCreate = true;
 	}	
 }
+			// Map‰æ–Ê•\Ž¦
+			//if (player == PLAYER_1 || player == PLAYER_2 || player == PLAYER_3)
+			//{
+			//	if (MapWindow >= 0)
+			//	{
+			//		MapWindow = MakeScreen(MAPWINDOW_SIZE_X, MAPWINDOW_SIZE_Y, true);
+			//		SetDrawScreen(MapWindow);
+			//		DrawBox(0, 0, MAPWINDOW_SIZE_X, MAPWINDOW_SIZE_Y, 0x0000ff, false);
+			//		SetDrawScreen(DX_SCREEN_BACK);
+			//	}
+			//}
+	
 
 void Map::IndividualsDraw(bool gameF,PLAYER tNum,int pCnt,VECTOR2 c_pos)
 {
@@ -642,8 +757,19 @@ IDType Map::GetData(MapType maptype, const VECTOR2 pos, IDType defID)
 
 	SetCheck setCheck;
 
+	if (!setCheck(tmp,MapSize))
+	{
+		return defID;
+	}
 	return maptype[tmp.y][tmp.x];
 }
+
+
+//VECTOR2 Map::IndividualsMapCalcPos(VECTOR2 pos,VECTOR2 camera,VECTOR2 indPos)
+//{
+//	indPos = pos - camera;
+//	return indPos;
+//}
 
 bool Map::SetObj(VECTOR2 scale,bool is_edit,WeakList weaklist)
 {
@@ -662,7 +788,7 @@ bool Map::SetObj(VECTOR2 scale,bool is_edit,WeakList weaklist)
 				}
 				else
 				{
-					if (instanceCnt >= 1)
+					//if (instanceCnt >= 1)
 					{
 						camera.push_back(Camera(VECTOR2(x * ChipSize.x, y * ChipSize.y - 40), VECTOR2(240, 280), VECTOR2(GRIDSIZE, GRIDSIZE), PLAYER::PLAYER_1));
 
@@ -678,7 +804,7 @@ bool Map::SetObj(VECTOR2 scale,bool is_edit,WeakList weaklist)
 				}
 				else
 				{
-					if (instanceCnt >= 1)
+					//if (instanceCnt >= 1)
 					{
 						camera.push_back(Camera(VECTOR2(x * ChipSize.x, y * ChipSize.y - 40), VECTOR2(240, 280), VECTOR2(GRIDSIZE, GRIDSIZE), PLAYER::PLAYER_2));
 
@@ -694,7 +820,7 @@ bool Map::SetObj(VECTOR2 scale,bool is_edit,WeakList weaklist)
 				}
 				else
 				{
-					if (instanceCnt >= 1)
+					//if (instanceCnt >= 1)
 					{
 						camera.push_back(Camera(VECTOR2(x * ChipSize.x, y * ChipSize.y - 40), VECTOR2(240, 280), VECTOR2(GRIDSIZE, GRIDSIZE), PLAYER::PLAYER_3));
 
@@ -858,53 +984,6 @@ void Map::OtherPreyDraw(int ImageName,VECTOR2 indPos,int pCnt)
 
 
 
-}
-
-bool Map::objblock(VECTOR2 pos)
-{
-	pos = { pos.x, pos.y + 80 };
-	bool block = true;
-	objID id = GetMapData(pos);
-	switch (id)
-	{
-	case objID::WALL:
-	case objID::CHAIR_1:
-	case objID::CHAIR_2:
-	case objID::CHAIR_3:
-	case objID::CHAIR_4:
-		block = false;
-		break;
-	case objID::BOOKSHELF:
-	case objID::DRAWER:
-	case objID::LOCKER:
-	case objID::VASE_1:
-	case objID::VASE_2:
-		block = false;
-		break;
-	case objID::MIRRORTABLE:
-	case objID::FACE:
-	case objID::KITCHIN_1:
-	case objID::KITCHIN_2:
-	case objID::S_MONITOR:
-		block = false;
-		break;
-	case objID::BED:
-		block = false;
-		break;
-	case objID::DESK:
-		block = false;
-		break;
-	case objID::MONITOR:
-		block = false;
-		break;
-	case objID::S_TABLE:
-		block = false;
-		break;
-	case objID::TABLE:
-		block = false;
-		break;
-	}
-	return block;
 }
 
 Map::Map()

@@ -345,6 +345,9 @@ void SelectScene::Draw(void)
 	DrawGraph(20 + 800, 220, button3[button3_flag], true);
 	DrawGraph(cursorPos.x, cursorPos.y, cursorImage, true);
 
+	DrawFormatString(0, 0, 0xffffff, "SPACEで人数決定（まだ一人だけ）");
+	DrawFormatString(0, 20, 0xffffff, "１か２か３を入力でキャラ選択");
+	DrawFormatString(0, 40, 0xffffff, "Vでゲームシーン（SPACE→１→V）");
 
 
 	DrawFormatString(100, 50,0xffffff,"selectMode:%d\nselect1Num:%d\nselect2Num:%d\nselect3Num:%d", lpMap.playerCnt, typeNum1, typeNum2, typeNum3);

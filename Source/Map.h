@@ -147,6 +147,8 @@ public:
 
 	std::vector<Camera> camera;
 
+	bool objblock(VECTOR2 pos);
+
 private:
 	Map();
 	~Map();

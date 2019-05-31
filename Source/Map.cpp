@@ -757,10 +757,6 @@ IDType Map::GetData(MapType maptype, const VECTOR2 pos, IDType defID)
 
 	SetCheck setCheck;
 
-	if (!setCheck(tmp,MapSize))
-	{
-		return defID;
-	}
 	return maptype[tmp.y][tmp.x];
 }
 
@@ -981,9 +977,54 @@ void Map::OtherPreyDraw(int ImageName,VECTOR2 indPos,int pCnt)
 			}
 		}
 	}
+}
 
+bool Map::objblock(VECTOR2 pos)
+{
 
-
+	pos = { pos.x, pos.y + 80 };
+	bool block = true;
+	objID id = GetMapData(pos);
+	switch (id)
+	{
+	case objID::WALL:
+	case objID::CHAIR_1:
+	case objID::CHAIR_2:
+	case objID::CHAIR_3:
+	case objID::CHAIR_4:
+		block = false;
+		break;
+	case objID::BOOKSHELF:
+	case objID::DRAWER:
+	case objID::LOCKER:
+	case objID::VASE_1:
+	case objID::VASE_2:
+		block = false;
+		break;
+	case objID::MIRRORTABLE:
+	case objID::FACE:
+	case objID::KITCHIN_1:
+	case objID::KITCHIN_2:
+	case objID::S_MONITOR:
+		block = false;
+		break;
+	case objID::BED:
+		block = false;
+		break;
+	case objID::DESK:
+		block = false;
+		break;
+	case objID::MONITOR:
+		block = false;
+		break;
+	case objID::S_TABLE:
+		block = false;
+		break;
+	case objID::TABLE:
+		block = false;
+		break;
+	}
+	return block;
 }
 
 Map::Map()

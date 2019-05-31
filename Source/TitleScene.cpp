@@ -33,6 +33,8 @@ unique_Base TitleScene::Update(unique_Base own, const Controller & controll)
 	}
 	if (CheckHitKey(KEY_INPUT_RETURN))
 	{
+		SetCreateSoundTimeStretchRate(0.5f);
+		PlaySoundFile("‰¹Œ¹/Œø‰Ê‰¹5.mp3", DX_PLAYTYPE_NORMAL);
 		return std::make_unique<EditScene>();
 	}
 

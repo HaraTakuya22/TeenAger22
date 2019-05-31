@@ -140,6 +140,7 @@
     <ClCompile Include="Source\Obj.cpp" />
     <ClCompile Include="Source\objID.cpp" />
     <ClCompile Include="Source\Prey.cpp" />
+    <ClCompile Include="Source\ResultScene.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\SelectScene.cpp" />
     <ClCompile Include="Source\TitleScene.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="Source\Obj.h" />
     <ClInclude Include="Source\objID.h" />
     <ClInclude Include="Source\Prey.h" />
+    <ClInclude Include="Source\ResultScene.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SelectScene.h" />
     <ClInclude Include="Source\TitleScene.h" />

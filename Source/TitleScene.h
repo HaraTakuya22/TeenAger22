@@ -15,7 +15,7 @@ public:
 
 private:
 	// initialize
-	virtual int Init(void);
+	int Init(void);
 	// object's list
 	Shared_ObjListptr objlist;
 	void Draw(void);

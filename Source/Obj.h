@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 #include <map>
+
+#include "PLAYER.h"
 #include "NUM_TYPE.h"
 #include "Map.h"
 #include "Controller.h"
@@ -42,11 +44,7 @@ enum OBJ_TYPE
 	TYPE_MAX
 };
 
-enum  SIDE_CHECK {
-	OUT_SIDE,
-	IN_SIDE,
-	SIDE_MAX
-};
+
 
 
 class Obj
@@ -81,6 +79,17 @@ public:
 	{
 		return pos;
 	}
+	// 現在のﾌﾟﾚｲﾔｰの区別の取得
+	PLAYER& GetPlayerNum(void)
+	{
+		return player;
+	}
+
+	VECTOR2 GetCameraPosition(void)
+	{
+		return cameraPosition;
+	}
+
 	
 	// 指定のｵﾌﾞｼﾞｪｸﾄをﾘｽﾄから消すﾌﾗｸﾞを返す
 	bool Getdeleteflag(void)
@@ -93,10 +102,6 @@ public:
 	{
 		deleteflag = true;
 	}
-	virtual int GetPlayerCnt(void)
-	{
-		return playerCnt;
-	}
 
 	// ｵﾌﾞｼﾞｪｸﾄのﾀｲﾌﾟ取得関数
 	virtual bool GetType(OBJ_TYPE type) = 0;
@@ -105,7 +110,7 @@ public:
 	virtual TYPE_NUM GetTypeNum(void) { return typeObjNum; };
 
 	// individualsMapPosの取得(typeNumによって値が違うので、純粋仮想関数に)
-	virtual VECTOR2& GetIndividualsMapPos(void) = 0;
+	//virtual VECTOR2& GetIndividualsMapPos(void) = 0;
 
 private:
 	//画像の名前
@@ -132,14 +137,13 @@ protected:
 	// ｷｬﾗｸﾀｰ選択時に選択したｷｬﾗをｵﾌﾞｼﾞｪｸﾄするための変数
 	TYPE_NUM typeObjNum;
 	
-	// ｷｬﾗｸﾀｰを生成した順番(1=1P 2 =2P 3 =3P)
-	int playerCnt;
+	// 現在のﾌﾟﾚｲﾔｰ
+	PLAYER player;
 
-	// ﾏｯﾌﾟ全体(12000 x 8640)を基にしたｽｸﾘｰﾝ単位でのﾎﾟｼﾞｼｮﾝ
-	VECTOR2 individualsMapPos;
+	// 固定ﾎﾟｼﾞｼｮﾝ(player(鬼も含める))
+	VECTOR2 fixedPos;
 
-	// ｶﾒﾗﾎﾟｼﾞｼｮﾝ(player(鬼も含める))
-	VECTOR2 cameraPos;
+	VECTOR2 cameraPosition;
 
 	//ｱﾆﾒｰｼｮﾝｶｳﾝﾄ
 	unsigned int AniCnt;

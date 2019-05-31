@@ -6,7 +6,7 @@
 #include "EditCursor.h"
 
 
-EditScene::EditScene()
+EditScene::EditScene(void)
 {
 	Init();
 }
@@ -18,21 +18,22 @@ EditScene::~EditScene()
 
 unique_Base EditScene::Update(unique_Base own, const Controller & Controller)
 {
-	auto input = Controller.GetButtonInfo(KEY_TYPE_NOW);
-	auto inputOld = Controller.GetButtonInfo(KEY_TYPE_OLD);
+	auto input = Controller.GetKeyButtonInfo(KEY_TYPE_NOW);
+	auto inputOld = Controller.GetKeyButtonInfo(KEY_TYPE_OLD);
 	auto Pad = GetJoypadInputState(DX_INPUT_PAD1);
 	// objListÇÃ±ØÃﬂ√ﬁ∞ƒ
 	for (auto itr = objlist->begin(); itr != objlist->end(); itr++)
 	{
 		(*itr)->Update(Controller, objlist);
 	}
+	lpMap.camera[static_cast<int>(PLAYER::CURSOR)].Update(Controller);
+
 	Shared_ObjList tmplist(objlist->size());
 
 	auto cursortypeItr = std::remove_copy_if(objlist->begin(), objlist->end(), tmplist.begin(), [](Objshared& obj) {return !(obj->GetType(TYPE_CURSOR)); });
 	for_each(tmplist.begin(), cursortypeItr, [&](auto &cursorType)
 	{
-		auto IndPos = cursorType->GetIndividualsMapPos();
-		lpMap.ChangeEditMapScale(Controller,IndPos);
+		lpMap.ChangeEditMapScale(Controller);
 	});
 		//	SÇâüÇµÇΩÇ∆Ç´ÅA√ﬁ∞¿Çæ∞ÃﬁÇ∑ÇÈ
 		if (input[KEY_INPUT_S])
@@ -75,11 +76,13 @@ int EditScene::Init(void)
 		objlist = std::make_shared<Shared_ObjList>();
 	}
 	objlist->clear();
-	lpMap.player = PLAYER_MAX;
+	obj = AddList()(objlist, std::make_unique<EditCursor>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4), NUM_CURSOR));
+	lpMap.camera.push_back(Camera(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4), VECTOR2(320, 320), VECTOR2(GRIDSIZE, GRIDSIZE), PLAYER::CURSOR));
+
+	
 	lpMap.setUp(VECTOR2(MAPSIZE_X, MAPSIZE_Y),VECTOR2(GRIDSIZE, GRIDSIZE));
 	lpMap.CreateMap();
 
-	obj = AddList()(objlist, std::make_unique<EditCursor>(VECTOR2(GRIDSIZE * 4, GRIDSIZE * 4),NUM_CURSOR));
 	return 0;
 }
 
@@ -93,11 +96,11 @@ void EditScene::EditDraw(void)
 	auto cursorTypeItr = std::remove_copy_if(objlist->begin(), objlist->end(), tmplist.begin(), [](Objshared& obj) {return !(obj->GetType(TYPE_CURSOR)); });
 	for_each(tmplist.begin(), cursorTypeItr, [&](auto &cursorType)
 	{
-	auto IndPos = cursorType->GetIndividualsMapPos();
-	auto count = cursorType->GetPlayerCnt();
+		auto tNum = cursorType->GetPlayerNum();
+		auto camera = cursorType->GetCameraPosition();
 
-	lpMap.IndividualsDraw(false,IndPos, count);
-	lpMap.Draw(true, lpMap.mapScaleCnt, IndPos, count);
+		lpMap.IndividualsDraw(false,tNum,lpMap.playerCnt,camera);
+		lpMap.Draw(true, lpMap.mapScaleCnt,lpMap.playerCnt,tNum,camera);
 	});
 	lpMap.MapDraw(false);
 
@@ -107,6 +110,9 @@ void EditScene::EditDraw(void)
 	//	¥√ﬁ®Øƒº∞›éûÇÃï`âÊ
 	auto itr = objlist->begin();
 	(*itr)->Draw();
+
+	DrawFormatString(500, 500, 0xffffff, "camera.x:%dcamera.y:%d", lpMap.camera[static_cast<int>(PLAYER::CURSOR)].GetCamera().x, lpMap.camera[static_cast<int>(PLAYER::CURSOR)].GetCamera().y);
+
 
 	ScreenFlip();
 }

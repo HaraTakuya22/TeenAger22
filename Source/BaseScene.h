@@ -3,6 +3,7 @@
 #include <memory>
 #include "NUM_TYPE.h"
 #include "Map.h"
+#include "Camera.h"
 
 
 class Controller;
@@ -18,6 +19,13 @@ extern TYPE_NUM typeNum1;
 extern TYPE_NUM typeNum2;
 // 3Pの選択人物
 extern TYPE_NUM typeNum3;
+
+//// 1P以外のﾃﾞｨｽﾌﾟﾚｲに映る1P
+//extern TYPE_NUM display_typeNum1;
+//// 2P以外のﾃﾞｨｽﾌﾟﾚｲに映る2P
+//extern TYPE_NUM display_typeNum2;
+//// 3P以外のﾃﾞｨｽﾌﾟﾚｲに映る3P
+//extern TYPE_NUM display_typeNum3;
 
 class BaseScene
 {

@@ -1,14 +1,14 @@
 #pragma once
 #include <vector>
+#include <string>
 
 #include "Obj.h"
-
+#include "PLAYER.h"
 #include "NUM_TYPE.h"
 #include "Controller.h"
 #include "VECTOR2.h"
 #include "AddList.h"
 #include "objID.h"
-//#include "Prey.h"
 
 
 
@@ -40,17 +40,12 @@ enum PASSAGE
 };
 
 
-// l”‚É‰‚¶‚Ämode‚ğ•ÏX
-enum PLAYER
-{
-	PLAYER_1,		// 1l
-	PLAYER_2,		// 2l
-	PLAYER_3,		// 3l
-	PLAYER_IT,
-	PLAYER_MAX
-};
 
 
+
+using namespace std;
+
+class Camera;
 
 class Map
 {
@@ -61,7 +56,7 @@ public:
 		return mapins;
 	}
 	// Map‚ÌµÌŞ¼Şª¸Ä‚Ì•`‰æ
-	void Draw(bool is_edit, VECTOR2 scale, VECTOR2 indPos, int pCnt);
+	void Draw(bool is_edit, VECTOR2 scale,int pCnt,PLAYER tNum,VECTOR2 c_pos);
 
 	// Map‚ÌGrid‚Ì•\¦(Ï½Šm”F—p) gameF:¹Ş°Ñ¼°İ‚ÉˆÚs‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚© true:GameScene false:EditScene
 	void MapDraw(bool gameF);
@@ -91,7 +86,7 @@ public:
 	void CreateMap(void);
 
 	// ŠeÌßÚ²Ô°‚ÌÃŞ¨½ÌßÚ²‚Ì•`‰æŠÖ”
-	void IndividualsDraw(bool gameF,VECTOR2 indPos,int pCnt);
+	void IndividualsDraw(bool gameF,PLAYER tNum,int pCnt,VECTOR2 c_pos);
 
 	// ‰æ–Ê‚Ì¾¯Ä
 	void setUp(const VECTOR2& size, const VECTOR2& chipSize);
@@ -124,14 +119,15 @@ public:
 	}
 
 
+
 	// ŒÂ•Ê‚ÌÏ¯Ìß³¨İÄŞ³‚ÌÎß¼Ş¼®İŒvZŠÖ”
-	VECTOR2 IndividualsMapCalcPos(VECTOR2 pos,VECTOR2 camera,VECTOR2 indPos);
+	//VECTOR2 IndividualsMapCalcPos(VECTOR2 pos,VECTOR2 camera,VECTOR2 indPos);
 
 	// ¾¯Ä‚µ‚½µÌŞ¼Şª¸Ä‚Ì•`‰æ(num:1P 2P or 3P is_edit:´ÃŞ¨¯ÄÓ°ÄŞ‚©‚Ç‚¤‚©‚ÌÌ×¸Ş scale:Ï¯Ìß‚ÌŠg‘åk¬—¦)
 	bool SetObj(VECTOR2 scale,bool is_edit,WeakList weaklist);
 
 	// Map‚ÌŠg‘åk¬(EditScene‚Ì‚İ)
-	bool ChangeEditMapScale(Controller ctrl,VECTOR2 indPos);
+	bool ChangeEditMapScale(Controller ctrl);
 	// Map‚ÌŠg‘åk¬—¦‚ÌŒˆ’èŠÖ”(GameScene‚Ì‚İ)
 	bool ChangePreyMapScale(void);
 
@@ -142,11 +138,15 @@ public:
 	// ‚»‚ê‚¼‚ê‚ÌÁ¯Ìß‚ÌŠg‘åk¬—¦
 	VECTOR2 blockScaleCnt;
 
-	// ÌßÚ²Ô°‚Ìl”‚ÌŠi”[•Ï”
-	PLAYER player;
 
-	bool objblock(VECTOR2 pos);
+	// ÃŞ¨½ÌßÚ²‚É‰f‚Á‚Ä‚¢‚é©•ªˆÈŠO‚Ì‘¼‚ÌÌßÚ²Ô°‚Ì•`‰æŠÖ”
+	void OtherPreyDraw(int ImageName,VECTOR2 indPos,int pCnt);
 	
+	// ·¬×¸À°‚ğ¶¬‚µ‚½‡”Ô(1=1P 2 =2P 3 =3P)
+	int playerCnt;
+
+	std::vector<Camera> camera;
+
 private:
 	Map();
 	~Map();
@@ -190,6 +190,8 @@ private:
 	int instanceCnt;
 
 
+
+
 	// Ï¯Ìß‚Ì1Ï½1Ï½‚ÌÃŞ°À
 	std::vector<objID*>MapData;
 	// Ï¯Ìß‚Ì‘S‘Ì‚ÌÃŞ°À
@@ -209,6 +211,7 @@ private:
 
 	bool makingPreyFlag[MAPSIZE_X / GRIDSIZE][MAPSIZE_Y / GRIDSIZE];
 	
+
 	
 
 	//	ˆø”‚Ì‚Æ‚±‚ë‚Å’u‚«Š·‚¦‚½Œ^‚ÅéŒ¾‚·‚é‚Æ‚¢‚¤‚±‚Æ

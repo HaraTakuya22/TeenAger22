@@ -26,8 +26,10 @@ void Scene::onceRun(void)
 			SetDrawScreen(DX_SCREEN_BACK);
 			isFullScreen = false;
 		}
-		sceneshift = sceneshift->Update(std::move(sceneshift), (*gamectl));
 		gamectl->Update();
+
+		sceneshift = sceneshift->Update(std::move(sceneshift), (*gamectl));
+		
 	}
 
 }

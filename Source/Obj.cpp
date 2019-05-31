@@ -34,7 +34,9 @@ void Obj::Draw(void)
 	}
 	
 	// playerCnt:1P 2P or 3P(ÌßÚ²Ô°”‚É‰‚¶‚Ä•`‰æ‚·‚éˆÊ’u‚ğ•Ï‰»)
-	DrawGraph(cameraPos.x + ((lpScene.GetScrSize().x / 2) * (playerCnt - 1)),cameraPos.y, ImageID(ImageName)[ID], true);
+	DrawGraph(fixedPos.x + ((lpScene.GetScrSize().x / 2) * ((int)player - 1)), fixedPos.y, ImageID(ImageName)[ID], true);
+
+	//lpMap.OtherPreyDraw(ImageID(ImageName)[ID],individualsMapPos,playerCnt);
 }
 
 void Obj::Draw(unsigned int id)

@@ -13,12 +13,9 @@
 
 #define CURSOR_POS_SPEED 400
 
-#define PI  3.1415926535897932384626433832795f
 SelectScene::SelectScene()
 {
 	Init();
-	SetCreateSoundTimeStretchRate(2.0f);
-	PlaySoundFile("‰¹Œ¹/sample6.mp3", DX_PLAYTYPE_LOOP);
 }
 
 SelectScene::~SelectScene()
@@ -34,8 +31,8 @@ unique_Base SelectScene::Update(unique_Base own, const Controller & controll)
 
 	auto Pad = GetJoypadInputState(DX_INPUT_PAD1);
 
-	auto cnt_now = controll.GetButtonInfo(KEY_TYPE_NOW);
-	auto cnt_old = controll.GetButtonInfo(KEY_TYPE_OLD);
+	auto cnt_now = controll.GetKeyButtonInfo(KEY_TYPE_NOW);
+	auto cnt_old = controll.GetKeyButtonInfo(KEY_TYPE_OLD);
 
 	if (cursorPos.x < ONE_PLAY_POS)
 	{
@@ -46,23 +43,12 @@ unique_Base SelectScene::Update(unique_Base own, const Controller & controll)
 		cursorPos.x = ONE_PLAY_POS;
 	}
 
-	buttonRotaCount++;
-
 	if (cursorPos.x == ONE_PLAY_POS)
 	{
-		if ((buttonRotaCount / 10) % 2 == 0)
-		{
-			buttonRota[0] = PI / 2 / 2 / 2 / 2 / 2 / 2;
-		}
-		else
-		{
-			buttonRota[0] = 0;
-		}
-
 		button1_flag = BUTTON_ON;
 		if (cnt_now[KEY_INPUT_SPACE])
 		{
-			lpMap.player = PLAYER_1;
+			lpMap.playerCnt = 1;
 			//return std::make_unique<GameScene>();
 		}
 	}
@@ -73,19 +59,10 @@ unique_Base SelectScene::Update(unique_Base own, const Controller & controll)
 
 	if (cursorPos.x == TWO_PLAY_POS)
 	{
-		if ((buttonRotaCount / 10) % 2 == 0)
-		{
-			buttonRota[1] = PI / 2 / 2 / 2 / 2 / 2 / 2;
-		}
-		else
-		{
-			buttonRota[1] = 0;
-		}
-
 		button2_flag = BUTTON_ON;
 		if (cnt_now[KEY_INPUT_SPACE])
 		{
-			lpMap.player = PLAYER_2;
+			lpMap.playerCnt = 2;
 			//return std::make_unique<GameScene>();
 		}
 	}
@@ -95,19 +72,10 @@ unique_Base SelectScene::Update(unique_Base own, const Controller & controll)
 	}
 	if (cursorPos.x == THREE_PLAY_POS)
 	{
-		if ((buttonRotaCount / 10) % 2 == 0)
-		{
-			buttonRota[2] = PI / 2 / 2 / 2 / 2 / 2 / 2;
-		}
-		else
-		{
-			buttonRota[2] = 0;
-		}
-
 		button3_flag = BUTTON_ON;
 		if (cnt_now[KEY_INPUT_SPACE])
 		{
-			lpMap.player = PLAYER_3;
+			lpMap.playerCnt = 3;
 			//return std::make_unique<GameScene>();
 		}
 	}
@@ -117,14 +85,14 @@ unique_Base SelectScene::Update(unique_Base own, const Controller & controll)
 	}
 	if (cnt_now[KEY_INPUT_I])
 	{
-		lpMap.player = PLAYER_IT;
+		lpMap.playerCnt = 4;
 		return std::make_unique<GameScene>();
 	}
 	// ‘€ìŠÖŒW------------------------------------------
 	// 1P‚Ì‘I‘ð‘€ì
-	switch (lpMap.player)
+	switch (lpMap.playerCnt)
 	{
-	case PLAYER_1:
+	case 1:
 		if (typeNum2 != PREY_1 && typeNum3 != PREY_1)
 		{
 			if (cnt_now[KEY_INPUT_1])
@@ -148,7 +116,7 @@ unique_Base SelectScene::Update(unique_Base own, const Controller & controll)
 		}
 		break;
 
-	case PLAYER_2:
+	case 2:
 		if (typeNum2 != PREY_1 && typeNum3 != PREY_1)
 		{
 			if (cnt_now[KEY_INPUT_1])
@@ -194,7 +162,7 @@ unique_Base SelectScene::Update(unique_Base own, const Controller & controll)
 		}
 		break;
 
-	case PLAYER_3:
+	case 3:
 		if (typeNum2 != PREY_1 && typeNum3 != PREY_1)
 		{
 			if (cnt_now[KEY_INPUT_1])
@@ -271,30 +239,24 @@ unique_Base SelectScene::Update(unique_Base own, const Controller & controll)
 	
 	// ---------------------------------------------------
 
-	if ((lpMap.player == PLAYER_1) && (typeNum1 >= PREY_1 && typeNum1 <= PREY_3))
+	if ((lpMap.playerCnt == 1) && (typeNum1 >= PREY_1 && typeNum1 <= PREY_3))
 	{
 		if (CheckHitKey(KEY_INPUT_V))
 		{
-			SetCreateSoundTimeStretchRate(0.5f);
-			PlaySoundFile("‰¹Œ¹/Œø‰Ê‰¹5.mp3", DX_PLAYTYPE_NORMAL);
 			return std::make_unique<GameScene>();
 		}
 	}
-	if ((lpMap.player == PLAYER_2) && ((typeNum1 >= PREY_1 && typeNum1 <= PREY_3) && (typeNum2 >= PREY_1 && typeNum2 <= PREY_3)))
+	if ((lpMap.playerCnt == 2) && ((typeNum1 >= PREY_1 && typeNum1 <= PREY_3) && (typeNum2 >= PREY_1 && typeNum2 <= PREY_3)))
 	{
 		if (CheckHitKey(KEY_INPUT_V))
 		{
-			SetCreateSoundTimeStretchRate(0.5f);
-			PlaySoundFile("‰¹Œ¹/Œø‰Ê‰¹5.mp3", DX_PLAYTYPE_NORMAL);
 			return std::make_unique<GameScene>();
 		}
 	}
-	if ((lpMap.player == PLAYER_3) && ((typeNum1 >= PREY_1 && typeNum1 <= PREY_3) && (typeNum2 >= PREY_1 && typeNum2 <= PREY_3) && (typeNum3 >= PREY_1 && typeNum3 <= PREY_3)))
+	if ((lpMap.playerCnt == 3) && ((typeNum1 >= PREY_1 && typeNum1 <= PREY_3) && (typeNum2 >= PREY_1 && typeNum2 <= PREY_3) && (typeNum3 >= PREY_1 && typeNum3 <= PREY_3)))
 	{
 		if (CheckHitKey(KEY_INPUT_V))
 		{
-			SetCreateSoundTimeStretchRate(0.5f);
-			PlaySoundFile("‰¹Œ¹/Œø‰Ê‰¹5.mp3", DX_PLAYTYPE_NORMAL);
 			return std::make_unique<GameScene>();
 		}
 	}
@@ -332,16 +294,6 @@ unique_Base SelectScene::Update(unique_Base own, const Controller & controll)
 		cursorPos.x -= CURSOR_POS_SPEED;
 	}
 
-	//rotaCount++;
-	//if ((rotaCount / 10) % 2 == 0)
-	//{
-	//	titleRota = PI/2/2/2/2/2/2/2/2;
-	//}
-	//else
-	//{
-	//	titleRota = 0;
-	//}
-
 	ClsDrawScreen();
 
 	Draw();
@@ -366,31 +318,26 @@ int SelectScene::Init(void)
 
 	cursorPos = { ONE_PLAY_POS,150 };
 
-	titleMapImage = LoadGraph("MAP/map(old)2.png");
+	titleMapImage = LoadGraph("MAP/map(old).png");
 
-	titleRota = 0;
-	for(int i = 0;i<3;i++)
-	{
-		buttonRota[i] = 0;
-	}
-	rotaCount = 0;
-	buttonRotaCount = 0;
+	lpMap.playerCnt = 0;
+
 	return 0;
 }
 
 void SelectScene::Draw(void)
 {
-	//DrawExtendGraph(0, 0,
-	//	1200 + 1, 660 + 1,
-	//	titleMapImage,
-	//	false);
-	DrawRotaGraph(600, 330, 1, titleRota, titleMapImage, true);
-	DrawRotaGraph(200, 330,1,buttonRota[0], button1[button1_flag], true);
-	DrawRotaGraph(600, 330,1, buttonRota[1], button2[button2_flag], true);
-	DrawRotaGraph(1000, 330,1, buttonRota[2], button3[button3_flag], true);
+	DrawExtendGraph(0, 0,
+		1200 + 1, 660 + 1,
+		titleMapImage,
+		false);
+
+	DrawGraph(20, 220, button1[button1_flag], true);
+	DrawGraph(20 + 400, 220, button2[button2_flag], true);
+	DrawGraph(20 + 800, 220, button3[button3_flag], true);
 	DrawGraph(cursorPos.x, cursorPos.y, cursorImage, true);
 
 
 
-	DrawFormatString(100, 50,0xffffff,"selectMode:%d\nselect1Num:%d\nselect2Num:%d\nselect3Num:%d", lpMap.player, typeNum1, typeNum2, typeNum3);
+	DrawFormatString(100, 50,0xffffff,"selectMode:%d\nselect1Num:%d\nselect2Num:%d\nselect3Num:%d", lpMap.playerCnt, typeNum1, typeNum2, typeNum3);
 }

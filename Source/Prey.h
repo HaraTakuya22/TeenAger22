@@ -2,6 +2,7 @@
 #include <array>
 #include "Map.h"
 #include "Obj.h"
+#include "Camera.h"
 
 // ‹S‚¶‚á‚È‚¢‘¤‚Ì»²½Ş(Prey = ’Ç‚í‚ê‚é‚à‚Ì)
 #define PREYSIZE_X		GRIDSIZE
@@ -14,7 +15,7 @@ class Prey :
 {
 public:
 	Prey();
-	Prey(VECTOR2 pos,TYPE_NUM pNum,int num);
+	Prey(VECTOR2 pos,TYPE_NUM pNum,PLAYER num,VECTOR2 camera);
 	~Prey();
 	void Move(const Controller& controll, WeakList objlist);
 	// ÌßÚ²Ô°‚Ì•`‰æ
@@ -30,15 +31,15 @@ public:
 		return typeObjNum;
 	}
 	// 1P 2P 3P ‚Ìî•ñæ“¾
-	int GetPlayerCnt(void)
+	PLAYER& GetPlayerNum(void)
 	{
-		return playerCnt;
+		return player;
 	}
 	// individualsMapPos‚Ìæ“¾
-	VECTOR2& GetIndividualsMapPos(void)
+	/*VECTOR2& GetIndividualsMapPos(void)
 	{
 		return individualsMapPos;
-	}
+	}*/
 
 private:
 	bool Init(TYPE_NUM p_num);

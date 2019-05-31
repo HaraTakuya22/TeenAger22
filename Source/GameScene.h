@@ -12,23 +12,14 @@ public:
 
 private:
 	// initialize
-	virtual int Init(void);
+	int Init(void);
 	// object's list
 	Shared_ObjListptr objlist;
 
-	VECTOR2 preyInstancePos[PREY_3];
-	bool is_Instance[PREY_3];
+
 
 	void Draw(void);
 
-	// ¹Þ°Ñ¼°Ý‚É“ü‚Á‚½Žž‚ÌÀ²Ï°‚ÌŠi”[
-	int startTime;
-	int itTimeUpImage;
-	bool timeUpFlag;
-	
-	// ¶³ÝÄÀÞ³Ý‚Ì‰æ‘œŠi”[
-	int countDownImage[4];
-	bool countDownFlag;
-	int countDown;
+
 };
 

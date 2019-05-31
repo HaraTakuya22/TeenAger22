@@ -1,4 +1,5 @@
 #include <DxLib.h>
+
 #include "Scene.h"
 #include "Prey.h"
 #include "Controller.h"
@@ -10,17 +11,15 @@ Prey::Prey()
 {
 }
 
-Prey::Prey(VECTOR2 pos,TYPE_NUM pNum,int num)
+Prey::Prey(VECTOR2 pos,TYPE_NUM pNum,PLAYER num,VECTOR2 camera)
 {
-	
 	this->typeObjNum = pNum;
-	playerCnt = num;
+
+	player = num;
 
 	this->pos = pos;
-	
-	cameraPos = { 240,280 };
-
-	individualsMapPos = lpMap.IndividualsMapCalcPos(pos,cameraPos,individualsMapPos);
+	this->cameraPosition = camera;
+	fixedPos = { 240,280 };	
 
 	Prey::Init(pNum);
 	//dir = DIR_DOWN;
@@ -38,34 +37,19 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	auto gridSize = lpMap.GetGridSize().x;
 	auto Scr = lpScene.GetScrSize();
 
-	auto input = controll.GetButtonInfo(KEY_TYPE_NOW);
-	auto inputOld = controll.GetButtonInfo(KEY_TYPE_OLD);
+	auto cnt_now = controll.GetButtonInfo()[KEY_TYPE_NOW];
+	auto cnt_old = controll.GetButtonInfo()[KEY_TYPE_OLD];
 
-	auto sidePos = [&](DIR dir, VECTOR2 pos, SIDE_CHECK sideFlag) {
-		VECTOR2 side;
-		switch (dir)
-		{
-		case DIR_LEFT:
-			side = { GRIDSIZE - (gridSize + sideFlag), 0 };
-			break;
-		case DIR_RIGHT:
-			side = { GRIDSIZE + (gridSize - sideFlag), 0 };
-			break;
-		case DIR_DOWN:
-			side = { 0, (gridSize - sideFlag) };
-			break;
-		case DIR_UP:
-			side = { 0,  -GRIDSIZE };
-			break;
-		}
-		return pos + side;
-	};
+	auto key_now = controll.GetKeyButtonInfo(KEY_TYPE_NOW);
+	auto key_old = controll.GetKeyButtonInfo(KEY_TYPE_OLD);
+
+	//pos = lpCamera.GetCamera();
 
 	// 移動処理(Mapの移動 & ﾌﾟﾚｲﾔｰの移動)-----------------------------
 	// 右移動(1P)
-	if (playerCnt == 1)
+	if (player == PLAYER::PLAYER_1)
 	{
-		if (input[KEY_INPUT_NUMPAD6] & ~inputOld[KEY_INPUT_NUMPAD6])
+		if (key_now[KEY_INPUT_RIGHT] & ~key_old[KEY_INPUT_RIGHT])
 		{
 			// ｱﾆﾒｰｼｮﾝを開始
 			AniCnt++;
@@ -75,14 +59,12 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 			}
 			// dirを右方向に
 			dir = DIR_RIGHT;
-			if (lpMap.objblock(sidePos(dir, pos, IN_SIDE)))
-			{
-				SetAnim("move");
-				// posの値のみの変化
-				pos.x += SPEED;
-				// ﾏｯﾌﾟ全体に対するｽｸﾘｰﾝのﾎﾟｼﾞｼｮﾝの変化
-				individualsMapPos.x = lpMap.IndividualsMapCalcPos(pos, cameraPos, individualsMapPos).x;
-			}
+			SetAnim("move");
+			// posの値のみの変化
+			pos.x += GRIDSIZE;
+			cameraPosition.x += GRIDSIZE;
+			// ﾏｯﾌﾟ全体に対するｽｸﾘｰﾝのﾎﾟｼﾞｼｮﾝの変化
+			//individualsMapPos.x = lpMap.IndividualsMapCalcPos(pos, objCameraPos,individualsMapPos).x;
 			// ﾏｯﾌﾟの右端に到達したら
 			if (pos.x >= MAPSIZE_X - GRIDSIZE)
 			{
@@ -93,11 +75,10 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 			}
 		}
 	}
-
 	// 右移動(2P)
-	if (playerCnt == 2)
+	if (player == PLAYER::PLAYER_2)
 	{
-		if (input[KEY_INPUT_RIGHT] & ~inputOld[KEY_INPUT_RIGHT])
+		if (key_now[KEY_INPUT_NUMPAD6] & ~key_old[KEY_INPUT_NUMPAD6])
 		{
 			// 2Pのｱﾆﾒｰｼｮﾝを開始
 			AniCnt++;
@@ -107,8 +88,8 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 			}
 			dir = DIR_RIGHT;
 			SetAnim("move");
-			pos.x += SPEED;
-			individualsMapPos.x = lpMap.IndividualsMapCalcPos(pos, cameraPos,individualsMapPos).x;
+			pos.x += GRIDSIZE;
+			//individualsMapPos.x = lpMap.IndividualsMapCalcPos(pos, objCameraPos,individualsMapPos).x;
 			if (pos.x >= MAPSIZE_X - GRIDSIZE)
 			{
 				pos.x = MAPSIZE_X - GRIDSIZE;
@@ -117,9 +98,9 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 		}
 	}
 	// 左移動
-	if (playerCnt == 1)
+	if (player == PLAYER::PLAYER_1)
 	{
-		if (input[KEY_INPUT_NUMPAD4] & ~inputOld[KEY_INPUT_NUMPAD4])
+		if (key_now[KEY_INPUT_LEFT] & ~key_old[KEY_INPUT_LEFT])
 		{
 			AniCnt++;
 			if (AniCnt >= 4)
@@ -127,25 +108,23 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 				AniCnt = 0;
 			}
 			dir = DIR_LEFT;
-			if (lpMap.objblock(sidePos(dir, pos, IN_SIDE)))
-			{
-				SetAnim("move");
-				pos.x -= SPEED;
-				individualsMapPos.x = lpMap.IndividualsMapCalcPos(pos, cameraPos, individualsMapPos).x;
-			}
+
+			SetAnim("move");
+			pos.x -= GRIDSIZE;
+			//individualsMapPos.x = lpMap.IndividualsMapCalcPos(pos, objCameraPos, individualsMapPos).x;
 			if (pos.x <= GRIDSIZE)
 			{
 				pos.x = GRIDSIZE;
-				individualsMapPos.x = -GRIDSIZE * 2;
+				//individualsMapPos.x = -GRIDSIZE * 2;
 				SetAnim("stop");
 			}
 		}
 	}
 
 	// 左移動(2P)
-	if (playerCnt == 2)
+	if (player == PLAYER::PLAYER_2)
 	{
-		if (input[KEY_INPUT_LEFT] & ~inputOld[KEY_INPUT_LEFT])
+		if (key_now[KEY_INPUT_NUMPAD4] & ~key_old[KEY_INPUT_NUMPAD4])
 		{
 			AniCnt++;
 			if (AniCnt >= 4)
@@ -154,20 +133,20 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 			}
 			dir = DIR_LEFT;
 			SetAnim("move");
-			pos.x -= SPEED;
-			individualsMapPos.x = lpMap.IndividualsMapCalcPos(pos, cameraPos, individualsMapPos).x;
+			pos.x -= GRIDSIZE;
+			//individualsMapPos.x = lpMap.IndividualsMapCalcPos(pos, objCameraPos, individualsMapPos).x;
 			if (pos.x <= GRIDSIZE)
 			{
 				pos.x = GRIDSIZE;
-				individualsMapPos.x = -GRIDSIZE * 2;
+				//individualsMapPos.x = -GRIDSIZE * 2;
 				SetAnim("stop");
 			}
 		}
 	}
 	// 上移動
-	if (playerCnt == 1)
+	if (player == PLAYER::PLAYER_1)
 	{
-		if (input[KEY_INPUT_NUMPAD8] & ~inputOld[KEY_INPUT_NUMPAD8])
+		if (key_now[KEY_INPUT_UP] & ~key_old[KEY_INPUT_UP])
 		{
 			AniCnt++;
 			if (AniCnt >= 4)
@@ -175,25 +154,23 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 				AniCnt = 0;
 			}
 			dir = DIR_UP;
-			if (lpMap.objblock(sidePos(dir, pos, IN_SIDE)))
-			{
-				SetAnim("move");
-				pos.y -= SPEED;
-				individualsMapPos.y = lpMap.IndividualsMapCalcPos(pos, cameraPos, individualsMapPos).y;
-			}
+
+			SetAnim("move");
+			pos.y -= GRIDSIZE;
+			//individualsMapPos.y = lpMap.IndividualsMapCalcPos(pos, objCameraPos, individualsMapPos).y;
 			if (pos.y <= GRIDSIZE - 40)
 			{
 				pos.y = GRIDSIZE - 40;
-				individualsMapPos.y = -GRIDSIZE * 3;
+				//individualsMapPos.y = -GRIDSIZE * 3;
 				SetAnim("stop");
 			}
 		}
 	}
 
 	// 上移動(2P)
-	if (playerCnt == 2)
+	if (player == PLAYER::PLAYER_2)
 	{
-		if (input[KEY_INPUT_UP] & ~inputOld[KEY_INPUT_UP])
+		if (key_now[KEY_INPUT_NUMPAD8] & ~key_old[KEY_INPUT_NUMPAD8])
 		{
 			AniCnt++;
 			if (AniCnt >= 4)
@@ -202,20 +179,20 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 			}
 			dir = DIR_UP;
 			SetAnim("move");
-			pos.y -= SPEED;
-			individualsMapPos.y = lpMap.IndividualsMapCalcPos(pos, cameraPos, individualsMapPos).y;
+			pos.y -= GRIDSIZE;
+			//individualsMapPos.y = lpMap.IndividualsMapCalcPos(pos, objCameraPos, individualsMapPos).y;
 			if (pos.y <= GRIDSIZE - 40)
 			{
 				pos.y = GRIDSIZE - 40;
-				individualsMapPos.y = -GRIDSIZE * 3;
+				//individualsMapPos.y = -GRIDSIZE * 3;
 				SetAnim("stop");
 			}
 		}
 	}
 	// 下移動
-	if (playerCnt == 1)
+	if (player == PLAYER::PLAYER_1)
 	{
-		if (input[KEY_INPUT_NUMPAD2] & ~inputOld[KEY_INPUT_NUMPAD2])
+		if (key_now[KEY_INPUT_DOWN] & ~key_old[KEY_INPUT_DOWN])
 		{
 			AniCnt++;
 			if (AniCnt >= 4)
@@ -223,24 +200,22 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 				AniCnt = 0;
 			}
 			dir = DIR_DOWN;
-			if (lpMap.objblock(sidePos(dir, pos, IN_SIDE)))
-			{
-				SetAnim("move");
-				pos.y += SPEED;
-				individualsMapPos.y = lpMap.IndividualsMapCalcPos(pos, cameraPos, individualsMapPos).y;
-			}
+
+			SetAnim("move");
+			pos.y += GRIDSIZE;
+			//individualsMapPos.y = lpMap.IndividualsMapCalcPos(pos, objCameraPos, individualsMapPos).y;
 			if (pos.y >= MAPSIZE_Y - ((GRIDSIZE * 2) + 40))
 			{
 				pos.y = MAPSIZE_Y - ((GRIDSIZE * 2) + 40);
-				individualsMapPos.y = MAPSIZE_Y - (GRIDSIZE * 6);
+				//individualsMapPos.y = MAPSIZE_Y - (GRIDSIZE * 6);
 				SetAnim("stop");
 			}
 		}
 	}
 	// 下移動(2P)
-	if (playerCnt == 2)
+	if (player == PLAYER::PLAYER_2)
 	{
-		if (input[KEY_INPUT_DOWN] & ~inputOld[KEY_INPUT_DOWN])
+		if (key_now[KEY_INPUT_NUMPAD2] & ~key_old[KEY_INPUT_NUMPAD2])
 		{
 			AniCnt++;
 			if (AniCnt >= 4)
@@ -249,12 +224,12 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 			}
 			dir = DIR_DOWN;
 			SetAnim("move");
-			pos.y += SPEED;
-			individualsMapPos.y = lpMap.IndividualsMapCalcPos(pos, cameraPos, individualsMapPos).y;
+			pos.y += GRIDSIZE;
+			//individualsMapPos.y = lpMap.IndividualsMapCalcPos(pos, objCameraPos, individualsMapPos).y;
 			if (pos.y >= MAPSIZE_Y - ((GRIDSIZE * 2) + 40))
 			{
 				pos.y = MAPSIZE_Y - ((GRIDSIZE * 2) + 40);
-				individualsMapPos.y = MAPSIZE_Y - (GRIDSIZE * 6);
+				//individualsMapPos.y = MAPSIZE_Y - (GRIDSIZE * 6);
 				SetAnim("stop");
 			}
 		}
@@ -272,15 +247,15 @@ void Prey::Draw(void)
 	Obj::Draw();
 	
 	// 1P 2P のposの表示(ﾃﾞﾊﾞｯｸﾞ用)
-	DrawFormatString(130, 50 * playerCnt, 0xffffff, "pos%d:%d,%d\n",playerCnt, pos.x, pos.y);
+	DrawFormatString(130, 50 * (int)player, 0xffffff, "pos%d:%d,%d\n",player, pos.x, pos.y);
 	
 	// 1P 2P のindividualsMapPosの表示(ﾃﾞﾊﾞｯｸﾞ用)
-	DrawFormatString(240, 50 * playerCnt, 0xffffff, "ind_map%d.x:%d\nind_map%d.y;%d", playerCnt,individualsMapPos.x, playerCnt, individualsMapPos.y);
+	DrawFormatString(240, 50 * (int)player, 0xffffff, "camera_pos%d.x:%d\ncamera_pos%d.y;%d",cameraPosition.x,player, cameraPosition.y);
 
 	// 1P 2P のtypeNumの表示(ﾃﾞﾊﾞｯｸﾞ用)
-	DrawFormatString(400, 50 * playerCnt, 0xffffff, "typeNum:%d\n",typeObjNum);
+	DrawFormatString(400, 50 * (int)player, 0xffffff, "typeNum:%d\n",typeObjNum);
 	// 1P 2P のdirの表示(ﾃﾞﾊﾞｯｸﾞ用)
-	DrawFormatString(400, 150 * playerCnt, 0xffffff, "dir:%d", dir);
+	DrawFormatString(400, 150 * (int)player, 0xffffff, "dir:%d", dir);
 }
 
 bool Prey::Init(TYPE_NUM p_num)
@@ -296,7 +271,7 @@ bool Prey::Init(TYPE_NUM p_num)
 	}
 	if (p_num == PREY_3)
 	{
-		Obj::Init("character/character2.png", VECTOR2(4, 4), VECTOR2(GRIDSIZE, GRIDSIZE + 40));
+		Obj::Init("character/character3.png", VECTOR2(4, 4), VECTOR2(GRIDSIZE, GRIDSIZE + 40));
 	}
 
 	return true;

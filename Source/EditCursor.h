@@ -16,14 +16,14 @@ public:
 	}
 	
 	// individualsMapPosæ“¾ŠÖ”
-	VECTOR2& GetIndividualsMapPos(void)
-	{
-		return individualsMapPos;
-	}
+	//VECTOR2& GetIndividualsMapPos(void)
+	//{
+	//	return individualsMapPos;
+	//}
 
-	int GetPlayerCnt(void)
+	PLAYER& GetPlayerNum(void)
 	{
-		return playerCnt;
+		return player;
 	}
 
 private:
@@ -46,7 +46,7 @@ private:
 	// Ã½Ä—p
 	bool setF;
 
-	
+	VECTOR2 cursorPos;
 
 	int keyDefRng;
 	int inputFrame;

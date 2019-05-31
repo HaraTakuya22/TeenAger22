@@ -13,8 +13,7 @@ public:
 private:
 
 	// initialize
-	virtual int Init(void);
-
+	int Init(void);
 
 	Shared_ObjListptr objlist;
 	List_Obj_itr obj;

@@ -21,6 +21,14 @@ private:
 
 	void Draw(void);
 
-
+	// ¹Þ°Ñ¼°Ý‚É“ü‚Á‚½Žž‚ÌÀ²Ï°‚ÌŠi”[
+	int startTime;
+	int itTimeUpImage;
+	bool timeUpFlag;
+	
+	// ¶³ÝÄÀÞ³Ý‚Ì‰æ‘œŠi”[
+	int countDownImage[4];
+	bool countDownFlag;
+	int countDown;
 };
 

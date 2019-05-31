@@ -1,9 +1,11 @@
 #include <DxLib.h>
 #include "Prey.h"
+#include "It.h"
 #include "Obj.h"
 #include "Scene.h"
 #include "GameScene.h"
 #include "EditScene.h"
+#include "ResultScene.h"
 
 #include "Map.h"
 
@@ -27,7 +29,7 @@ unique_Base GameScene::Update(unique_Base own, const Controller & Controller)
 	{
 		(*itr)->Update(Controller, objlist);
 	}
-	
+
 	// πﬁ∞— ﬂØƒﬁÇÃBack∑∞Çâüâ∫ Å® EditSceneÇ…à⁄çs
 	if (Pad & PAD_INPUT_11)
 	{
@@ -39,7 +41,37 @@ unique_Base GameScene::Update(unique_Base own, const Controller & Controller)
 	{
 		return std::make_unique<EditScene>();
 	}
-	
+	if (500 < (GetNowCount() - startTime) && (GetNowCount() - startTime) <= 1500)
+	{
+		countDownFlag = true;
+		countDown = 0;
+	}
+	if (1500 < (GetNowCount() - startTime) && (GetNowCount() - startTime) <= 2500)
+	{
+		countDown = 1;
+	}
+	if (2500 < (GetNowCount() - startTime) && (GetNowCount() - startTime) <= 3500)
+	{
+		countDown = 2;
+	}
+	if (3500 < (GetNowCount() - startTime) && (GetNowCount() - startTime) <= 4500)
+	{
+		countDown = 3;
+	}
+	if (4500 < (GetNowCount() - startTime) && (GetNowCount() - startTime) <= 5000)
+	{
+		countDownFlag = false;
+	}
+
+	if (GetNowCount() - startTime > 3000 + 5000)
+	{
+		timeUpFlag = true;
+	}
+	if (GetNowCount() - startTime > 10000)
+	{
+		return std::make_unique<ResultScene>();
+	}
+
 	ClsDrawScreen();
 	Draw();
 	ScreenFlip();
@@ -50,6 +82,8 @@ unique_Base GameScene::Update(unique_Base own, const Controller & Controller)
 
 int GameScene::Init(void)
 {
+	itTimeUpImage = LoadGraph("image/TimeUp.png");
+	LoadDivGraph("image/CountDown.png", 4, 4, 1, 600, 600, countDownImage);
 	if (!objlist)
 	{
 		objlist = std::make_shared<Shared_ObjList>();
@@ -67,6 +101,11 @@ int GameScene::Init(void)
 	lpMap.setUp(VECTOR2(MAPSIZE_X, MAPSIZE_Y), VECTOR2(GRIDSIZE, GRIDSIZE));
 	lpMap.ChangeInstanceCnt();
 	lpMap.LoadMap(objlist, true);
+
+	startTime = GetNowCount();
+	timeUpFlag = false;
+	countDownFlag = false;
+	countDown = 0;
 	return 0;
 }
 
@@ -94,5 +133,13 @@ void GameScene::Draw(void)
 	for (auto itr = objlist->begin(); itr != objlist->end(); itr++)
 	{
 		(*itr)->Draw();
+	}
+	if(timeUpFlag)
+	{
+		DrawGraph(300, 100, itTimeUpImage, true);
+	}
+	if (countDownFlag)
+	{
+		DrawGraph(300, 30, countDownImage[countDown], true);
 	}
 }

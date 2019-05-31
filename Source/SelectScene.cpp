@@ -13,6 +13,7 @@
 
 #define CURSOR_POS_SPEED 400
 
+#define PI  3.1415926535897932384626433832795f
 SelectScene::SelectScene()
 {
 	Init();
@@ -43,8 +44,19 @@ unique_Base SelectScene::Update(unique_Base own, const Controller & controll)
 		cursorPos.x = ONE_PLAY_POS;
 	}
 
+	buttonRotaCount++;
+
 	if (cursorPos.x == ONE_PLAY_POS)
 	{
+		if ((buttonRotaCount / 10) % 2 == 0)
+		{
+			buttonRota[0] = PI / 2 / 2 / 2 / 2 / 2 / 2;
+		}
+		else
+		{
+			buttonRota[0] = 0;
+		}
+
 		button1_flag = BUTTON_ON;
 		if (cnt_now[KEY_INPUT_SPACE])
 		{
@@ -59,6 +71,15 @@ unique_Base SelectScene::Update(unique_Base own, const Controller & controll)
 
 	if (cursorPos.x == TWO_PLAY_POS)
 	{
+		if ((buttonRotaCount / 10) % 2 == 0)
+		{
+			buttonRota[1] = PI / 2 / 2 / 2 / 2 / 2 / 2;
+		}
+		else
+		{
+			buttonRota[1] = 0;
+		}
+
 		button2_flag = BUTTON_ON;
 		if (cnt_now[KEY_INPUT_SPACE])
 		{
@@ -72,6 +93,15 @@ unique_Base SelectScene::Update(unique_Base own, const Controller & controll)
 	}
 	if (cursorPos.x == THREE_PLAY_POS)
 	{
+		if ((buttonRotaCount / 10) % 2 == 0)
+		{
+			buttonRota[2] = PI / 2 / 2 / 2 / 2 / 2 / 2;
+		}
+		else
+		{
+			buttonRota[2] = 0;
+		}
+
 		button3_flag = BUTTON_ON;
 		if (cnt_now[KEY_INPUT_SPACE])
 		{
@@ -294,6 +324,16 @@ unique_Base SelectScene::Update(unique_Base own, const Controller & controll)
 		cursorPos.x -= CURSOR_POS_SPEED;
 	}
 
+	//rotaCount++;
+	//if ((rotaCount / 10) % 2 == 0)
+	//{
+	//	titleRota = PI/2/2/2/2/2/2/2/2;
+	//}
+	//else
+	//{
+	//	titleRota = 0;
+	//}
+
 	ClsDrawScreen();
 
 	Draw();
@@ -318,21 +358,28 @@ int SelectScene::Init(void)
 
 	cursorPos = { ONE_PLAY_POS,150 };
 
-	titleMapImage = LoadGraph("MAP/map(old).png");
+	titleMapImage = LoadGraph("MAP/map(old)2.png");
 
+	titleRota = 0;
+	for(int i = 0;i<3;i++)
+	{
+		buttonRota[i] = 0;
+	}
+	rotaCount = 0;
+	buttonRotaCount = 0;
 	return 0;
 }
 
 void SelectScene::Draw(void)
 {
-	DrawExtendGraph(0, 0,
-		1200 + 1, 660 + 1,
-		titleMapImage,
-		false);
-
-	DrawGraph(20, 220, button1[button1_flag], true);
-	DrawGraph(20 + 400, 220, button2[button2_flag], true);
-	DrawGraph(20 + 800, 220, button3[button3_flag], true);
+	//DrawExtendGraph(0, 0,
+	//	1200 + 1, 660 + 1,
+	//	titleMapImage,
+	//	false);
+	DrawRotaGraph(600, 330, 1, titleRota, titleMapImage, true);
+	DrawRotaGraph(200, 330,1,buttonRota[0], button1[button1_flag], true);
+	DrawRotaGraph(600, 330,1, buttonRota[1], button2[button2_flag], true);
+	DrawRotaGraph(1000, 330,1, buttonRota[2], button3[button3_flag], true);
 	DrawGraph(cursorPos.x, cursorPos.y, cursorImage, true);
 
 

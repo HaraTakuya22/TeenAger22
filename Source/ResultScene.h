@@ -8,7 +8,7 @@ class ResultScene:
 public:
 	ResultScene();
 	~ResultScene();
-	virtual unique_Base Update(unique_Base own, const Controller& Controller);
+	virtual unique_Base Update(unique_Base own, const Controller& controll);
 private:
 	virtual int Init(void);
 

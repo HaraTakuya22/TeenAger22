@@ -22,13 +22,14 @@ ResultScene::~ResultScene()
 {
 }
 
-unique_Base ResultScene::Update(unique_Base own, const Controller & Controller)
+unique_Base ResultScene::Update(unique_Base own, const Controller & controll)
 {
-	auto input = Controller.GetButtonInfo(KEY_TYPE_NOW);
-	auto inputOld = Controller.GetButtonInfo(KEY_TYPE_OLD);
-	auto Pad = GetJoypadInputState(DX_INPUT_PAD1);
+	auto cnt_now = controll.GetButtonInfo()[KEY_TYPE_NOW];
+	auto cnt_old = controll.GetButtonInfo()[KEY_TYPE_OLD];
 
-	if (input[KEY_INPUT_RETURN] && !lpMap.Get_isScale())
+	auto key_now = controll.GetKeyButtonInfo(KEY_TYPE_NOW);
+	auto key_old = controll.GetKeyButtonInfo(KEY_TYPE_OLD);
+	if (key_now[KEY_INPUT_RETURN] && !lpMap.Get_isScale())
 	{
 		return std::make_unique<SelectScene>();
 	}

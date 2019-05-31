@@ -12,6 +12,9 @@
 TitleScene::TitleScene()
 {
 	Init();
+	SetCreateSoundTimeStretchRate(2.0f);
+	PlaySoundFile("‰¹Œ¹/sample6.mp3", DX_PLAYTYPE_LOOP);
+
 }
 
 

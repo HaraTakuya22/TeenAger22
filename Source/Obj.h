@@ -42,7 +42,11 @@ enum OBJ_TYPE
 	TYPE_MAX
 };
 
-
+enum  SIDE_CHECK {
+	OUT_SIDE,
+	IN_SIDE,
+	SIDE_MAX
+};
 
 
 class Obj

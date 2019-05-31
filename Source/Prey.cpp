@@ -41,6 +41,26 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 	auto input = controll.GetButtonInfo(KEY_TYPE_NOW);
 	auto inputOld = controll.GetButtonInfo(KEY_TYPE_OLD);
 
+	auto sidePos = [&](DIR dir, VECTOR2 pos, SIDE_CHECK sideFlag) {
+		VECTOR2 side;
+		switch (dir)
+		{
+		case DIR_LEFT:
+			side = { GRIDSIZE - (gridSize + sideFlag), 0 };
+			break;
+		case DIR_RIGHT:
+			side = { GRIDSIZE + (gridSize - sideFlag), 0 };
+			break;
+		case DIR_DOWN:
+			side = { 0, (gridSize - sideFlag) };
+			break;
+		case DIR_UP:
+			side = { 0,  -GRIDSIZE };
+			break;
+		}
+		return pos + side;
+	};
+
 	// 移動処理(Mapの移動 & ﾌﾟﾚｲﾔｰの移動)-----------------------------
 	// 右移動(1P)
 	if (playerCnt == 1)
@@ -55,11 +75,14 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 			}
 			// dirを右方向に
 			dir = DIR_RIGHT;
-			SetAnim("move");
-			// posの値のみの変化
-			pos.x += SPEED;
-			// ﾏｯﾌﾟ全体に対するｽｸﾘｰﾝのﾎﾟｼﾞｼｮﾝの変化
-			individualsMapPos.x = lpMap.IndividualsMapCalcPos(pos, cameraPos,individualsMapPos).x;
+			if (lpMap.objblock(sidePos(dir, pos, IN_SIDE)))
+			{
+				SetAnim("move");
+				// posの値のみの変化
+				pos.x += SPEED;
+				// ﾏｯﾌﾟ全体に対するｽｸﾘｰﾝのﾎﾟｼﾞｼｮﾝの変化
+				individualsMapPos.x = lpMap.IndividualsMapCalcPos(pos, cameraPos, individualsMapPos).x;
+			}
 			// ﾏｯﾌﾟの右端に到達したら
 			if (pos.x >= MAPSIZE_X - GRIDSIZE)
 			{
@@ -104,10 +127,12 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 				AniCnt = 0;
 			}
 			dir = DIR_LEFT;
-
-			SetAnim("move");
-			pos.x -= SPEED;
-			individualsMapPos.x = lpMap.IndividualsMapCalcPos(pos, cameraPos, individualsMapPos).x;
+			if (lpMap.objblock(sidePos(dir, pos, IN_SIDE)))
+			{
+				SetAnim("move");
+				pos.x -= SPEED;
+				individualsMapPos.x = lpMap.IndividualsMapCalcPos(pos, cameraPos, individualsMapPos).x;
+			}
 			if (pos.x <= GRIDSIZE)
 			{
 				pos.x = GRIDSIZE;
@@ -150,10 +175,12 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 				AniCnt = 0;
 			}
 			dir = DIR_UP;
-
-			SetAnim("move");
-			pos.y -= SPEED;
-			individualsMapPos.y = lpMap.IndividualsMapCalcPos(pos, cameraPos, individualsMapPos).y;
+			if (lpMap.objblock(sidePos(dir, pos, IN_SIDE)))
+			{
+				SetAnim("move");
+				pos.y -= SPEED;
+				individualsMapPos.y = lpMap.IndividualsMapCalcPos(pos, cameraPos, individualsMapPos).y;
+			}
 			if (pos.y <= GRIDSIZE - 40)
 			{
 				pos.y = GRIDSIZE - 40;
@@ -196,10 +223,12 @@ void Prey::Move(const Controller & controll, WeakList objlist)
 				AniCnt = 0;
 			}
 			dir = DIR_DOWN;
-
-			SetAnim("move");
-			pos.y += SPEED;
-			individualsMapPos.y = lpMap.IndividualsMapCalcPos(pos, cameraPos, individualsMapPos).y;
+			if (lpMap.objblock(sidePos(dir, pos, IN_SIDE)))
+			{
+				SetAnim("move");
+				pos.y += SPEED;
+				individualsMapPos.y = lpMap.IndividualsMapCalcPos(pos, cameraPos, individualsMapPos).y;
+			}
 			if (pos.y >= MAPSIZE_Y - ((GRIDSIZE * 2) + 40))
 			{
 				pos.y = MAPSIZE_Y - ((GRIDSIZE * 2) + 40);

@@ -67,10 +67,10 @@ unique_Base GameScene::Update(unique_Base own, const Controller & Controller)
 	{
 		timeUpFlag = true;
 	}
-	if (GetNowCount() - startTime > 10000)
-	{
-		return std::make_unique<ResultScene>();
-	}
+	//if (GetNowCount() - startTime > 10000)
+	//{
+	//	return std::make_unique<ResultScene>();
+	//}
 
 	ClsDrawScreen();
 	Draw();

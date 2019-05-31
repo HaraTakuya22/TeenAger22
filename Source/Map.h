@@ -144,6 +144,8 @@ public:
 
 	// ÌßÚ²Ô°‚Ìl”‚ÌŠi”[•Ï”
 	PLAYER player;
+
+	bool objblock(VECTOR2 pos);
 	
 private:
 	Map();

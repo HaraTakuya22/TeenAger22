@@ -566,7 +566,11 @@ void Map::IndividualsDraw(bool gameF,VECTOR2 indPos,int pCnt)
 		{
 			for (windowsNumY = 0; windowsNumY <= 1; windowsNumY++)
 			{
-				DrawRectExtendGraph((Scr.x / mapScaleCnt.x) * windowsNumX, (Scr.y / mapScaleCnt.y) * windowsNumY, (Scr.x / mapScaleCnt.x) * (windowsNumX + 1), (Scr.y / mapScaleCnt.y) * (windowsNumY + 1), indPos.x, indPos.y, Scr.x, Scr.y, mapAllwindow, true);
+				DrawRectExtendGraph((Scr.x / mapScaleCnt.x) * windowsNumX, 
+					(Scr.y / mapScaleCnt.y) * windowsNumY, 
+					(Scr.x / mapScaleCnt.x) * (windowsNumX + 1), 
+					(Scr.y / mapScaleCnt.y) * (windowsNumY + 1), 
+					indPos.x, indPos.y, Scr.x, Scr.y, mapAllwindow, true);
 			}
 		}
 		// ÃÞÊÞ¯¸Þ—p------------------------------------------

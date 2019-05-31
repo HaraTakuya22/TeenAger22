@@ -7,14 +7,14 @@
 #define PREYSIZE_X		GRIDSIZE
 #define PREYSIZE_Y		GRIDSIZE * 1.5
 // ÌßÚ²Ô°‚Ì½Ëß°ÄÞ
-#define SPEED			GRIDSIZE
+#define SPEED			GRIDSIZE * 2
 
 class It :
 	public Obj
 {
 public:
 	It();
-	It(VECTOR2* pos, TYPE_NUM i_num);
+	It(VECTOR2 pos, TYPE_NUM i_num);
 	~It();
 	void Draw(void);
 	void Move(const Controller& controll, WeakList objlist);

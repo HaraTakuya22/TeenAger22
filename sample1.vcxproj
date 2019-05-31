@@ -127,6 +127,7 @@
   <ItemGroup>
     <ClCompile Include="Source\AddList.cpp" />
     <ClCompile Include="Source\BaseScene.cpp" />
+    <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Connection.cpp" />
     <ClCompile Include="Source\Controller.cpp" />
     <ClCompile Include="Source\EditCursor.cpp" />
@@ -147,6 +148,7 @@
   <ItemGroup>
     <ClInclude Include="Source\AddList.h" />
     <ClInclude Include="Source\BaseScene.h" />
+    <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Connection.h" />
     <ClInclude Include="Source\Controller.h" />
     <ClInclude Include="Source\EditCursor.h" />

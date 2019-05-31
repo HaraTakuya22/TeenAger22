@@ -761,10 +761,6 @@ IDType Map::GetData(MapType maptype, const VECTOR2 pos, IDType defID)
 
 	SetCheck setCheck;
 
-	if (!setCheck(tmp,MapSize))
-	{
-		return defID;
-	}
 	return maptype[tmp.y][tmp.x];
 }
 

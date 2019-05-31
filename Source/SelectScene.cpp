@@ -17,6 +17,8 @@
 SelectScene::SelectScene()
 {
 	Init();
+	SetCreateSoundTimeStretchRate(2.0f);
+	PlaySoundFile("‰¹Œ¹/sample6.mp3", DX_PLAYTYPE_LOOP);
 }
 
 SelectScene::~SelectScene()
@@ -273,6 +275,8 @@ unique_Base SelectScene::Update(unique_Base own, const Controller & controll)
 	{
 		if (CheckHitKey(KEY_INPUT_V))
 		{
+			SetCreateSoundTimeStretchRate(0.5f);
+			PlaySoundFile("‰¹Œ¹/Œø‰Ê‰¹5.mp3", DX_PLAYTYPE_NORMAL);
 			return std::make_unique<GameScene>();
 		}
 	}
@@ -280,6 +284,8 @@ unique_Base SelectScene::Update(unique_Base own, const Controller & controll)
 	{
 		if (CheckHitKey(KEY_INPUT_V))
 		{
+			SetCreateSoundTimeStretchRate(0.5f);
+			PlaySoundFile("‰¹Œ¹/Œø‰Ê‰¹5.mp3", DX_PLAYTYPE_NORMAL);
 			return std::make_unique<GameScene>();
 		}
 	}
@@ -287,6 +293,8 @@ unique_Base SelectScene::Update(unique_Base own, const Controller & controll)
 	{
 		if (CheckHitKey(KEY_INPUT_V))
 		{
+			SetCreateSoundTimeStretchRate(0.5f);
+			PlaySoundFile("‰¹Œ¹/Œø‰Ê‰¹5.mp3", DX_PLAYTYPE_NORMAL);
 			return std::make_unique<GameScene>();
 		}
 	}
